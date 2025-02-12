@@ -1,0 +1,1 @@
+https://discomap.eea.europa.eu/App/AQViewer/index.html?fqn=Airquality_Dissem.ebd.countries_and_nuts&fqn=Airquality_Dissem.hra.nuts3_sel
