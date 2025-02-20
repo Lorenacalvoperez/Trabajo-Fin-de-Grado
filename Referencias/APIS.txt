@@ -1,0 +1,2 @@
+API VARIABLE PM2.5:
+https://ghoapi.azureedge.net/api/RSUD_230
