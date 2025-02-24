@@ -4,3 +4,8 @@ https://ghoapi.azureedge.net/api/RSUD_230
 APIS del Parkinson:
 DATA_URL = "https://api.ourworldindata.org/v1/indicators/916408.data.json"
 METADATA_URL = "https://api.ourworldindata.org/v1/indicators/916408.metadata.json"
+
+APIS DE VARIABLE NITRATOS (CALIDAD DE AGUA):
+
+DATA_URL = "https://api.ourworldindata.org/v1/indicators/820661.data.json"
+METADATA_URL = "https://api.ourworldindata.org/v1/indicators/820661.metadata.json"
