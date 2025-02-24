@@ -5,3 +5,7 @@ https://discomap.eea.europa.eu/App/AQViewer/index.html?fqn=Airquality_Dissem.ebd
 Parkinson:
 
 https://www.nia.nih.gov/espanol/parkinson/enfermedad-parkinson-causas-sintomas-tratamientos
+
+Variable calidad de agua:
+
+https://ourworldindata.org/grapher/average-nitrate-concentration-in-freshwater?tab=table
