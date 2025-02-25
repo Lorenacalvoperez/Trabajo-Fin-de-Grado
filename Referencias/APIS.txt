@@ -9,3 +9,8 @@ APIS DE VARIABLE NITRATOS (CALIDAD DE AGUA):
 
 DATA_URL = "https://api.ourworldindata.org/v1/indicators/820661.data.json"
 METADATA_URL = "https://api.ourworldindata.org/v1/indicators/820661.metadata.json"
+
+APIS DE VARIBALES DE EXPOSICION AL PLOMO:
+
+DATA_URL = "https://api.ourworldindata.org/v1/indicators/941463.data.json"
+METADATA_URL = "https://api.ourworldindata.org/v1/indicators/941463.metadata.json"
