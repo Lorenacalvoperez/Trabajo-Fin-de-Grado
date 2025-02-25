@@ -12,4 +12,4 @@ https://ourworldindata.org/grapher/average-nitrate-concentration-in-freshwater?t
 
 Variable de exposicion a metales pesados (plomo) :
 
-https://ourworldindata.org/lead-pollution
+https://ourworldindata.org/grapher/rate-disease-burden-lead?tab=table
