@@ -9,3 +9,7 @@ https://www.nia.nih.gov/espanol/parkinson/enfermedad-parkinson-causas-sintomas-t
 Variable calidad de agua:
 
 https://ourworldindata.org/grapher/average-nitrate-concentration-in-freshwater?tab=table
+
+Variable de exposicion a metales pesados (plomo) :
+
+https://ourworldindata.org/lead-pollution
