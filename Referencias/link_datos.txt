@@ -4,7 +4,7 @@ https://discomap.eea.europa.eu/App/AQViewer/index.html?fqn=Airquality_Dissem.ebd
 
 Parkinson:
 
-https://www.nia.nih.gov/espanol/parkinson/enfermedad-parkinson-causas-sintomas-tratamientos
+https://ourworldindata.org/grapher/parkinsons-disease-prevalence-ihme?tab=table
 
 Variable calidad de agua:
 
