@@ -13,3 +13,9 @@ https://ourworldindata.org/grapher/average-nitrate-concentration-in-freshwater?t
 Variable de exposicion a metales pesados (plomo) :
 
 https://ourworldindata.org/grapher/rate-disease-burden-lead?tab=table
+
+Posible web de datos de pepticidas:
+
+https://esdac.jrc.ec.europa.eu/themes/pesticides-residues-eu-agricultural-soils-based-lucas
+
+Datasets, datos sobre amenazas de suelo: Indicadores de degradación del suelo en la UE (https://esdac.jrc.ec.europa.eu/content/soil-degradation-indicators-eu)
