@@ -14,3 +14,8 @@ APIS DE VARIBALES DE EXPOSICION AL PLOMO:
 
 DATA_URL = "https://api.ourworldindata.org/v1/indicators/941463.data.json"
 METADATA_URL = "https://api.ourworldindata.org/v1/indicators/941463.metadata.json"
+
+APIS de pepticidas:
+
+DATA_URL = "https://api.ourworldindata.org/v1/indicators/832404.data.json"
+METADATA_URL = "https://api.ourworldindata.org/v1/indicators/832404.metadata.json"
