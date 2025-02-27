@@ -19,3 +19,7 @@ Posible web de datos de pepticidas:
 https://esdac.jrc.ec.europa.eu/themes/pesticides-residues-eu-agricultural-soils-based-lucas
 
 Datasets, datos sobre amenazas de suelo: Indicadores de degradación del suelo en la UE (https://esdac.jrc.ec.europa.eu/content/soil-degradation-indicators-eu)
+
+Datos de uso de plaguicidas:
+
+https://ourworldindata.org/grapher/pesticide-use-tonnes?tab=table
