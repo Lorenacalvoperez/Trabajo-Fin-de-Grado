@@ -22,3 +22,7 @@ https://ourworldindata.org/grapher/pesticide-use-tonnes?tab=table
 Tasa de mortalidad por contaminación del aire
 
 https://ourworldindata.org/grapher/death-rates-from-air-pollution?tab=table
+
+Variable no relacionada:
+
+https://ourworldindata.org/grapher/number-of-internet-users?tab=table&time=2018..latest
