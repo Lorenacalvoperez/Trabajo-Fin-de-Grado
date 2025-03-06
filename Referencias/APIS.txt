@@ -19,3 +19,14 @@ APIS de pepticidas:
 
 DATA_URL = "https://api.ourworldindata.org/v1/indicators/832404.data.json"
 METADATA_URL = "https://api.ourworldindata.org/v1/indicators/832404.metadata.json"
+
+APIS DE TASA MORTALIDAD POR CONTAMINACIÓN DEL AIRE:
+
+DATA_URL = "https://api.ourworldindata.org/v1/indicators/939832.data.json"
+METADATA_URL = "https://api.ourworldindata.org/v1/indicators/939832.metadata.json"
+
+
+APIS de pepticidas:
+
+DATA_URL = "https://api.ourworldindata.org/v1/indicators/832404.data.json"
+METADATA_URL = "https://api.ourworldindata.org/v1/indicators/832404.metadata.json"
