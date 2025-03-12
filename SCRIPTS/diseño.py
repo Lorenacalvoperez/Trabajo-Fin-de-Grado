@@ -1,4 +1,4 @@
-from shiny import App, ui, render, reactive
+from shiny import App, ui, render
 
 # Define la interfaz de usuario con CSS global
 app_ui = ui.page_fluid(
@@ -34,6 +34,9 @@ app_ui = ui.page_fluid(
             .nav-item:hover {
                 background-color: #e0e0e0;
             }
+            .navset-pill .nav-link {
+                border-radius: 0px !important; /* Hace que la barra sea rectangular */
+            }
         """),
     ),
     ui.layout_sidebar(
@@ -58,7 +61,27 @@ def server(input, output, session):
         if page == "section1":
             return ui.div("📌 Welcome to Section 1", class_="content-box")
         elif page == "section2":
-            return ui.div("📌 This is Section 2", class_="content-box")
+            return ui.div(
+                ui.div(
+                    ui.navset_pill(
+                        ui.nav_panel("A", "Panel A content"),
+                        ui.nav_panel("B", "Panel B content"),
+                        ui.nav_panel("C", "Panel C content"),
+                        ui.nav_menu(
+                            "Other links",
+                            ui.nav_panel("D", "Panel D content"),
+                            "----",
+                            "Description:",
+                            ui.nav_control(
+                                ui.a("Shiny", href="https://shiny.posit.co", target="_blank")
+                            ),
+                        ),
+                        id="tab"
+                    ),
+                    class_="navset-pill"
+                ),
+                class_="content-box"
+            )
         elif page == "section3":
             return ui.div("📌 You are in Section 3", class_="content-box")
         else:
@@ -66,5 +89,3 @@ def server(input, output, session):
 
 # Crea y ejecuta la aplicación
 app = App(app_ui, server)
-
-

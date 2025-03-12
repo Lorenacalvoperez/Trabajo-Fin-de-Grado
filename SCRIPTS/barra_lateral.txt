@@ -1,0 +1,31 @@
+from shiny import App, ui
+
+# Define la interfaz de usuario con CSS global
+app_ui = ui.page_fluid(
+    ui.head_content(
+        ui.tags.style("""
+            .sidebar {
+                background-color: #007BFF !important;  /* Azul */
+                color: white !important;
+                padding: 15px !important;
+                height: 100vh !important;
+            }
+        """)
+    ),
+    ui.layout_sidebar(
+        ui.sidebar(
+            "Sidebar",  # Título de la barra lateral
+            ui.input_select("dropdown", "Select an option:", ["Option 1", "Option 2", "Option 3"]),
+            ui.input_text("input_text", "Enter some text:"),
+            ui.input_action_button("button", "Click me"),
+            class_="sidebar"  # Aplica la clase CSS
+        ),
+        ui.div("Main content")
+    )
+)
+
+# No necesitamos un servidor en este ejemplo
+app_server = None
+
+# Crea y ejecuta la aplicación
+app = App(app_ui, app_server)
