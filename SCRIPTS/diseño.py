@@ -49,6 +49,17 @@ app_ui = ui.page_fluid(
             #home_btn:hover {
                 text-decoration: underline;
             }
+            .home-container {
+                display: flex;
+                align-items: center;
+                gap: 20px;
+                padding: 20px;
+            }
+            .home-title {
+                font-size: 24px;
+                font-weight: bold;
+                color: #333;
+            }
         """),
     ),
     ui.layout_sidebar(
@@ -72,10 +83,11 @@ def server(input, output, session):
     def content_display():
         if input.page() == "home":  # Si se presiona Home
             return ui.div(
-                ui.h1("Parkinson Worldview", class_="text-center"),
-                ui.img(src="https://www.python.org/static/community_logos/python-logo.png", height="100px"),
-                ui.p("Esta es una aplicación creada con Shiny para Python.", class_="text-center"),
-                class_="text-center mt-4"
+                ui.div(
+                    ui.img(src="https://upload.wikimedia.org/wikipedia/commons/8/80/World_map_-_low_resolution.svg", height="150px"),
+                    ui.span("Parkinson Worldview: Impacto Ambiental en el Parkinson", class_="home-title"),
+                    class_="home-container"
+                )
             )
         
         page = input.page()
