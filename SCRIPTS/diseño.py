@@ -60,6 +60,10 @@ app_ui = ui.page_fluid(
                 font-weight: bold;
                 color: #333;
             }
+            .home-subtitle {
+                font-size: 18px;
+                color: #666;
+            }
         """),
     ),
     ui.layout_sidebar(
@@ -83,10 +87,21 @@ def server(input, output, session):
     def content_display():
         if input.page() == "home":  # Si se presiona Home
             return ui.div(
+                ui.navset_bar(
+                    ui.nav_panel("Overview", "Información general sobre el proyecto"),
+                    ui.nav_panel("Data", "Datos analizados sobre el Parkinson"),
+                    ui.nav_panel("Research", "Investigaciones relacionadas"),
+                    title="Parkinson Worldview: Impacto Ambiental en el Parkinson"
+                ),
                 ui.div(
-                    ui.img(src="https://upload.wikimedia.org/wikipedia/commons/8/80/World_map_-_low_resolution.svg", height="150px"),
-                    ui.span("Parkinson Worldview: Impacto Ambiental en el Parkinson", class_="home-title"),
+                    ui.img(src="https://upload.wikimedia.org/wikipedia/commons/8/80/World_map_-_low_resolution.svg", height="300px"),
                     class_="home-container"
+                ),
+                ui.div(
+                    ui.h3("NeuroMap: Impacto Ambiental en el Parkinson", class_="home-title"),
+                    ui.p("Esta aplicación visualiza cómo las variables ambientales, como la contaminación y la temperatura, afectan la prevalencia y desarrollo de la enfermedad de Parkinson en diferentes países.",
+                        class_="home-subtitle"),
+                    class_="content-box"
                 )
             )
         
