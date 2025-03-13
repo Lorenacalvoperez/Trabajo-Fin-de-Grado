@@ -1,9 +1,32 @@
 from shiny import App, reactive, render, ui
+import plotly.express as px
+import pandas as pd
+
+# Cargar el archivo CSV en un DataFrame
+df = pd.read_csv('Parkinson.csv')
+
+# Crear el gráfico de coropletas animado por año
+fig = px.choropleth(
+    df,
+    locations="País",                
+    locationmode="country names",    
+    color="Parkinson",       
+    hover_name="País",               
+    hover_data={
+        "Parkinson": True,
+    },
+    animation_frame="Año",         
+    color_continuous_scale="Viridis",
+    title="Indicadores por país y año"
+)
+
+# Generar el HTML del gráfico de Plotly
+fig_html = fig.to_html(full_html=False)
 
 # Define la interfaz de usuario con CSS global
 app_ui = ui.page_fluid(
     ui.head_content(
-        ui.tags.style("""
+        ui.tags.style(""" 
             .sidebar {
                 background-color: #007BFF !important;
                 color: white !important;
@@ -96,15 +119,15 @@ def server(input, output, session):
                     ui.nav_panel("Overview", "Información general sobre el proyecto"),
                     ui.nav_panel("Data", "Datos analizados sobre el Parkinson"),
                     ui.nav_panel("Research", "Investigaciones relacionadas"),
-                    title="Parkinson Worldview"
+                    title="Parkinson Worldview: Impacto Ambiental en el Parkinson"
                 ),
                 ui.div(
                     ui.img(src="https://upload.wikimedia.org/wikipedia/commons/8/80/World_map_-_low_resolution.svg", height="300px"),
                     class_="home-container"
                 ),
                 ui.div(
-                    ui.h3("Parkinson Worldview: Impacto Ambiental en el Parkinson", class_="home-title"),
-                    ui.p("Esta aplicación visualiza cómo ciertas variables ambientales afectan la prevalencia y desarrollo de la enfermedad de Parkinson en diferentes países.",
+                    ui.h3("NeuroMap: Impacto Ambiental en el Parkinson", class_="home-title"),
+                    ui.p("Esta aplicación visualiza cómo las variables ambientales, como la contaminación y la temperatura, afectan la prevalencia y desarrollo de la enfermedad de Parkinson en diferentes países.",
                         class_="home-subtitle"),
                     class_="content-box"
                 )
@@ -112,7 +135,11 @@ def server(input, output, session):
         
         page = input.page()
         if page == "section1":
-            return ui.div("📌 Welcome to Section 1")
+            # Mostrar el gráfico interactivo como HTML
+            return ui.div(
+                ui.HTML(fig_html),  # Usar el HTML generado por Plotly
+                class_="content-box"
+            )
         elif page == "section2":
             return ui.div(
                 ui.div(
