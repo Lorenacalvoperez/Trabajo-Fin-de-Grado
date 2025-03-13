@@ -5,7 +5,7 @@ import pandas as pd
 # Cargar el archivo CSV en un DataFrame
 df = pd.read_csv('Parkinson.csv')
 
-# Crear el gráfico de coropletas animado por año
+# Crear el gráfico
 fig = px.choropleth(
     df,
     locations="País",                
@@ -23,7 +23,7 @@ fig = px.choropleth(
 # Generar el HTML del gráfico de Plotly
 fig_html = fig.to_html(full_html=False)
 
-# Define la interfaz de usuario con CSS global
+# Definición de la interfaz de usuario con CSS global
 app_ui = ui.page_fluid(
     ui.head_content(
         ui.tags.style(""" 
@@ -115,12 +115,12 @@ app_ui = ui.page_fluid(
     )
 )
 
-# Define la lógica del servidor
+# Defino la lógica del servidor
 def server(input, output, session):
     @output
     @render.ui
     def content_display():
-        if input.page() == "home":  # Si se presiona Home
+        if input.page() == "home":  
             return ui.div(
                 ui.navset_bar(
                     ui.nav_panel("Overview", "Información general sobre el proyecto"),
@@ -143,8 +143,9 @@ def server(input, output, session):
         if page == "section1":
             # Mostrar el gráfico interactivo como HTML y centrarlo
             return ui.div(
-                ui.HTML(fig_html),  # Usar el HTML generado por Plotly
-                class_="map-container"  # Aplica la clase CSS para centrar y hacer el gráfico más grande
+                 # Usar el HTML generado por Plotly
+                ui.HTML(fig_html), 
+                class_="map-container"  
             )
         elif page == "section2":
             return ui.div(
@@ -168,7 +169,6 @@ def server(input, output, session):
                 )
             )
         elif page == "section3":
-            # Sección 3 sencilla, sin sub-paneles
             return ui.div(
                 "📌 Esta es la Sección 3, aún no tiene contenido.",
                 class_="content-box"
@@ -176,5 +176,5 @@ def server(input, output, session):
         else:
             return ui.div("👉 Click on a section to navigate")
 
-# Crea y ejecuta la aplicación
+# Creo y ejecuto la aplicación
 app = App(app_ui, server)
