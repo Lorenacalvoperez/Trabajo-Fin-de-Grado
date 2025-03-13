@@ -92,6 +92,13 @@ app_ui = ui.page_fluid(
                 font-size: 18px;
                 color: #666;
             }
+            /* Nueva clase para centrar el gráfico y hacerlo más grande */
+            .map-container {
+                width: 90%;  /* Hacemos el gráfico más grande */
+                max-width: 1200px;  /* Limita el tamaño máximo */
+                margin: 0 auto;  /* Centra el gráfico */
+                height: 600px;  /* Puedes ajustar la altura también */
+            }
         """),
     ),
     ui.layout_sidebar(
@@ -118,15 +125,14 @@ def server(input, output, session):
                 ui.navset_bar(
                     ui.nav_panel("Overview", "Información general sobre el proyecto"),
                     ui.nav_panel("Data", "Datos analizados sobre el Parkinson"),
-                    ui.nav_panel("Research", "Investigaciones relacionadas"),
-                    title="Parkinson Worldview: Impacto Ambiental en el Parkinson"
+                    title="Parkinson Worldview"
                 ),
                 ui.div(
                     ui.img(src="https://upload.wikimedia.org/wikipedia/commons/8/80/World_map_-_low_resolution.svg", height="300px"),
                     class_="home-container"
                 ),
                 ui.div(
-                    ui.h3("NeuroMap: Impacto Ambiental en el Parkinson", class_="home-title"),
+                    ui.h3("Parkinso Worldview: Impacto Ambiental en el Parkinson", class_="home-title"),
                     ui.p("Esta aplicación visualiza cómo las variables ambientales, como la contaminación y la temperatura, afectan la prevalencia y desarrollo de la enfermedad de Parkinson en diferentes países.",
                         class_="home-subtitle"),
                     class_="content-box"
@@ -135,10 +141,10 @@ def server(input, output, session):
         
         page = input.page()
         if page == "section1":
-            # Mostrar el gráfico interactivo como HTML
+            # Mostrar el gráfico interactivo como HTML y centrarlo
             return ui.div(
                 ui.HTML(fig_html),  # Usar el HTML generado por Plotly
-                class_="content-box"
+                class_="map-container"  # Aplica la clase CSS para centrar y hacer el gráfico más grande
             )
         elif page == "section2":
             return ui.div(
@@ -162,7 +168,11 @@ def server(input, output, session):
                 )
             )
         elif page == "section3":
-            return ui.div("📌 You are in Section 3")
+            # Sección 3 sencilla, sin sub-paneles
+            return ui.div(
+                "📌 Esta es la Sección 3, aún no tiene contenido.",
+                class_="content-box"
+            )
         else:
             return ui.div("👉 Click on a section to navigate")
 
