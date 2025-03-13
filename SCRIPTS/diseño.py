@@ -10,12 +10,17 @@ app_ui = ui.page_fluid(
                 padding: 15px !important;
                 height: 100vh !important;
                 width: 250px !important;
+                position: fixed; /* Fija la barra lateral */
+                top: 0; /* Asegura que esté alineada al principio */
+                left: 0;
+                z-index: 1000; /* Asegura que esté por encima del contenido */
             }
             .content-box {
                 padding: 20px;
                 border: none !important;
                 background-color: transparent !important;
                 margin-top: 10px;
+                margin-left: 270px; /* Ajusta el contenido para no superponer la barra lateral */
             }
             .nav-item {
                 display: block;
