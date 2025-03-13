@@ -75,9 +75,9 @@ app_ui = ui.page_fluid(
         ui.sidebar(
             ui.div(
                 ui.a("🏠 Home", id="home_btn", onclick="Shiny.setInputValue('page', 'home')"),
-                ui.a("Section 1", class_="nav-item", onclick="Shiny.setInputValue('page', 'section1')"),
-                ui.a("Section 2", class_="nav-item", onclick="Shiny.setInputValue('page', 'section2')"),
-                ui.a("Section 3", class_="nav-item", onclick="Shiny.setInputValue('page', 'section3')"),
+                ui.a("Mapa Global del Parkinson", class_="nav-item", onclick="Shiny.setInputValue('page', 'section1')"),
+                ui.a("Impacto de las Variables Ambientales", class_="nav-item", onclick="Shiny.setInputValue('page', 'section2')"),
+                ui.a("Análisis Gráfico y Correlaciones", class_="nav-item", onclick="Shiny.setInputValue('page', 'section3')"),
                 class_="sidebar"
             )
         ),
@@ -96,15 +96,15 @@ def server(input, output, session):
                     ui.nav_panel("Overview", "Información general sobre el proyecto"),
                     ui.nav_panel("Data", "Datos analizados sobre el Parkinson"),
                     ui.nav_panel("Research", "Investigaciones relacionadas"),
-                    title="Parkinson Worldview: Impacto Ambiental en el Parkinson"
+                    title="Parkinson Worldview"
                 ),
                 ui.div(
                     ui.img(src="https://upload.wikimedia.org/wikipedia/commons/8/80/World_map_-_low_resolution.svg", height="300px"),
                     class_="home-container"
                 ),
                 ui.div(
-                    ui.h3("NeuroMap: Impacto Ambiental en el Parkinson", class_="home-title"),
-                    ui.p("Esta aplicación visualiza cómo las variables ambientales, como la contaminación y la temperatura, afectan la prevalencia y desarrollo de la enfermedad de Parkinson en diferentes países.",
+                    ui.h3("Parkinson Worldview: Impacto Ambiental en el Parkinson", class_="home-title"),
+                    ui.p("Esta aplicación visualiza cómo ciertas variables ambientales afectan la prevalencia y desarrollo de la enfermedad de Parkinson en diferentes países.",
                         class_="home-subtitle"),
                     class_="content-box"
                 )
