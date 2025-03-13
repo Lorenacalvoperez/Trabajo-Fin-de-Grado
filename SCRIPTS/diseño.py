@@ -13,9 +13,8 @@ app_ui = ui.page_fluid(
             }
             .content-box {
                 padding: 20px;
-                border: 1px solid #ddd;
-                border-radius: 5px;
-                background-color: #f9f9f9;
+                border: none !important;
+                background-color: transparent !important;
                 margin-top: 10px;
             }
             .nav-item {
@@ -37,12 +36,25 @@ app_ui = ui.page_fluid(
             .navset-pill .nav-link {
                 border-radius: 0px !important; /* Hace que la barra sea rectangular */
             }
+            #home_btn {
+                background: none !important;
+                border: none !important;
+                color: white !important;
+                font-size: 18px;
+                cursor: pointer;
+                text-align: left;
+                padding: 10px 15px;
+                display: block;
+            }
+            #home_btn:hover {
+                text-decoration: underline;
+            }
         """),
     ),
     ui.layout_sidebar(
         ui.sidebar(
             ui.div(
-                ui.input_action_button("home_btn", "🏠 Home", class_="btn-primary"),
+                ui.a("🏠 Home", id="home_btn", onclick="Shiny.setInputValue('page', 'home')"),
                 ui.a("Section 1", class_="nav-item", onclick="Shiny.setInputValue('page', 'section1')"),
                 ui.a("Section 2", class_="nav-item", onclick="Shiny.setInputValue('page', 'section2')"),
                 ui.a("Section 3", class_="nav-item", onclick="Shiny.setInputValue('page', 'section3')"),
@@ -58,17 +70,17 @@ def server(input, output, session):
     @output
     @render.ui
     def content_display():
-        if input.home_btn():  # Si se presiona el botón Home
+        if input.page() == "home":  # Si se presiona Home
             return ui.div(
-                ui.h1("Bienvenido a Mi App", class_="text-center"),
+                ui.h1("Parkinson Worldview", class_="text-center"),
                 ui.img(src="https://www.python.org/static/community_logos/python-logo.png", height="100px"),
                 ui.p("Esta es una aplicación creada con Shiny para Python.", class_="text-center"),
-                class_="content-box text-center mt-4"
+                class_="text-center mt-4"
             )
         
         page = input.page()
         if page == "section1":
-            return ui.div("📌 Welcome to Section 1", class_="content-box")
+            return ui.div("📌 Welcome to Section 1")
         elif page == "section2":
             return ui.div(
                 ui.div(
@@ -88,13 +100,12 @@ def server(input, output, session):
                         id="tab"
                     ),
                     class_="navset-pill"
-                ),
-                class_="content-box"
+                )
             )
         elif page == "section3":
-            return ui.div("📌 You are in Section 3", class_="content-box")
+            return ui.div("📌 You are in Section 3")
         else:
-            return ui.div("👉 Click on a section to navigate", class_="content-box")
+            return ui.div("👉 Click on a section to navigate")
 
 # Crea y ejecuta la aplicación
 app = App(app_ui, server)
