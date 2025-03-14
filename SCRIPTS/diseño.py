@@ -133,7 +133,7 @@ def server(input, output, session):
                 ),
                 ui.div(
                     ui.h3("Parkinso Worldview: Impacto Ambiental en el Parkinson", class_="home-title"),
-                    ui.p("Esta aplicación visualiza cómo las variables ambientales, como la contaminación y la temperatura, afectan la prevalencia y desarrollo de la enfermedad de Parkinson en diferentes países.",
+                    ui.p("Esta aplicación visualiza cómo ciertas variables ambientales afectan la prevalencia y desarrollo de la enfermedad de Parkinson en diferentes países.",
                         class_="home-subtitle"),
                     class_="content-box"
                 )
