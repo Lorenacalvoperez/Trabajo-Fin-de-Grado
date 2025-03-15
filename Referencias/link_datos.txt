@@ -23,6 +23,6 @@ Tasa de mortalidad por contaminación del aire
 
 https://ourworldindata.org/grapher/death-rates-from-air-pollution?tab=table
 
-Variable no relacionada:
+Variable no relacionada (precipitaciones)
 
-https://ourworldindata.org/grapher/number-of-internet-users?tab=table&time=2018..latest
+https://ourworldindata.org/grapher/average-precipitation-per-year?tab=table
