@@ -6,6 +6,10 @@ import pandas as pd
 df_parkinson = pd.read_csv('Parkinson.csv')
 df_contaminacion = pd.read_csv('Contaminacion_aire.csv')
 df_plomo = pd.read_csv('Plomo.csv')
+df_pepticidas = pd.read_csv('Pepticidas.csv')
+df_precipitaciones = pd.read_csv('Precipitaciones.csv')
+
+
 
 # Crear el gráfico de Parkinson
 fig_parkinson = px.choropleth(
@@ -48,11 +52,10 @@ fig_exposicion_plomo = px.choropleth(
     title="Exposición al Plomo por País y Año"
 )
 
-df = pd.read_csv('Pepticidas.csv')
 
 # Cargar datos de uso de pepticidas
 fig_uso_pepticidas= px.choropleth(
-    df,
+    df_pepticidas,
     locations="País",                
     locationmode="country names",    
     color="Pesticidas",       
@@ -66,11 +69,30 @@ fig_uso_pepticidas= px.choropleth(
     title="Indicadores por país y año"
 )
 
+# Cargar datos de precipitaciones
+fig_precipitaciones = px.choropleth(
+    df_precipitaciones,
+    locations="País",                
+    locationmode="country names",    
+    color="Precipitación (mm)",       
+    hover_name="País",               
+    hover_data={
+        "Precipitación (mm)": True,
+          
+    },
+    animation_frame="Año",         
+    color_continuous_scale="Viridis",
+    title="Indicadores por país y año"
+)
+
+
 # Generar los HTML de los gráficos
 fig_parkinson_html = fig_parkinson.to_html(full_html=False)
 fig_contaminacion_html = fig_contaminacion.to_html(full_html=False)
 fig_exposicion_plomo_html = fig_exposicion_plomo.to_html(full_html=False)
 fig_uso_pepticidas_html = fig_uso_pepticidas.to_html(full_html=False)
+fig_precipitaciones_html = fig_precipitaciones.to_html(full_html=False)
+
 
 # Definición de la interfaz de usuario con CSS global
 app_ui = ui.page_fluid(
@@ -200,6 +222,7 @@ def server(input, output, session):
                     ui.nav_panel("Contaminación del Aire", ui.HTML(fig_contaminacion_html)),
                     ui.nav_panel("Exposición al Plomo", ui.HTML(fig_exposicion_plomo_html)),
                     ui.nav_panel("Uso de Pepticidas", ui.HTML(fig_uso_pepticidas_html)),
+                    ui.nav_panel("Precipitaciones", ui.HTML(fig_precipitaciones_html)),
                     id="tab"
                 ),
                 class_="map-container"
