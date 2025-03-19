@@ -32,9 +32,27 @@ fig_contaminacion = px.choropleth(
     range_color=[df_contaminacion["Tasa_contaminacion_Aire"].min(), df_contaminacion["Tasa_contaminacion_Aire"].quantile(0.9)],
     title="Contaminación del Aire por País y Año"
 )
+
+# Cargar datos de exposición al plomo
+df_plomo = pd.read_csv('Plomo.csv')
+
+# Crear el gráfico de coropletas para exposición al plomo
+fig_exposicion_plomo = px.choropleth(
+    df_plomo,
+    locations="País",                
+    locationmode="country names",    
+    color="Exp_Plomo",       
+    hover_name="País",               
+    hover_data={"Exp_Plomo": True},
+    animation_frame="Año",         
+    color_continuous_scale="Viridis",
+    title="Exposición al Plomo por País y Año"
+)
+
 # Generar los HTML de los gráficos
 fig_parkinson_html = fig_parkinson.to_html(full_html=False)
 fig_contaminacion_html = fig_contaminacion.to_html(full_html=False)
+fig_exposicion_plomo_html = fig_exposicion_plomo.to_html(full_html=False)
 
 # Definición de la interfaz de usuario con CSS global
 app_ui = ui.page_fluid(
@@ -162,6 +180,7 @@ def server(input, output, session):
             return ui.div(
                 ui.navset_pill(
                     ui.nav_panel("Contaminación del Aire", ui.HTML(fig_contaminacion_html)),
+                    ui.nav_panel("Exposición al Plomo", ui.HTML(fig_exposicion_plomo_html)),
                     id="tab"
                 ),
                 class_="map-container"
