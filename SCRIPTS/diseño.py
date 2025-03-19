@@ -2,26 +2,39 @@ from shiny import App, reactive, render, ui
 import plotly.express as px
 import pandas as pd
 
-# Cargar el archivo CSV en un DataFrame
-df = pd.read_csv('Parkinson.csv')
+# Cargar los archivos CSV en DataFrames
+df_parkinson = pd.read_csv('Parkinson.csv')
+df_contaminacion = pd.read_csv('Contaminacion_aire.csv')
 
-# Crear el gráfico
-fig = px.choropleth(
-    df,
+# Crear el gráfico de Parkinson
+fig_parkinson = px.choropleth(
+    df_parkinson,
     locations="País",                
     locationmode="country names",    
     color="Parkinson",       
     hover_name="País",               
-    hover_data={
-        "Parkinson": True,
-    },
+    hover_data={"Parkinson": True},
     animation_frame="Año",         
     color_continuous_scale="Viridis",
-    title="Indicadores por país y año"
+    title="Prevalencia del Parkinson por País y Año"
 )
 
-# Generar el HTML del gráfico de Plotly
-fig_html = fig.to_html(full_html=False)
+# Crear el gráfico de contaminación del aire
+fig_contaminacion = px.choropleth(
+    df_contaminacion,
+    locations="País",                
+    locationmode="country names",    
+    color="Tasa_contaminacion_Aire",       
+    hover_name="País",               
+    hover_data={"Tasa_contaminacion_Aire": True},
+    animation_frame="Año",         
+    color_continuous_scale=px.colors.sequential.Plasma,
+    range_color=[df_contaminacion["Tasa_contaminacion_Aire"].min(), df_contaminacion["Tasa_contaminacion_Aire"].quantile(0.9)],
+    title="Contaminación del Aire por País y Año"
+)
+# Generar los HTML de los gráficos
+fig_parkinson_html = fig_parkinson.to_html(full_html=False)
+fig_contaminacion_html = fig_contaminacion.to_html(full_html=False)
 
 # Definición de la interfaz de usuario con CSS global
 app_ui = ui.page_fluid(
@@ -33,17 +46,17 @@ app_ui = ui.page_fluid(
                 padding: 15px !important;
                 height: 100vh !important;
                 width: 250px !important;
-                position: fixed; /* Fija la barra lateral */
-                top: 0; /* Asegura que esté alineada al principio */
+                position: fixed;
+                top: 0;
                 left: 0;
-                z-index: 1000; /* Asegura que esté por encima del contenido */
+                z-index: 1000;
             }
             .content-box {
                 padding: 20px;
                 border: none !important;
                 background-color: transparent !important;
                 margin-top: 10px;
-                margin-left: 270px; /* Ajusta el contenido para no superponer la barra lateral */
+                margin-left: 270px;
             }
             .nav-item {
                 display: block;
@@ -62,7 +75,7 @@ app_ui = ui.page_fluid(
                 background-color: #e0e0e0;
             }
             .navset-pill .nav-link {
-                border-radius: 0px !important; /* Hace que la barra sea rectangular */
+                border-radius: 0px !important;
             }
             #home_btn {
                 background: none !important;
@@ -92,12 +105,11 @@ app_ui = ui.page_fluid(
                 font-size: 18px;
                 color: #666;
             }
-            /* Nueva clase para centrar el gráfico y hacerlo más grande */
             .map-container {
-                width: 90%;  /* Hacemos el gráfico más grande */
-                max-width: 1200px;  /* Limita el tamaño máximo */
-                margin: 0 auto;  /* Centra el gráfico */
-                height: 600px;  /* Puedes ajustar la altura también */
+                width: 90%;
+                max-width: 1200px;
+                margin: 0 auto;
+                height: 600px;
             }
         """),
     ),
@@ -115,7 +127,7 @@ app_ui = ui.page_fluid(
     )
 )
 
-# Defino la lógica del servidor
+# Definir la lógica del servidor
 def server(input, output, session):
     @output
     @render.ui
@@ -132,49 +144,37 @@ def server(input, output, session):
                     class_="home-container"
                 ),
                 ui.div(
-                    ui.h3("Parkinso Worldview: Impacto Ambiental en el Parkinson", class_="home-title"),
+                    ui.h3("Parkinson Worldview: Impacto Ambiental en el Parkinson", class_="home-title"),
                     ui.p("Esta aplicación visualiza cómo ciertas variables ambientales afectan la prevalencia y desarrollo de la enfermedad de Parkinson en diferentes países.",
                         class_="home-subtitle"),
                     class_="content-box"
                 )
             )
-        
+
         page = input.page()
         if page == "section1":
-            # Mostrar el gráfico interactivo como HTML y centrarlo
             return ui.div(
-                 # Usar el HTML generado por Plotly
-                ui.HTML(fig_html), 
-                class_="map-container"  
+                ui.HTML(fig_parkinson_html), 
+                class_="map-container"
             )
+
         elif page == "section2":
             return ui.div(
-                ui.div(
-                    ui.navset_pill(
-                        ui.nav_panel("Parkinson", "Panel A content"),
-                        ui.nav_panel("B", "Panel B content"),
-                        ui.nav_panel("C", "Panel C content"),
-                        ui.nav_menu(
-                            "Other links",
-                            ui.nav_panel("D", "Panel D content"),
-                            "----",
-                            "Description:",
-                            ui.nav_control(
-                                ui.a("Shiny", href="https://shiny.posit.co", target="_blank")
-                            ),
-                        ),
-                        id="tab"
-                    ),
-                    class_="navset-pill"
-                )
+                ui.navset_pill(
+                    ui.nav_panel("Contaminación del Aire", ui.HTML(fig_contaminacion_html)),
+                    id="tab"
+                ),
+                class_="map-container"
             )
+
         elif page == "section3":
             return ui.div(
                 "📌 Esta es la Sección 3, aún no tiene contenido.",
                 class_="content-box"
             )
-        else:
-            return ui.div("👉 Click on a section to navigate")
 
-# Creo y ejecuto la aplicación
+        else:
+            return ui.div("👉 Click en una sección para navegar")
+
+# Crear y ejecutar la aplicación
 app = App(app_ui, server)
