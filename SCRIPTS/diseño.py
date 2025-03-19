@@ -9,90 +9,21 @@ df_plomo = pd.read_csv('Plomo.csv')
 df_pepticidas = pd.read_csv('Pepticidas.csv')
 df_precipitaciones = pd.read_csv('Precipitaciones.csv')
 
-
-
 # Crear el gráfico de Parkinson
 fig_parkinson = px.choropleth(
     df_parkinson,
-    locations="País",                
-    locationmode="country names",    
-    color="Parkinson",       
-    hover_name="País",               
+    locations="País",
+    locationmode="country names",
+    color="Parkinson",
+    hover_name="País",
     hover_data={"Parkinson": True},
-    animation_frame="Año",         
+    animation_frame="Año",
     color_continuous_scale="Viridis",
     title="Prevalencia del Parkinson por País y Año"
 )
 
-# Crear el gráfico de contaminación del aire
-fig_contaminacion = px.choropleth(
-    df_contaminacion,
-    locations="País",                
-    locationmode="country names",    
-    color="Tasa_contaminacion_Aire",       
-    hover_name="País",               
-    hover_data={"Tasa_contaminacion_Aire": True},
-    animation_frame="Año",         
-    color_continuous_scale=px.colors.sequential.Plasma,
-    range_color=[df_contaminacion["Tasa_contaminacion_Aire"].min(), df_contaminacion["Tasa_contaminacion_Aire"].quantile(0.9)],
-    title="Contaminación del Aire por País y Año"
-)
-
-
-# Crear el gráfico de coropletas para exposición al plomo
-fig_exposicion_plomo = px.choropleth(
-    df_plomo,
-    locations="País",                
-    locationmode="country names",    
-    color="Exp_Plomo",       
-    hover_name="País",               
-    hover_data={"Exp_Plomo": True},
-    animation_frame="Año",         
-    color_continuous_scale="Viridis",
-    title="Exposición al Plomo por País y Año"
-)
-
-
-# Cargar datos de uso de pepticidas
-fig_uso_pepticidas= px.choropleth(
-    df_pepticidas,
-    locations="País",                
-    locationmode="country names",    
-    color="Pesticidas",       
-    hover_name="País",               
-    hover_data={
-        "Pesticidas": True,
-          
-    },
-    animation_frame="Año",         
-    color_continuous_scale="Viridis",
-    title="Indicadores por país y año"
-)
-
-# Cargar datos de precipitaciones
-fig_precipitaciones = px.choropleth(
-    df_precipitaciones,
-    locations="País",                
-    locationmode="country names",    
-    color="Precipitación (mm)",       
-    hover_name="País",               
-    hover_data={
-        "Precipitación (mm)": True,
-          
-    },
-    animation_frame="Año",         
-    color_continuous_scale="Viridis",
-    title="Indicadores por país y año"
-)
-
-
-# Generar los HTML de los gráficos
+# Generar el HTML del gráfico de Parkinson
 fig_parkinson_html = fig_parkinson.to_html(full_html=False)
-fig_contaminacion_html = fig_contaminacion.to_html(full_html=False)
-fig_exposicion_plomo_html = fig_exposicion_plomo.to_html(full_html=False)
-fig_uso_pepticidas_html = fig_uso_pepticidas.to_html(full_html=False)
-fig_precipitaciones_html = fig_precipitaciones.to_html(full_html=False)
-
 
 # Definición de la interfaz de usuario con CSS global
 app_ui = ui.page_fluid(
@@ -209,6 +140,7 @@ def server(input, output, session):
                 )
             )
 
+
         page = input.page()
         if page == "section1":
             return ui.div(
@@ -219,11 +151,23 @@ def server(input, output, session):
         elif page == "section2":
             return ui.div(
                 ui.navset_pill(
-                    ui.nav_panel("Contaminación del Aire", ui.HTML(fig_contaminacion_html)),
-                    ui.nav_panel("Exposición al Plomo", ui.HTML(fig_exposicion_plomo_html)),
-                    ui.nav_panel("Uso de Pepticidas", ui.HTML(fig_uso_pepticidas_html)),
-                    ui.nav_panel("Precipitaciones", ui.HTML(fig_precipitaciones_html)),
+                    ui.nav_panel("Contaminación del Aire", ui.output_ui("plot_contaminacion")),
+                    ui.nav_panel("Exposición al Plomo", ui.output_ui("plot_plomo")),
+                    ui.nav_panel("Uso de pepticidas", ui.output_ui("plot_pepticidas")),
+                    ui.nav_panel("Precipitaciones", ui.output_ui("plot_precipitaciones")),
                     id="tab"
+                ),
+                ui.div(
+                    ui.div(
+                        ui.input_slider("year", "Selecciona el Año", 
+                                        min=df_parkinson["Año"].min(), 
+                                        max=df_parkinson["Año"].max(), 
+                                        value=df_parkinson["Año"].min(), 
+                                        step=1, 
+                                        sep=""),  # <--- Evita la coma en los números grandes
+                        class_="slider-box"
+                    ),
+                    class_="slider-container"
                 ),
                 class_="map-container"
             )
@@ -236,6 +180,71 @@ def server(input, output, session):
 
         else:
             return ui.div("👉 Click en una sección para navegar")
+
+    @output
+    @render.ui
+    def plot_contaminacion():
+        año_seleccionado = input.year()
+        fig_contaminacion_filtrado = px.choropleth(
+            df_contaminacion[df_contaminacion["Año"] == año_seleccionado],
+            locations="País",
+            locationmode="country names",
+            color="Tasa_contaminacion_Aire",
+            hover_name="País",
+            hover_data={"Tasa_contaminacion_Aire": True},
+            color_continuous_scale="Viridis",
+            title=f"Contaminación del Aire - {año_seleccionado}"
+        )
+        return ui.HTML(fig_contaminacion_filtrado.to_html(full_html=False))
+
+    @output
+    @render.ui
+    def plot_plomo():
+        año_seleccionado = input.year()
+        fig_plomo_filtrado = px.choropleth(
+            df_plomo[df_plomo["Año"] == año_seleccionado],
+            locations="País",
+            locationmode="country names",
+            color="Exp_Plomo",
+            hover_name="País",
+            hover_data={"Exp_Plomo": True},
+            color_continuous_scale="Viridis",
+            title=f"Exposición al Plomo - {año_seleccionado}"
+        )
+        return ui.HTML(fig_plomo_filtrado.to_html(full_html=False))
+    
+    @output
+    @render.ui
+    def plot_pepticidas():
+        año_seleccionado = input.year()
+        fig_pepticidas_filtrado = px.choropleth(
+            df_pepticidas[df_pepticidas["Año"] == año_seleccionado],
+            locations="País",
+            locationmode="country names",
+            color="Pesticidas",
+            hover_name="País",
+            hover_data={"Pesticidas": True},
+            color_continuous_scale="Viridis",
+            title=f"Uso de pepticidas - {año_seleccionado}"
+        )
+        return ui.HTML(fig_pepticidas_filtrado.to_html(full_html=False))
+    
+    @output
+    @render.ui
+    def plot_precipitaciones():
+        año_seleccionado = input.year()
+        fig_precipitaciones_filtrado = px.choropleth(
+            df_precipitaciones[df_precipitaciones["Año"] == año_seleccionado],
+            locations="País",
+            locationmode="country names",
+            color="Precipitación (mm)",
+            hover_name="País",
+            hover_data={"Precipitación (mm)": True},
+            color_continuous_scale="Viridis",
+            title=f"Precipitaciones - {año_seleccionado}"
+        )
+        return ui.HTML(fig_precipitaciones_filtrado.to_html(full_html=False))
+
 
 # Crear y ejecutar la aplicación
 app = App(app_ui, server)
