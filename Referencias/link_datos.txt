@@ -6,9 +6,9 @@ Parkinson:
 
 https://ourworldindata.org/grapher/parkinsons-disease-prevalence-ihme?tab=table
 
-Variable calidad de agua:
+Muertes atribuidas a fuentes de agua inseguras
 
-https://ourworldindata.org/grapher/average-nitrate-concentration-in-freshwater?tab=table
+https://ourworldindata.org/grapher/deaths-due-to-unsafe-water-sources?tab=table
 
 Variable de exposicion a metales pesados (plomo) :
 
