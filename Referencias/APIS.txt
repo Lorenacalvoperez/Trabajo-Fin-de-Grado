@@ -5,10 +5,10 @@ APIS del Parkinson:
 DATA_URL = "https://api.ourworldindata.org/v1/indicators/916408.data.json"
 METADATA_URL = "https://api.ourworldindata.org/v1/indicators/916408.metadata.json"
 
-APIS DE VARIABLE NITRATOS (CALIDAD DE AGUA):
+APIS CALIDAD DE AGUA
 
-DATA_URL = "https://api.ourworldindata.org/v1/indicators/820661.data.json"
-METADATA_URL = "https://api.ourworldindata.org/v1/indicators/820661.metadata.json"
+DATA_URL = "https://api.ourworldindata.org/v1/indicators/936533.data.json"
+METADATA_URL = "https://api.ourworldindata.org/v1/indicators/936533.metadata.json"
 
 APIS DE VARIBALES DE EXPOSICION AL PLOMO:
 
