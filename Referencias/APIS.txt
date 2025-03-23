@@ -1,6 +1,3 @@
-API VARIABLE PM2.5:
-https://ghoapi.azureedge.net/api/RSUD_230
-
 APIS del Parkinson:
 DATA_URL = "https://api.ourworldindata.org/v1/indicators/916408.data.json"
 METADATA_URL = "https://api.ourworldindata.org/v1/indicators/916408.metadata.json"
@@ -17,8 +14,8 @@ METADATA_URL = "https://api.ourworldindata.org/v1/indicators/941463.metadata.jso
 
 APIS de pepticidas:
 
-DATA_URL = "https://api.ourworldindata.org/v1/indicators/832404.data.json"
-METADATA_URL = "https://api.ourworldindata.org/v1/indicators/832404.metadata.json"
+DATA_URL = "https://api.ourworldindata.org/v1/indicators/1016584.data.json"
+METADATA_URL = "https://api.ourworldindata.org/v1/indicators/1016584.metadata.json"
 
 APIS DE TASA MORTALIDAD POR CONTAMINACIÓN DEL AIRE:
 
