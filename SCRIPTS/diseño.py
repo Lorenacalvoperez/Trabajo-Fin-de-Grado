@@ -6,26 +6,30 @@ import pandas as pd
 df_parkinson = pd.read_csv('Parkinson.csv')
 df_contaminacion = pd.read_csv('Contaminacion_aire.csv')
 df_plomo = pd.read_csv('Plomo.csv')
+df_agua  = pd.read_csv("Datos_muertes_agua.csv")
 df_pepticidas = pd.read_csv('Pepticidas.csv')
 df_precipitaciones = pd.read_csv('Precipitaciones.csv')
 
-# Crear el gráfico de Parkinson
-fig_parkinson = px.choropleth(
-    df_parkinson,
-    locations="País",
-    locationmode="country names",
-    color="Parkinson",
-    hover_name="País",
-    hover_data={"Parkinson": True},
-    animation_frame="Año",
-    color_continuous_scale="Viridis",
-    title="Prevalencia del Parkinson por País y Año"
-)
+#Misma escala de distribicon para todos los mapas
 
-# Generar el HTML del gráfico de Parkinson
-fig_parkinson_html = fig_parkinson.to_html(full_html=False)
+min_parkinson = df_parkinson["Parkinson"].min()
+max_parkinson = df_parkinson["Parkinson"].quantile(0.90)
 
-# Definición de la interfaz de usuario con CSS global
+min_contaminacion = df_contaminacion["Tasa_contaminacion_Aire"].min()
+max_contaminacion = df_contaminacion["Tasa_contaminacion_Aire"].quantile(0.90)
+
+min_plomo = df_plomo["Exp_Plomo"].min()
+max_plomo = df_plomo["Exp_Plomo"].quantile(0.90)
+
+min_agua = df_agua["Muertes_agua"].min()
+max_agua = df_agua["Muertes_agua"].quantile(0.75)
+
+min_pepticidas = df_pepticidas["Pesticidas"].min()
+max_pepticidas = df_pepticidas["Pesticidas"].quantile(0.90)
+
+min_precipitaciones = df_precipitaciones["Precipitación (mm)"].min()
+max_precipitaciones = df_precipitaciones["Precipitación (mm)"].quantile(0.90)
+# Definir la interfaz de usuario con CSS global
 app_ui = ui.page_fluid(
     ui.head_content(
         ui.tags.style(""" 
@@ -45,7 +49,9 @@ app_ui = ui.page_fluid(
                 border: none !important;
                 background-color: transparent !important;
                 margin-top: 10px;
-                margin-left: 270px;
+                margin-left: 50px;
+                margin-right: 60px;  /* Ajusta este valor para aumentar el espacio del borde derecho */
+                padding-left: 20px;  /* Ajusta si es necesario para mayor espacio */
             }
             .nav-item {
                 display: block;
@@ -95,11 +101,33 @@ app_ui = ui.page_fluid(
                 color: #666;
             }
             .map-container {
+                margin-: 30px;  /* Ajusta este valor para mover todo el contenido a la derecha */
+                padding-right: 30px;  /* Ajusta si es necesario para mayor espacio */
                 width: 90%;
                 max-width: 1200px;
                 margin: 0 auto;
                 height: 600px;
+            /* Estilo para el título dentro de la sección de Parkinson */
+            #section1 .map-container h3 {
+                font-size: 100px;
+                font-weight: bold;
+                color: #333;
+                margin-left: 20px;  /* Ajusta la distancia del borde izquierdo */
+                margin-bottom: 20px;  /* Espacio debajo del título */
+
             }
+            .map-and-slider-container {
+                display: flex;
+                flex-direction: column;  /* Apila el mapa y el slider de arriba hacia abajo */
+                align-items: flex-start;  /* Alinea el contenido a la izquierda */
+                width: 100%;  /* Asegura que el contenedor ocupe todo el espacio disponible */
+            }
+            
+            .slider-box {
+                margin-left: 0px;  /* Alinea el slider a la izquierda */
+                width: 100%;  /* Asegura que el slider ocupe el ancho completo del contenedor */
+            }
+
         """),
     ),
     ui.layout_sidebar(
@@ -140,19 +168,35 @@ def server(input, output, session):
                 )
             )
 
-
         page = input.page()
         if page == "section1":
             return ui.div(
-                ui.HTML(fig_parkinson_html), 
-                class_="map-container"
+                # Contenedor para el mapa y el slider
+                ui.div(
+                    # Aquí es donde se muestra el gráfico de Plotly (fig_parkinson es el gráfico)
+                    ui.output_ui("plot_parkinson"),  # Reemplazamos el HTML con el gráfico Plotly directamente
+                    class_="map-container",  # Clase para mover el mapa a la izquierda
+                ),
+                ui.div(  # Slider debajo del mapa
+                    ui.input_slider("year", "Selecciona el Año", 
+                                    min=df_parkinson["Año"].min(), 
+                                    max=df_parkinson["Año"].max(), 
+                                    value=df_parkinson["Año"].min(), 
+                                    step=1, 
+                                    sep=""),  # Evita la coma en los números grandes
+                    class_="slider-box"
+                ),
+                class_="content-box"
             )
+
+
 
         elif page == "section2":
             return ui.div(
                 ui.navset_pill(
                     ui.nav_panel("Contaminación del Aire", ui.output_ui("plot_contaminacion")),
                     ui.nav_panel("Exposición al Plomo", ui.output_ui("plot_plomo")),
+                    ui.nav_panel("Muertes por aguas inseguras", ui.output_ui("plot_agua")),
                     ui.nav_panel("Uso de pepticidas", ui.output_ui("plot_pepticidas")),
                     ui.nav_panel("Precipitaciones", ui.output_ui("plot_precipitaciones")),
                     id="tab"
@@ -164,7 +208,7 @@ def server(input, output, session):
                                         max=df_parkinson["Año"].max(), 
                                         value=df_parkinson["Año"].min(), 
                                         step=1, 
-                                        sep=""),  # <--- Evita la coma en los números grandes
+                                        sep=""),  # Evita la coma en los números grandes
                         class_="slider-box"
                     ),
                     class_="slider-container"
@@ -183,6 +227,39 @@ def server(input, output, session):
 
     @output
     @render.ui
+    def plot_parkinson():
+        año_seleccionado = input.year()  # Capturamos el año seleccionado en el slider
+        fig_parkinson_filtrado = px.choropleth(
+            df_parkinson[df_parkinson["Año"] == año_seleccionado],
+            locations="País",
+            locationmode="country names",
+            color="Parkinson",
+            hover_name="País",
+            hover_data={"Parkinson": True},
+            color_continuous_scale="Viridis",
+            range_color=(min_parkinson, max_parkinson),
+            title=f"Prevalencia del Parkinson por País y Año - {año_seleccionado}"
+        )
+        fig_parkinson_filtrado.update_geos(
+            projection_type="equirectangular",  # Mapa plano
+            showcoastlines=True,
+            showland=True,
+            fitbounds="locations"
+        )
+        fig_parkinson_filtrado.update_layout(
+            title={
+                'text': f"<b>Prevalencia del Parkinson por País y Año - {año_seleccionado}</b>",
+                'font': {'size': 26},  # Cambiar el tamaño aquí
+                'x': 0.6,  # Centrar el título
+                'xanchor': 'right'  # Asegurarse de que esté centrado
+            },
+            height=600,
+            margin={"r": 0, "t": 50, "l": 0, "b": 0}
+        )
+        return ui.HTML(fig_parkinson_filtrado.to_html(full_html=False))
+
+    @output
+    @render.ui
     def plot_contaminacion():
         año_seleccionado = input.year()
         fig_contaminacion_filtrado = px.choropleth(
@@ -193,8 +270,22 @@ def server(input, output, session):
             hover_name="País",
             hover_data={"Tasa_contaminacion_Aire": True},
             color_continuous_scale="Viridis",
+            range_color=(min_contaminacion, max_contaminacion),
             title=f"Contaminación del Aire - {año_seleccionado}"
         )
+
+        fig_contaminacion_filtrado.update_geos(
+        projection_type="equirectangular",  # <- Mapa plano
+        showcoastlines=True,
+        showland=True,
+        fitbounds="locations"
+     )
+
+        fig_contaminacion_filtrado.update_layout(
+        height=400,  # Hacerlo más grande
+        margin={"r":0,"t":50,"l":0,"b":0}
+    )
+
         return ui.HTML(fig_contaminacion_filtrado.to_html(full_html=False))
 
     @output
@@ -209,9 +300,53 @@ def server(input, output, session):
             hover_name="País",
             hover_data={"Exp_Plomo": True},
             color_continuous_scale="Viridis",
+            range_color=(min_plomo, max_plomo),
             title=f"Exposición al Plomo - {año_seleccionado}"
         )
+
+        fig_plomo_filtrado.update_geos(
+        projection_type="equirectangular",  # <- Mapa plano
+        showcoastlines=True,
+        showland=True,
+        fitbounds="locations"
+     )
+
+        fig_plomo_filtrado.update_layout(
+        height=400,  # Hacerlo más grande
+        margin={"r":0,"t":50,"l":0,"b":0}
+    )
+
         return ui.HTML(fig_plomo_filtrado.to_html(full_html=False))
+
+    @output
+    @render.ui
+    def plot_agua():
+        año_seleccionado = input.year()
+        fig_agua_filtrado = px.choropleth(
+            df_agua[df_agua["Año"] == año_seleccionado],
+            locations="País",
+            locationmode="country names",
+            color="Muertes_agua",
+            hover_name="País",
+            hover_data={"Muertes_agua": True},
+            color_continuous_scale="Viridis",
+            range_color=(min_agua, max_agua),
+            title=f"Muertes de agua - {año_seleccionado}"
+        )
+
+        fig_agua_filtrado.update_geos(
+        projection_type="equirectangular",  # <- Mapa plano
+        showcoastlines=True,
+        showland=True,
+        fitbounds="locations"
+     )
+
+        fig_agua_filtrado.update_layout(
+        height=400,  # Hacerlo más grande
+        margin={"r":0,"t":50,"l":0,"b":0}
+    )
+        return ui.HTML(fig_agua_filtrado.to_html(full_html=False))
+
     
     @output
     @render.ui
@@ -225,8 +360,21 @@ def server(input, output, session):
             hover_name="País",
             hover_data={"Pesticidas": True},
             color_continuous_scale="Viridis",
+            range_color=(min_pepticidas, max_pepticidas),
             title=f"Uso de pepticidas - {año_seleccionado}"
         )
+
+        fig_pepticidas_filtrado.update_geos(
+        projection_type="equirectangular",  # <- Mapa plano
+        showcoastlines=True,
+        showland=True,
+        fitbounds="locations"
+     )
+
+        fig_pepticidas_filtrado.update_layout(
+        height=400,  # Hacerlo más grande
+        margin={"r":0,"t":50,"l":0,"b":0}
+    )
         return ui.HTML(fig_pepticidas_filtrado.to_html(full_html=False))
     
     @output
@@ -241,8 +389,19 @@ def server(input, output, session):
             hover_name="País",
             hover_data={"Precipitación (mm)": True},
             color_continuous_scale="Viridis",
+            range_color=(min_precipitaciones, max_precipitaciones),
             title=f"Precipitaciones - {año_seleccionado}"
         )
+        fig_precipitaciones_filtrado.update_geos(
+        projection_type="equirectangular",  # <- Mapa plano
+        showcoastlines=True,
+        showland=True,
+        fitbounds="locations"
+     )
+        fig_precipitaciones_filtrado.update_layout(
+        height=400,  # Hacerlo más grande
+        margin={"r":0,"t":50,"l":0,"b":0}
+    )
         return ui.HTML(fig_precipitaciones_filtrado.to_html(full_html=False))
 
 
