@@ -29,6 +29,7 @@ max_pepticidas = df_pepticidas["Pesticidas"].quantile(0.90)
 
 min_precipitaciones = df_precipitaciones["Precipitación (mm)"].min()
 max_precipitaciones = df_precipitaciones["Precipitación (mm)"].quantile(0.90)
+
 # Definir la interfaz de usuario con CSS global
 app_ui = ui.page_fluid(
     ui.head_content(
@@ -50,8 +51,8 @@ app_ui = ui.page_fluid(
                 background-color: transparent !important;
                 margin-top: 10px;
                 margin-left: 50px;
-                margin-right: 60px;  /* Ajusta este valor para aumentar el espacio del borde derecho */
-                padding-left: 20px;  /* Ajusta si es necesario para mayor espacio */
+                margin-right: 60px;  
+                padding-left: 20px;  
             }
             .nav-item {
                 display: block;
@@ -101,33 +102,30 @@ app_ui = ui.page_fluid(
                 color: #666;
             }
             .map-container {
-                margin-: 30px;  /* Ajusta este valor para mover todo el contenido a la derecha */
-                padding-right: 30px;  /* Ajusta si es necesario para mayor espacio */
+                margin-: 30px;
+                padding-right: 30px;
                 width: 90%;
                 max-width: 1200px;
                 margin: 0 auto;
                 height: 600px;
-            /* Estilo para el título dentro de la sección de Parkinson */
+            }
             #section1 .map-container h3 {
                 font-size: 100px;
                 font-weight: bold;
                 color: #333;
-                margin-left: 20px;  /* Ajusta la distancia del borde izquierdo */
-                margin-bottom: 20px;  /* Espacio debajo del título */
-
+                margin-left: 20px;
+                margin-bottom: 20px;
             }
             .map-and-slider-container {
                 display: flex;
-                flex-direction: column;  /* Apila el mapa y el slider de arriba hacia abajo */
-                align-items: flex-start;  /* Alinea el contenido a la izquierda */
-                width: 100%;  /* Asegura que el contenedor ocupe todo el espacio disponible */
+                flex-direction: column;  
+                align-items: flex-start;  
+                width: 100%;  
             }
-            
             .slider-box {
-                margin-left: 0px;  /* Alinea el slider a la izquierda */
-                width: 100%;  /* Asegura que el slider ocupe el ancho completo del contenedor */
+                margin-left: 0px;  
+                width: 100%;  
             }
-
         """),
     ),
     ui.layout_sidebar(
@@ -135,6 +133,7 @@ app_ui = ui.page_fluid(
             ui.div(
                 ui.a("🏠 Home", id="home_btn", onclick="Shiny.setInputValue('page', 'home')"),
                 ui.a("Mapa Global del Parkinson", class_="nav-item", onclick="Shiny.setInputValue('page', 'section1')"),
+                ui.a("🌍 Ver Mapa Europeo", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'europe_map')"),
                 ui.a("Impacto de las Variables Ambientales", class_="nav-item", onclick="Shiny.setInputValue('page', 'section2')"),
                 ui.a("Análisis Gráfico y Correlaciones", class_="nav-item", onclick="Shiny.setInputValue('page', 'section3')"),
                 class_="sidebar"
@@ -171,24 +170,31 @@ def server(input, output, session):
         page = input.page()
         if page == "section1":
             return ui.div(
-                # Contenedor para el mapa y el slider
                 ui.div(
-                    # Aquí es donde se muestra el gráfico de Plotly (fig_parkinson es el gráfico)
-                    ui.output_ui("plot_parkinson"),  # Reemplazamos el HTML con el gráfico Plotly directamente
-                    class_="map-container",  # Clase para mover el mapa a la izquierda
+                    ui.output_ui("plot_parkinson"),
+                    class_="map-container",
                 ),
-                ui.div(  # Slider debajo del mapa
+                ui.div(
                     ui.input_slider("year", "Selecciona el Año", 
                                     min=df_parkinson["Año"].min(), 
                                     max=df_parkinson["Año"].max(), 
                                     value=df_parkinson["Año"].min(), 
                                     step=1, 
-                                    sep=""),  # Evita la coma en los números grandes
+                                    sep=""),
                     class_="slider-box"
+                ),
+                ui.div(
+                    ui.input_action_button("go_to_europe", "🌍 Ver Mapa Europeo", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'europe_map')"),
+                    style="margin-top: 20px;"
                 ),
                 class_="content-box"
             )
 
+        elif page == "europe_map":
+            return ui.div(
+                ui.output_ui("plot_europe"),
+                class_="content-box"
+            )
 
 
         elif page == "section2":
@@ -208,7 +214,7 @@ def server(input, output, session):
                                         max=df_parkinson["Año"].max(), 
                                         value=df_parkinson["Año"].min(), 
                                         step=1, 
-                                        sep=""),  # Evita la coma en los números grandes
+                                        sep=""),
                         class_="slider-box"
                     ),
                     class_="slider-container"
@@ -257,6 +263,58 @@ def server(input, output, session):
             margin={"r": 0, "t": 50, "l": 0, "b": 0}
         )
         return ui.HTML(fig_parkinson_filtrado.to_html(full_html=False))
+
+    @output
+    @render.ui
+    def plot_europe():
+        año_seleccionado = input.year()
+        
+        # Lista de países de Europa
+        paises_europa = [
+            "Spain", "France", "Germany", "Italy", "United Kingdom", "Netherlands", 
+            "Belgium", "Switzerland", "Portugal", "Sweden", "Norway", "Finland", "Denmark", 
+            "Poland", "Austria", "Greece", "Hungary", "Ireland", "Czechia", "Slovakia", "Iceland",
+            "Romania", "Bulgaria", "Serbia", "Croatia", "Slovenia", "Estonia", "Latvia", "Cyprus", 
+            "Luxembourg", "Malta", "Lithuania", "Ukraine", "Bosnia and Herzegovina", 
+            "North Macedonia", "Albania", "Montenegro", "Moldova", "Russia"
+        ]
+    
+        df_europa = df_parkinson[df_parkinson["País"].isin(paises_europa)]
+        df_europa = df_europa[df_europa["Año"] == año_seleccionado]
+    
+        fig_europa = px.choropleth(
+            df_europa,
+            locations="País",
+            locationmode="country names",
+            color="Parkinson",
+            hover_name="País",
+            hover_data={"Parkinson": True},
+            color_continuous_scale="Viridis",
+            range_color=(min_parkinson, max_parkinson),
+            title=f"Indicadores de Parkinson en Europa - {año_seleccionado}"
+        )
+    
+        fig_europa.update_geos(
+            projection_type="equirectangular",
+            scope="europe",
+            showland=True,
+            landcolor="white",
+            countrycolor="black"
+        )
+    
+        fig_europa.update_layout(
+            height=600,
+            margin={"r":0,"t":50,"l":0,"b":0},
+            title={
+                'text': f"<b>Indicadores de Parkinson en Europa - {año_seleccionado}</b>",
+                'font': {'size': 24},
+                'x': 0.5,
+                'xanchor': 'center'
+            }
+        )
+    
+        return ui.HTML(fig_europa.to_html(full_html=False))
+
 
     @output
     @render.ui
@@ -407,3 +465,4 @@ def server(input, output, session):
 
 # Crear y ejecutar la aplicación
 app = App(app_ui, server)
+
