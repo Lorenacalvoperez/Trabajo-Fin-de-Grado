@@ -21,6 +21,8 @@ max_contaminacion = df_contaminacion["Tasa_contaminacion_Aire"].quantile(0.90)
 min_plomo = df_plomo["Exp_Plomo"].min()
 max_plomo = df_plomo["Exp_Plomo"].quantile(0.90)
 
+
+
 min_agua = df_agua["Muertes_agua"].min()
 max_agua = df_agua["Muertes_agua"].quantile(0.75)
 
@@ -123,7 +125,7 @@ app_ui = ui.page_fluid(
                 width: 100%;  
             }
             .slider-box {
-                margin-left: 0px;  
+                margin-left: -40px;  
                 width: 100%;  
             }
         """),
@@ -133,7 +135,6 @@ app_ui = ui.page_fluid(
             ui.div(
                 ui.a("🏠 Home", id="home_btn", onclick="Shiny.setInputValue('page', 'home')"),
                 ui.a("Mapa Global del Parkinson", class_="nav-item", onclick="Shiny.setInputValue('page', 'section1')"),
-                ui.a("🌍 Ver Mapa Europeo", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'europe_map')"),
                 ui.a("Impacto de las Variables Ambientales", class_="nav-item", onclick="Shiny.setInputValue('page', 'section2')"),
                 ui.a("Análisis Gráfico y Correlaciones", class_="nav-item", onclick="Shiny.setInputValue('page', 'section3')"),
                 class_="sidebar"
@@ -172,42 +173,6 @@ def server(input, output, session):
             return ui.div(
                 ui.div(
                     ui.output_ui("plot_parkinson"),
-                    class_="map-container",
-                ),
-                ui.div(
-                    ui.input_slider("year", "Selecciona el Año", 
-                                    min=df_parkinson["Año"].min(), 
-                                    max=df_parkinson["Año"].max(), 
-                                    value=df_parkinson["Año"].min(), 
-                                    step=1, 
-                                    sep=""),
-                    class_="slider-box"
-                ),
-                ui.div(
-                    ui.input_action_button("go_to_europe", "🌍 Ver Mapa Europeo", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'europe_map')"),
-                    style="margin-top: 20px;"
-                ),
-                class_="content-box"
-            )
-
-        elif page == "europe_map":
-            return ui.div(
-                ui.output_ui("plot_europe"),
-                class_="content-box"
-            )
-
-
-        elif page == "section2":
-            return ui.div(
-                ui.navset_pill(
-                    ui.nav_panel("Contaminación del Aire", ui.output_ui("plot_contaminacion")),
-                    ui.nav_panel("Exposición al Plomo", ui.output_ui("plot_plomo")),
-                    ui.nav_panel("Muertes por aguas inseguras", ui.output_ui("plot_agua")),
-                    ui.nav_panel("Uso de pepticidas", ui.output_ui("plot_pepticidas")),
-                    ui.nav_panel("Precipitaciones", ui.output_ui("plot_precipitaciones")),
-                    id="tab"
-                ),
-                ui.div(
                     ui.div(
                         ui.input_slider("year", "Selecciona el Año", 
                                         min=df_parkinson["Año"].min(), 
@@ -215,11 +180,129 @@ def server(input, output, session):
                                         value=df_parkinson["Año"].min(), 
                                         step=1, 
                                         sep=""),
-                        class_="slider-box"
+                        style="margin-top: 10px;"
                     ),
-                    class_="slider-container"
+                    ui.div(
+                        ui.input_action_button("go_to_europe", "🌍 Ver Mapa Europeo", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'europe_map')"),
+                        style="margin-top: 10px;"
+                    ),
+                    class_="map-container"
                 ),
-                class_="map-container"
+                class_="content-box"
+            )
+            
+        elif page == "europe_map":
+            return ui.div(
+                ui.div(
+                    ui.input_action_button(
+                        "go_back", 
+                        "🔙 Volver al Mapa Global", 
+                        class_="btn btn-secondary",
+                        onclick="Shiny.setInputValue('page', 'section1')"
+                    ),
+                    style="margin-bottom: 20px;"
+                ),
+                ui.div(
+                    ui.input_slider(
+                        "year", "Selecciona el Año",
+                        min=df_parkinson["Año"].min(),
+                        max=df_parkinson["Año"].max(),
+                        value=df_parkinson["Año"].min(),
+                        step=1,
+                        sep=""
+                    ),
+                    class_="slider-box"
+                ),
+                ui.output_ui("plot_europe"),
+                class_="content-box"
+            )
+
+        elif page == "section2":
+            return ui.div(
+                # Barra lateral horizontal con botones
+                ui.div(
+                    ui.input_action_button("show_contaminacion", "Contaminación del Aire", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'contaminacion')"),
+                    ui.input_action_button("show_plomo", "Exposición al Plomo", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'plomo')"),
+                    ui.input_action_button("show_agua", "Muertes por aguas inseguras", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'agua')"),
+                    ui.input_action_button("show_pesticidas", "Uso de pesticidas", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'pesticidas')"),
+                    ui.input_action_button("show_precipitaciones", "Precipitaciones", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'precipitaciones')"),
+                    style="display: flex; justify-content: space-around; margin-bottom: 20px;"  # Estilo para la barra horizontal
+                )
+            )
+
+        elif page == "contaminacion":
+            return ui.div(
+                ui.div(
+                    ui.output_ui("plot_contaminacion"),
+                    ui.div(
+                        ui.input_slider("year", "Selecciona el Año", 
+                                        min=df_parkinson["Año"].min(), 
+                                        max=df_parkinson["Año"].max(), 
+                                        value=df_parkinson["Año"].min(), 
+                                        step=1, 
+                                        sep=""),
+                        style="margin-top: 10px;"
+                    ),
+                    ui.div(
+                        ui.input_action_button("go_to_europe_aire", "🌍 Ver Mapa Europeo", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'plot_europe_aire')"),
+                    ui.div(
+                        ui.input_action_button("go_back", "Volver atrás", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'section2')"),
+                        style="margin-top: 10px;"
+                    ),
+                    class_="map-container"
+                ),
+                class_="content-box"
+            )
+            )
+
+        elif page == "plot_europe_aire":
+            return ui.div(
+                ui.div(
+                    ui.input_action_button(
+                        "go_back", 
+                        "🔙 Volver al Mapa Global", 
+                        class_="btn btn-secondary",
+                        onclick="Shiny.setInputValue('page', 'contaminacion')"
+                    ),
+                    style="margin-bottom: 20px;"
+                ),
+                ui.div(
+                    ui.input_slider(
+                        "year", "Selecciona el Año",
+                        min=df_parkinson["Año"].min(),
+                        max=df_parkinson["Año"].max(),
+                        value=df_parkinson["Año"].min(),
+                        step=1,
+                        sep=""
+                    ),
+                    class_="slider-box"
+                ),
+                ui.output_ui("plot_europe_aire"),
+                class_="content-box"
+            )
+        
+        elif page == "plomo":
+            return ui.div(
+                ui.output_ui("plot_plomo"),
+                ui.input_action_button("back_to_section2", "🔙 Volver a la Sección 2", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'section2')")
+            )
+
+        elif page == "agua":
+            return ui.div(
+                ui.output_ui("plot_agua"),
+                ui.input_action_button("back_to_section2", "🔙 Volver a la Sección 2", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'section2')")
+            )
+
+        elif page == "pesticidas":
+            return ui.div(
+                ui.output_ui("plot_pepticidas"),
+                ui.input_action_button("back_to_section2", "🔙 Volver a la Sección 2", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'section2')")
+            )
+
+        elif page == "precipitaciones":
+            return ui.div(
+                ui.output_ui("plot_precipitaciones"),
+                ui.input_action_button("back_to_section2", "🔙 Volver a la Sección 2", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'section2')")
             )
 
         elif page == "section3":
@@ -230,7 +313,6 @@ def server(input, output, session):
 
         else:
             return ui.div("👉 Click en una sección para navegar")
-
     @output
     @render.ui
     def plot_parkinson():
@@ -255,13 +337,21 @@ def server(input, output, session):
         fig_parkinson_filtrado.update_layout(
             title={
                 'text': f"<b>Prevalencia del Parkinson por País y Año - {año_seleccionado}</b>",
-                'font': {'size': 26},  # Cambiar el tamaño aquí
-                'x': 0.6,  # Centrar el título
-                'xanchor': 'right'  # Asegurarse de que esté centrado
+                'font': {'size': 20},
+                'x': 0.7,
+                'y' : 0.98,
+                'xanchor': 'right'
             },
-            height=600,
-            margin={"r": 0, "t": 50, "l": 0, "b": 0}
+            height=400,
+            margin={"r": 10, "t": 10, "l": 0, "b": 0},
+            coloraxis_colorbar=dict(
+                len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
+                thickness=15,
+                y=0.5,
+                title="Parkinson"
+            )
         )
+
         return ui.HTML(fig_parkinson_filtrado.to_html(full_html=False))
 
     @output
@@ -291,7 +381,7 @@ def server(input, output, session):
             hover_data={"Parkinson": True},
             color_continuous_scale="Viridis",
             range_color=(min_parkinson, max_parkinson),
-            title=f"Indicadores de Parkinson en Europa - {año_seleccionado}"
+            title=f"Prevalencia del Parkinson en Europa por País y Año - {año_seleccionado}"
         )
     
         fig_europa.update_geos(
@@ -301,16 +391,23 @@ def server(input, output, session):
             landcolor="white",
             countrycolor="black"
         )
-    
+
         fig_europa.update_layout(
-            height=600,
-            margin={"r":0,"t":50,"l":0,"b":0},
             title={
-                'text': f"<b>Indicadores de Parkinson en Europa - {año_seleccionado}</b>",
-                'font': {'size': 24},
-                'x': 0.5,
-                'xanchor': 'center'
-            }
+                'text': f"<b>Prevalencia del Parkinson en Europa por País y Año - {año_seleccionado}</b>",
+                'font': {'size': 20},
+                'x': 0.7,
+                'y' : 0.98,
+                'xanchor': 'right'
+            },
+            height=400,
+            margin={"r": 10, "t": 10, "l": 0, "b": 0},
+            coloraxis_colorbar=dict(
+                len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
+                thickness=15,
+                y=0.5,
+                title="Parkinson"
+            )
         )
     
         return ui.HTML(fig_europa.to_html(full_html=False))
@@ -338,13 +435,78 @@ def server(input, output, session):
         showland=True,
         fitbounds="locations"
      )
+        
 
         fig_contaminacion_filtrado.update_layout(
         height=400,  # Hacerlo más grande
         margin={"r":0,"t":50,"l":0,"b":0}
     )
 
+        
         return ui.HTML(fig_contaminacion_filtrado.to_html(full_html=False))
+
+    @output
+    @render.ui
+    def plot_europe_aire():
+        año_seleccionado = input.year()
+
+        # Lista de países de Europa
+        paises_europa = [
+            "Spain", "France", "Germany", "Italy", "United Kingdom", "Netherlands", 
+            "Belgium", "Switzerland", "Portugal", "Sweden", "Norway", "Finland", "Denmark", 
+            "Poland", "Austria", "Greece", "Hungary", "Ireland", "Czechia", "Slovakia", "Iceland",
+            "Romania", "Bulgaria", "Serbia", "Croatia", "Slovenia", "Estonia", "Latvia", "Cyprus", 
+            "Luxembourg", "Malta", "Lithuania", "Ukraine", "Bosnia and Herzegovina", 
+            "North Macedonia", "Albania", "Montenegro", "Moldova", "Russia"
+        ]
+
+        df_europa = df_contaminacion[df_contaminacion["País"].isin(paises_europa)]
+        df_europa = df_europa[df_europa["Año"] == año_seleccionado]
+    
+    
+        fig_europa_Aire = px.choropleth(
+            df_europa,
+            locations="País",
+            locationmode="country names",
+            color="Tasa_contaminacion_Aire",
+            hover_name="País",
+            hover_data={"Tasa_contaminacion_Aire": True},
+            color_continuous_scale="Viridis",
+            range_color=(min_contaminacion, max_contaminacion),
+            title=f"Contaminación del Aire en Europa - {año_seleccionado}"
+        )
+    
+        # Usamos 'scope=europe' para centrar solo en Europa
+        fig_europa_Aire.update_geos(
+            projection_type="equirectangular",
+            scope="europe",
+            showland=True,
+            landcolor="white",
+            countrycolor="black"
+        )
+
+        fig_europa_Aire.update_layout(
+            title={
+                'text': f"<b>Contaminación de aire en Europa - {año_seleccionado}</b>",
+                'font': {'size': 20},
+                'x': 0.7,
+                'y' : 0.98,
+                'xanchor': 'right'
+            },
+            height=400,
+            margin={"r": 10, "t": 10, "l": 0, "b": 0},
+            coloraxis_colorbar=dict(
+                len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
+                thickness=15,
+                y=0.5,
+                title="Contaminación_aire"
+            )
+        )
+
+
+    
+        return ui.HTML(fig_europa_Aire.to_html(full_html=False))
+
 
     @output
     @render.ui
@@ -375,6 +537,68 @@ def server(input, output, session):
     )
 
         return ui.HTML(fig_plomo_filtrado.to_html(full_html=False))
+
+    @output
+    @render.ui
+    def plot_europe_plomo():
+        año_seleccionado = input.year()
+
+        # Lista de países de Europa
+        paises_europa = [
+            "Spain", "France", "Germany", "Italy", "United Kingdom", "Netherlands", 
+            "Belgium", "Switzerland", "Portugal", "Sweden", "Norway", "Finland", "Denmark", 
+            "Poland", "Austria", "Greece", "Hungary", "Ireland", "Czechia", "Slovakia", "Iceland",
+            "Romania", "Bulgaria", "Serbia", "Croatia", "Slovenia", "Estonia", "Latvia", "Cyprus", 
+            "Luxembourg", "Malta", "Lithuania", "Ukraine", "Bosnia and Herzegovina", 
+            "North Macedonia", "Albania", "Montenegro", "Moldova", "Russia"
+        ]
+
+        df_europa = df_plomo[df_plomo["País"].isin(paises_europa)]
+        df_europa = df_europa[df_europa["Año"] == año_seleccionado]
+    
+    
+        fig_europa_plomo = px.choropleth(
+            df_europa,
+            locations="País",
+            locationmode="country names",
+            color="Exp_Plomo",
+            hover_name="País",
+            hover_data={"Exp_Plomo": True},
+            color_continuous_scale="Viridis",
+            range_color=(min_plomo, max_plomo),
+            title=f"Exposición al Plomo - {año_seleccionado}"
+        )
+    
+        # Usamos 'scope=europe' para centrar solo en Europa
+        fig_europa_plomo.update_geos(
+            projection_type="equirectangular",
+            scope="europe",
+            showland=True,
+            landcolor="white",
+            countrycolor="black"
+        )
+
+        fig_europa_plomo.update_layout(
+            title={
+                'text': f"<b>Exposición al Plomo - {año_seleccionado}</b>",
+                'font': {'size': 20},
+                'x': 0.7,
+                'y' : 0.98,
+                'xanchor': 'right'
+            },
+            height=400,
+            margin={"r": 10, "t": 10, "l": 0, "b": 0},
+            coloraxis_colorbar=dict(
+                len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
+                thickness=15,
+                y=0.5,
+                title="Exp_Plomo"
+            )
+        )
+
+
+    
+        return ui.HTML(fig_europa_plomo.to_html(full_html=False))
 
     @output
     @render.ui
