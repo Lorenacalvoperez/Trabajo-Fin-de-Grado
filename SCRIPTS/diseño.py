@@ -280,29 +280,209 @@ def server(input, output, session):
                 ui.output_ui("plot_europe_aire"),
                 class_="content-box"
             )
-        
+
         elif page == "plomo":
             return ui.div(
-                ui.output_ui("plot_plomo"),
-                ui.input_action_button("back_to_section2", "🔙 Volver a la Sección 2", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'section2')")
+                ui.div(
+                    ui.output_ui("plot_plomo"),
+                    ui.div(
+                        ui.input_slider("year", "Selecciona el Año", 
+                                        min=df_parkinson["Año"].min(), 
+                                        max=df_parkinson["Año"].max(), 
+                                        value=df_parkinson["Año"].min(), 
+                                        step=1, 
+                                        sep=""),
+                        style="margin-top: 10px;"
+                    ),
+                    ui.div(
+                        ui.input_action_button("go_to_europe_plomo", "🌍 Ver Mapa Europeo", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'plot_europe_plomo')"),
+                    ui.div(
+                        ui.input_action_button("go_back", "Volver atrás", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'section2')"),
+                        style="margin-top: 10px;"
+                    ),
+                    class_="map-container"
+                ),
+                class_="content-box"
+            )
+            )
+
+        elif page == "plot_europe_plomo":
+            return ui.div(
+                ui.div(
+                    ui.input_action_button(
+                        "go_back", 
+                        "🔙 Volver al Mapa Global", 
+                        class_="btn btn-secondary",
+                        onclick="Shiny.setInputValue('page', 'contaminacion')"
+                    ),
+                    style="margin-bottom: 20px;"
+                ),
+                ui.div(
+                    ui.input_slider(
+                        "year", "Selecciona el Año",
+                        min=df_parkinson["Año"].min(),
+                        max=df_parkinson["Año"].max(),
+                        value=df_parkinson["Año"].min(),
+                        step=1,
+                        sep=""
+                    ),
+                    class_="slider-box"
+                ),
+                ui.output_ui("plot_europe_plomo"),
+                class_="content-box"
             )
 
         elif page == "agua":
             return ui.div(
-                ui.output_ui("plot_agua"),
-                ui.input_action_button("back_to_section2", "🔙 Volver a la Sección 2", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'section2')")
+                ui.div(
+                    ui.output_ui("plot_agua"),
+                    ui.div(
+                        ui.input_slider("year", "Selecciona el Año", 
+                                        min=df_parkinson["Año"].min(), 
+                                        max=df_parkinson["Año"].max(), 
+                                        value=df_parkinson["Año"].min(), 
+                                        step=1, 
+                                        sep=""),
+                        style="margin-top: 10px;"
+                    ),
+                    ui.div(
+                        ui.input_action_button("go_to_europe_agua", "🌍 Ver Mapa Europeo", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'plot_europe_agua')"),
+                    ui.div(
+                        ui.input_action_button("go_back", "Volver atrás", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'section2')"),
+                        style="margin-top: 10px;"
+                    ),
+                    class_="map-container"
+                ),
+                class_="content-box"
+            )
+            )
+
+        elif page == "plot_europe_agua":
+            return ui.div(
+                ui.div(
+                    ui.input_action_button(
+                        "go_back", 
+                        "🔙 Volver al Mapa Global", 
+                        class_="btn btn-secondary",
+                        onclick="Shiny.setInputValue('page', 'contaminacion')"
+                    ),
+                    style="margin-bottom: 20px;"
+                ),
+                ui.div(
+                    ui.input_slider(
+                        "year", "Selecciona el Año",
+                        min=df_parkinson["Año"].min(),
+                        max=df_parkinson["Año"].max(),
+                        value=df_parkinson["Año"].min(),
+                        step=1,
+                        sep=""
+                    ),
+                    class_="slider-box"
+                ),
+                ui.output_ui("plot_europe_agua"),
+                class_="content-box"
             )
 
         elif page == "pesticidas":
             return ui.div(
-                ui.output_ui("plot_pepticidas"),
-                ui.input_action_button("back_to_section2", "🔙 Volver a la Sección 2", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'section2')")
+                ui.div(
+                    ui.output_ui("plot_pepticidas"),
+                    ui.div(
+                        ui.input_slider("year", "Selecciona el Año", 
+                                        min=df_parkinson["Año"].min(), 
+                                        max=df_parkinson["Año"].max(), 
+                                        value=df_parkinson["Año"].min(), 
+                                        step=1, 
+                                        sep=""),
+                        style="margin-top: 10px;"
+                    ),
+                    ui.div(
+                        ui.input_action_button("go_to_europe_pepticidas", "🌍 Ver Mapa Europeo", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'plot_europe_pepticidas')"),
+                    ui.div(
+                        ui.input_action_button("go_back", "Volver atrás", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'section2')"),
+                        style="margin-top: 10px;"
+                    ),
+                    class_="map-container"
+                ),
+                class_="content-box"
+            )
+            )
+
+        elif page == "plot_europe_pepticidas":
+            return ui.div(
+                ui.div(
+                    ui.input_action_button(
+                        "go_back", 
+                        "🔙 Volver al Mapa Global", 
+                        class_="btn btn-secondary",
+                        onclick="Shiny.setInputValue('page', 'contaminacion')"
+                    ),
+                    style="margin-bottom: 20px;"
+                ),
+                ui.div(
+                    ui.input_slider(
+                        "year", "Selecciona el Año",
+                        min=df_parkinson["Año"].min(),
+                        max=df_parkinson["Año"].max(),
+                        value=df_parkinson["Año"].min(),
+                        step=1,
+                        sep=""
+                    ),
+                    class_="slider-box"
+                ),
+                ui.output_ui("plot_europe_pepticidas"),
+                class_="content-box"
             )
 
         elif page == "precipitaciones":
             return ui.div(
-                ui.output_ui("plot_precipitaciones"),
-                ui.input_action_button("back_to_section2", "🔙 Volver a la Sección 2", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'section2')")
+                ui.div(
+                    ui.output_ui("plot_precipitaciones"),
+                    ui.div(
+                        ui.input_slider("year", "Selecciona el Año", 
+                                        min=df_parkinson["Año"].min(), 
+                                        max=df_parkinson["Año"].max(), 
+                                        value=df_parkinson["Año"].min(), 
+                                        step=1, 
+                                        sep=""),
+                        style="margin-top: 10px;"
+                    ),
+                    ui.div(
+                        ui.input_action_button("go_to_europe_precipitaciones", "🌍 Ver Mapa Europeo", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'plot_europe_precipitaciones')"),
+                    ui.div(
+                        ui.input_action_button("go_back", "Volver atrás", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'section2')"),
+                        style="margin-top: 10px;"
+                    ),
+                    class_="map-container"
+                ),
+                class_="content-box"
+            )
+            )
+
+        elif page == "plot_europe_precipitaciones":
+            return ui.div(
+                ui.div(
+                    ui.input_action_button(
+                        "go_back", 
+                        "🔙 Volver al Mapa Global", 
+                        class_="btn btn-secondary",
+                        onclick="Shiny.setInputValue('page', 'contaminacion')"
+                    ),
+                    style="margin-bottom: 20px;"
+                ),
+                ui.div(
+                    ui.input_slider(
+                        "year", "Selecciona el Año",
+                        min=df_parkinson["Año"].min(),
+                        max=df_parkinson["Año"].max(),
+                        value=df_parkinson["Año"].min(),
+                        step=1,
+                        sep=""
+                    ),
+                    class_="slider-box"
+                ),
+                ui.output_ui("plot_europe_precipitaciones"),
+                class_="content-box"
             )
 
         elif page == "section3":
@@ -629,6 +809,68 @@ def server(input, output, session):
     )
         return ui.HTML(fig_agua_filtrado.to_html(full_html=False))
 
+
+    @output
+    @render.ui
+    def plot_europe_agua():
+        año_seleccionado = input.year()
+
+        # Lista de países de Europa
+        paises_europa = [
+            "Spain", "France", "Germany", "Italy", "United Kingdom", "Netherlands", 
+            "Belgium", "Switzerland", "Portugal", "Sweden", "Norway", "Finland", "Denmark", 
+            "Poland", "Austria", "Greece", "Hungary", "Ireland", "Czechia", "Slovakia", "Iceland",
+            "Romania", "Bulgaria", "Serbia", "Croatia", "Slovenia", "Estonia", "Latvia", "Cyprus", 
+            "Luxembourg", "Malta", "Lithuania", "Ukraine", "Bosnia and Herzegovina", 
+            "North Macedonia", "Albania", "Montenegro", "Moldova", "Russia"
+        ]
+
+        df_europa = df_agua[df_agua["País"].isin(paises_europa)]
+        df_europa = df_europa[df_europa["Año"] == año_seleccionado]
+    
+    
+        fig_europa_agua = px.choropleth(
+            df_europa,
+            locations="País",
+            locationmode="country names",
+            color="Muertes_agua",
+            hover_name="País",
+            hover_data={"Muertes_agua": True},
+            color_continuous_scale="Viridis",
+            range_color=(min_agua, max_agua),
+            title=f"Muertes de agua - {año_seleccionado}"
+        )
+    
+        # Usamos 'scope=europe' para centrar solo en Europa
+        fig_europa_agua.update_geos(
+            projection_type="equirectangular",
+            scope="europe",
+            showland=True,
+            landcolor="white",
+            countrycolor="black"
+        )
+
+        fig_europa_agua.update_layout(
+            title={
+                'text': f"<b>Muertes de agua - {año_seleccionado}</b>",
+                'font': {'size': 20},
+                'x': 0.7,
+                'y' : 0.98,
+                'xanchor': 'right'
+            },
+            height=400,
+            margin={"r": 10, "t": 10, "l": 0, "b": 0},
+            coloraxis_colorbar=dict(
+                len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
+                thickness=15,
+                y=0.5,
+                title="Muertes_agua"
+            )
+        )
+
+
+    
+        return ui.HTML(fig_europa_agua.to_html(full_html=False))
     
     @output
     @render.ui
@@ -658,6 +900,68 @@ def server(input, output, session):
         margin={"r":0,"t":50,"l":0,"b":0}
     )
         return ui.HTML(fig_pepticidas_filtrado.to_html(full_html=False))
+
+    @output
+    @render.ui
+    def plot_europe_pepticidas():
+        año_seleccionado = input.year()
+
+        # Lista de países de Europa
+        paises_europa = [
+            "Spain", "France", "Germany", "Italy", "United Kingdom", "Netherlands", 
+            "Belgium", "Switzerland", "Portugal", "Sweden", "Norway", "Finland", "Denmark", 
+            "Poland", "Austria", "Greece", "Hungary", "Ireland", "Czechia", "Slovakia", "Iceland",
+            "Romania", "Bulgaria", "Serbia", "Croatia", "Slovenia", "Estonia", "Latvia", "Cyprus", 
+            "Luxembourg", "Malta", "Lithuania", "Ukraine", "Bosnia and Herzegovina", 
+            "North Macedonia", "Albania", "Montenegro", "Moldova", "Russia"
+        ]
+
+        df_europa = df_pepticidas[df_pepticidas["País"].isin(paises_europa)]
+        df_europa = df_europa[df_europa["Año"] == año_seleccionado]
+    
+    
+        fig_europa_pepticidas= px.choropleth(
+            df_europa,
+            locations="País",
+            locationmode="country names",
+            color="Pesticidas",
+            hover_name="País",
+            hover_data={"Pesticidas": True},
+            color_continuous_scale="Viridis",
+            range_color=(min_pepticidas, max_pepticidas),
+            title=f"Exposición al Plomo - {año_seleccionado}"
+        )
+    
+        # Usamos 'scope=europe' para centrar solo en Europa
+        fig_europa_pepticidas.update_geos(
+            projection_type="equirectangular",
+            scope="europe",
+            showland=True,
+            landcolor="white",
+            countrycolor="black"
+        )
+
+        fig_europa_pepticidas.update_layout(
+            title={
+                'text': f"<b>Exposición al Plomo - {año_seleccionado}</b>",
+                'font': {'size': 20},
+                'x': 0.7,
+                'y' : 0.98,
+                'xanchor': 'right'
+            },
+            height=400,
+            margin={"r": 10, "t": 10, "l": 0, "b": 0},
+            coloraxis_colorbar=dict(
+                len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
+                thickness=15,
+                y=0.5,
+                title="Pesticidas"
+            )
+        )
+
+
+    
+        return ui.HTML(fig_europa_pepticidas.to_html(full_html=False))
     
     @output
     @render.ui
@@ -685,6 +989,68 @@ def server(input, output, session):
         margin={"r":0,"t":50,"l":0,"b":0}
     )
         return ui.HTML(fig_precipitaciones_filtrado.to_html(full_html=False))
+
+    @output
+    @render.ui
+    def plot_europe_precipitaciones():
+        año_seleccionado = input.year()
+
+        # Lista de países de Europa
+        paises_europa = [
+            "Spain", "France", "Germany", "Italy", "United Kingdom", "Netherlands", 
+            "Belgium", "Switzerland", "Portugal", "Sweden", "Norway", "Finland", "Denmark", 
+            "Poland", "Austria", "Greece", "Hungary", "Ireland", "Czechia", "Slovakia", "Iceland",
+            "Romania", "Bulgaria", "Serbia", "Croatia", "Slovenia", "Estonia", "Latvia", "Cyprus", 
+            "Luxembourg", "Malta", "Lithuania", "Ukraine", "Bosnia and Herzegovina", 
+            "North Macedonia", "Albania", "Montenegro", "Moldova", "Russia"
+        ]
+
+        df_europa = df_precipitaciones[df_precipitaciones["País"].isin(paises_europa)]
+        df_europa = df_europa[df_europa["Año"] == año_seleccionado]
+    
+    
+        fig_europa_precipitaciones= px.choropleth(
+            df_europa,
+            locations="País",
+            locationmode="country names",
+            color="Precipitación (mm)",
+            hover_name="País",
+            hover_data={"Precipitación (mm)": True},
+            color_continuous_scale="Viridis",
+            range_color=(min_precipitaciones, max_precipitaciones),
+            title=f"Precipitaciones - {año_seleccionado}"
+        )
+    
+        # Usamos 'scope=europe' para centrar solo en Europa
+        fig_europa_precipitaciones.update_geos(
+            projection_type="equirectangular",
+            scope="europe",
+            showland=True,
+            landcolor="white",
+            countrycolor="black"
+        )
+
+        fig_europa_precipitaciones.update_layout(
+            title={
+                'text': f"<b>Precipitaciones - {año_seleccionado}</b>",
+                'font': {'size': 20},
+                'x': 0.7,
+                'y' : 0.98,
+                'xanchor': 'right'
+            },
+            height=400,
+            margin={"r": 10, "t": 10, "l": 0, "b": 0},
+            coloraxis_colorbar=dict(
+                len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
+                thickness=15,
+                y=0.5,
+                title="Precipitación"
+            )
+        )
+
+
+    
+        return ui.HTML(fig_europa_precipitaciones.to_html(full_html=False))
 
 
 # Crear y ejecutar la aplicación
