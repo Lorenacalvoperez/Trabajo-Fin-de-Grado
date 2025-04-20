@@ -9,6 +9,9 @@ df_plomo = pd.read_csv('Plomo.csv')
 df_agua  = pd.read_csv("Datos_muertes_agua.csv")
 df_pepticidas = pd.read_csv('Pepticidas.csv')
 df_precipitaciones = pd.read_csv('Precipitaciones.csv')
+df_pred_promedio = pd.read_csv("predicciones_modelos_promedio.csv")
+df_pred_desviacion = pd.read_csv("predicciones_modelos_desviacion.csv")
+df_pred_CV = pd.read_csv("predicciones_modelos_CV.csv")
 
 #Misma escala de distribicon para todos los mapas
 
@@ -32,6 +35,16 @@ max_pepticidas = df_pepticidas["Pesticidas"].quantile(0.90)
 min_precipitaciones = df_precipitaciones["Precipitación (mm)"].min()
 max_precipitaciones = df_precipitaciones["Precipitación (mm)"].quantile(0.90)
 
+min_val = df_pred_promedio["Parkinson_Predicho_Promedio"].min()
+max_val = df_pred_promedio["Parkinson_Predicho_Promedio"].quantile(0.95)
+
+min_std = df_pred_desviacion["Desviacion"].min()
+max_std = df_pred_desviacion["Desviacion"].quantile(0.95)
+
+min_cv = df_pred_CV['CV'].min()
+max_cv = df_pred_CV['CV'].quantile(0.95)
+
+
 # Definir la interfaz de usuario con CSS global
 app_ui = ui.page_fluid(
     ui.head_content(
@@ -48,6 +61,7 @@ app_ui = ui.page_fluid(
                 z-index: 1000;
             }
             .content-box {
+                flex-direction: column;
                 padding: 20px;
                 border: none !important;
                 background-color: transparent !important;
@@ -485,14 +499,23 @@ def server(input, output, session):
                 class_="content-box"
             )
 
+    
+        
         elif page == "section3":
             return ui.div(
-                "📌 Esta es la Sección 3, aún no tiene contenido.",
+                ui.div(
+                    ui.output_ui("plot_modelos_mapa"),
+                    ui.output_ui("plot_modelos"),
+                    ui.output_ui("plot_modelos_CV"),
+                    style="display: flex; flex-direction: column; align-items: center; gap: 20px;"
+                ),
                 class_="content-box"
             )
 
-        else:
-            return ui.div("👉 Click en una sección para navegar")
+            
+
+
+
     @output
     @render.ui
     def plot_parkinson():
@@ -1052,6 +1075,124 @@ def server(input, output, session):
     
         return ui.HTML(fig_europa_precipitaciones.to_html(full_html=False))
 
+    @output
+    @render.ui
+    def plot_modelos_mapa():
+        fig_modelos = px.choropleth(
+            data_frame=df_pred_promedio,
+            locations="País",
+            locationmode="country names",
+            color="Parkinson_Predicho_Promedio",
+            hover_name="País",
+            hover_data={"Parkinson_Predicho_Promedio": True},
+            color_continuous_scale="Viridis",
+            range_color=(min_val, max_val),
+            title=f"Predicción Promedio del Parkinson por País"
+        )
+        fig_modelos.update_geos(
+        projection_type="equirectangular",  # <- Mapa plano
+        showcoastlines=True,
+        showland=True,
+        fitbounds="locations"
+     )
+
+        fig_modelos.update_layout(
+            title={
+                'text': f"<b>Predicción Promedio del Parkinson por País </b>",
+                'font': {'size': 20},
+                'x': 0.7,
+                'y' : 0.98,
+                'xanchor': 'right'
+            },
+            height=400,
+            margin={"r": 10, "t": 10, "l": 0, "b": 0},
+            coloraxis_colorbar=dict(
+                len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
+                thickness=20,
+                y=0.5,
+                title="Parkinson"
+            )
+        )
+        return ui.HTML(fig_modelos.to_html(full_html=False))
+        
+    @output
+    @render.ui
+    def plot_modelos():
+        fig_modelos_prueba = px.choropleth(
+            data_frame=df_pred_desviacion,
+            locations="País",
+            locationmode="country names",
+            color="Desviacion",
+            hover_name="País",
+            hover_data={"Desviacion": True},
+            color_continuous_scale="Reds",
+            range_color=(min_std, max_std),
+            title=f"Desviación Estándar de Predicciones por País (Incertidumbre entre Modelos)"
+        )
+        fig_modelos_prueba.update_geos(
+        projection_type="equirectangular",  # <- Mapa plano
+        showcoastlines=True,
+        showland=True,
+        fitbounds="locations"
+     )
+        fig_modelos_prueba.update_layout(
+            title={
+                'text': f"<b>Desviación Estándar de Predicciones por País",
+                'font': {'size': 20},
+                'x': 0.7,
+                'y' : 0.98,
+                'xanchor': 'right'
+            },
+            height=400,
+            margin={"r": 10, "t": 10, "l": 0, "b": 0},
+            coloraxis_colorbar=dict(
+                len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
+                thickness=20,
+                y=0.5,
+                title="Desviación"
+            )
+        )
+        return ui.HTML(fig_modelos_prueba.to_html(full_html=False))
+    
+
+    @output
+    @render.ui
+    def plot_modelos_CV():
+        fig_modelos_CV = px.choropleth(
+            data_frame=df_pred_CV,
+            locations="País",
+            locationmode="country names",
+            color="CV",
+            hover_name="País",
+            hover_data={"CV": True},
+            color_continuous_scale="YlGnBu",
+            range_color=(min_cv, max_cv),
+            title=f"Coeficiente de Variación de Predicciones por País (Consistencia relativa entre modelos)"
+        )
+        fig_modelos_CV.update_geos(
+        projection_type="equirectangular",  # <- Mapa plano
+        showcoastlines=True,
+        showland=True,
+        fitbounds="locations"
+     )
+        fig_modelos_CV.update_layout(
+            title={
+                'text': f"<b>Coeficiente de Variación de Predicciones por País",
+                'font': {'size': 20},
+                'x': 0.7,
+                'y' : 0.98,
+                'xanchor': 'right'
+            },
+            height=400,
+            margin={"r": 10, "t": 10, "l": 0, "b": 0},
+            coloraxis_colorbar=dict(
+                len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
+                thickness=20,
+                y=0.5,
+                title="CV"
+            )
+        )
+        return ui.HTML(fig_modelos_CV.to_html(full_html=False))
 
 # Crear y ejecutar la aplicación
 app = App(app_ui, server)
