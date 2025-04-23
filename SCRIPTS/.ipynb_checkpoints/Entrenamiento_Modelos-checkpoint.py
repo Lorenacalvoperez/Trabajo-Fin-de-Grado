@@ -23,8 +23,8 @@ def entrenar_modelo_glm(df, modelo_familia, variables_independientes, variable_d
         df['Muertes_agua_2'] = df['Muertes_agua'] ** 2
     if 'Exp_plomo' in variables_independientes:
         df['Exp_plomo_2'] = df['Exp_plomo'] ** 2
-    if 'Pepticidas' in variables_independientes:
-        df['Pepticidas_log'] = np.log1p(df['Pepticidas'])
+    if 'Pesticidas' in variables_independientes:
+        df['Pesticidas_log'] = np.log1p(df['Pesticidas'])
         
      # Seleccionar las variables transformadas
     nuevas_variables = [var for var in df.columns if var in variables_independientes or var.endswith('_2') or var.endswith('_log')]
@@ -151,14 +151,14 @@ def entrenar_modelo_svr(df, test_size=0.2):
     df = df.copy()
 
     # Crear variables transformadas
-    df['Contaminacion_aire_2'] = df['Contaminacion_aire'] ** 2
-    df['Muertes_agua_2'] = df['Muertes_agua'] ** 2
-    df['Exp_plomo_2'] = df['Exp_plomo'] ** 2
     df['Pesticidas_log'] = np.log1p(df['Pesticidas'])
 
-    # Variables transformadas a usar
-    variables_transformadas = ['Contaminacion_aire_2', 'Muertes_agua_2', 'Exp_plomo_2', 'Pesticidas_log']
-    X = df[variables_transformadas]
+    # Variables originales y transformadas
+    variables_originales = ['Contaminacion_aire', 'Muertes_agua', 'Exp_plomo']
+    variables_transformadas = ['Pesticidas_log']
+    variables_usar = variables_originales + variables_transformadas
+
+    X = df[variables_usar]
     y = df['Parkinson']
 
     # División y escalado
@@ -168,7 +168,8 @@ def entrenar_modelo_svr(df, test_size=0.2):
     X_test_scaled = scaler.transform(X_test)
 
     # Crear el modelo SVR con los mejores parámetros que ya obtuviste
-    modelo = SVR(C=1000, epsilon=1, gamma=10, kernel='rbf')
+    modelo = SVR(C=1000, epsilon=1, gamma=1, kernel='rbf')  # ¡Ojo! gamma=1 aquí según tus mejores resultados
+
     modelo.fit(X_train_scaled, y_train)
 
     # Evaluar el modelo
@@ -179,23 +180,27 @@ def entrenar_modelo_svr(df, test_size=0.2):
 
     print(f"MAE: {mae:.2f}, RMSE: {rmse:.2f}, R²: {r2:.2f}")
 
-    return modelo, variables_transformadas
+    # Devuelve el modelo y resultados clave
+    return modelo, variables_usar, X_test_scaled, y_test
 
 # Modelo KNN
 def entrenar_modelo_knn(df, test_size=0.2):
     df = df.copy()
 
-    # Crear variables transformadas
-    df['Contaminacion_aire_2'] = df['Contaminacion_aire'] ** 2
-    df['Muertes_agua_2'] = df['Muertes_agua'] ** 2
-    df['Exp_plomo_2'] = df['Exp_plomo'] ** 2
-    df['Pesticidas_log'] = np.log1p(df['Pesticidas'])
+    if 'Pesticidas' in df.columns:
+        df['Pesticidas_log'] = np.log1p(df['Pesticidas'])
 
-    # Variables transformadas a usar
-    variables_transformadas = ['Contaminacion_aire_2', 'Muertes_agua_2', 'Exp_plomo_2', 'Pesticidas_log']
-    X = df[variables_transformadas]
+    # Variables originales y transformadas
+    variables_originales = ['Contaminacion_aire', 'Muertes_agua', 'Exp_plomo']
+    variables_transformadas = ['Pesticidas_log']
+
+    # Crear variable que combine ambas listas
+    variables_usar = variables_originales + variables_transformadas
+
+    # Crear X e y
+    X = df[variables_usar]
     y = df['Parkinson']
-
+    
     # División y escalado
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=42)
     scaler = StandardScaler()
@@ -203,7 +208,7 @@ def entrenar_modelo_knn(df, test_size=0.2):
     X_test_scaled = scaler.transform(X_test)
 
     # Crear el modelo KNN con los mejores parámetros encontrados
-    knn_model = KNeighborsRegressor(n_neighbors=3, weights='distance', metric='manhattan')
+    knn_model = KNeighborsRegressor(n_neighbors=11, weights='distance', metric='manhattan')
     knn_model.fit(X_train_scaled, y_train)
 
     # Evaluar el modelo
@@ -214,21 +219,28 @@ def entrenar_modelo_knn(df, test_size=0.2):
     print(f"MAE KNN con variables transformadas: {mae_knn:.2f}")
     print(f"RMSE KNN con variables transformadas: {rmse_knn:.2f}")
 
-    return knn_model, variables_transformadas
+    # Devuelve también los datos de test ya escalados
+    return knn_model, variables_usar, X_test_scaled, y_test
 
 # Modelo MLP
 def entrenar_modelo_mlp(df, test_size=0.2):
     df = df.copy()
 
-    # Crear variables transformadas
-    df['Contaminacion_aire_2'] = df['Contaminacion_aire'] ** 2
-    df['Muertes_agua_2'] = df['Muertes_agua'] ** 2
-    df['Exp_plomo_2'] = df['Exp_plomo'] ** 2
-    df['Pesticidas_log'] = np.log1p(df['Pesticidas'])
+    # Aplicar transformaciones si las columnas existen
+    if 'Muertes_agua' in df.columns:
+        df['Muertes_agua_2'] = df['Muertes_agua'] ** 2
+    if 'Pesticidas' in df.columns:
+        df['Pesticidas_log'] = np.log1p(df['Pesticidas'])
 
-    # Variables transformadas a usar
-    variables_transformadas = ['Contaminacion_aire_2', 'Muertes_agua_2', 'Exp_plomo_2', 'Pesticidas_log']
-    X = df[variables_transformadas]
+    # Variables originales y transformadas
+    variables_originales = ['Contaminacion_aire', 'Exp_plomo', 'Pesticidas']
+    variables_transformadas = [ 'Muertes_agua_2', 'Pesticidas_log']
+
+    # ✅ Crear variable que combine ambas listas
+    variables_usar = variables_originales + variables_transformadas
+
+    # Crear X e y
+    X = df[variables_usar]
     y = df['Parkinson']
 
     # División y escalado
@@ -249,5 +261,4 @@ def entrenar_modelo_mlp(df, test_size=0.2):
     print(f"MAE MLP con variables transformadas: {mae_mlp:.2f}")
     print(f"RMSE MLP con variables transformadas: {rmse_mlp:.2f}")
 
-    return mlp_model, scaler,variables_transformadas
-
+    return mlp_model, scaler, variables_usar, X_test_scaled, y_test
