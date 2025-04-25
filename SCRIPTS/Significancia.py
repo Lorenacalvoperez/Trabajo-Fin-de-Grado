@@ -8,6 +8,60 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 
+def entrenar_modelo_glm_prueba(df, modelo_familia, variables_independientes, variable_dependiente, test_size=0.2, scaler=False):
+    df = df.copy()  # Evitar modificar el original
+    
+    # Seleccionar las variables sin transformaciones
+    variables = [var for var in variables_independientes]
+    
+    # Definir X (independientes) e y (dependiente)
+    X = df[variables]
+    y = df[variable_dependiente]
+    
+    # Dividir en entrenamiento y prueba
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=42)
+    
+    # Alinear índices
+    X_train = X_train.reset_index(drop=True)
+    y_train = y_train.reset_index(drop=True)
+    X_test = X_test.reset_index(drop=True)
+    y_test = y_test.reset_index(drop=True)
+    
+    # Escalar si es necesario
+    scaler_model = None
+    if scaler:
+        scaler_model = StandardScaler()
+        X_train_scaled = scaler_model.fit_transform(X_train)
+        X_test_scaled = scaler_model.transform(X_test)
+
+        # Reconstruir DataFrames conservando los nombres
+        X_train = pd.DataFrame(X_train_scaled, columns=variables)
+        X_test = pd.DataFrame(X_test_scaled, columns=variables)
+    
+    # Añadir constante (intercepto)
+    X_train = sm.add_constant(X_train, has_constant='add')
+    X_test = sm.add_constant(X_test, has_constant='add')
+    
+    # Entrenar el modelo GLM
+    modelo = sm.GLM(y_train, X_train, family=modelo_familia).fit()
+    
+    # Mostrar resumen del modelo
+    print(modelo.summary())
+    
+    # Verificación antes de predecir
+    if X_test.shape[1] != len(modelo.params):
+        print("⚠ ERROR: Desajuste entre columnas de X_test y los parámetros del modelo.")
+        print("Columnas esperadas por el modelo:", modelo.params.index.tolist())
+        print("Columnas reales en X_test:", X_test.columns.tolist())
+        raise ValueError("¡Número de columnas de X_test no coincide con los parámetros del modelo!")
+
+    # Evaluar el modelo
+    y_pred = modelo.predict(X_test)
+    rmse = np.sqrt(mean_squared_error(y_test, y_pred))
+    mae = mean_absolute_error(y_test, y_pred)
+    
+    return modelo, scaler_model, variables
+
 #Modelo SVR
 def entrenar_modelo_svr_importancia(df, test_size=0.2):
     df = df.copy()

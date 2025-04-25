@@ -3,15 +3,15 @@ import plotly.express as px
 import pandas as pd
 
 # Cargar los archivos CSV en DataFrames
-df_parkinson = pd.read_csv('Parkinson.csv')
-df_contaminacion = pd.read_csv('Contaminacion_aire.csv')
-df_plomo = pd.read_csv('Plomo.csv')
-df_agua  = pd.read_csv("Datos_muertes_agua.csv")
-df_pepticidas = pd.read_csv('Pepticidas.csv')
-df_precipitaciones = pd.read_csv('Precipitaciones.csv')
-df_pred_promedio = pd.read_csv("predicciones_modelos_promedio.csv")
-df_pred_desviacion = pd.read_csv("predicciones_modelos_desviacion.csv")
-df_pred_CV = pd.read_csv("predicciones_modelos_CV.csv")
+df_parkinson = pd.read_csv('Parkinson.csv').round(2)
+df_contaminacion = pd.read_csv('Contaminacion_aire.csv').round(2)
+df_plomo = pd.read_csv('Plomo.csv').round(2)
+df_agua  = pd.read_csv("Datos_muertes_agua.csv").round(2)
+df_pepticidas = pd.read_csv('Pepticidas.csv').round(2)
+df_precipitaciones = pd.read_csv('Precipitaciones.csv').round(2)
+df_pred_promedio = pd.read_csv("predicciones_modelos_promedio.csv").round(2)
+df_pred_desviacion = pd.read_csv("predicciones_modelos_desviacion.csv").round(2)
+df_pred_CV = pd.read_csv("predicciones_modelos_CV.csv").round(2)
 
 #Misma escala de distribicon para todos los mapas
 
@@ -526,7 +526,7 @@ def server(input, output, session):
             locationmode="country names",
             color="Parkinson",
             hover_name="País",
-            hover_data={"Parkinson": True},
+            hover_data={"Parkinson": True,"País":False},
             color_continuous_scale="Viridis",
             range_color=(min_parkinson, max_parkinson),
             title=f"Prevalencia del Parkinson por País y Año - {año_seleccionado}"
@@ -581,7 +581,7 @@ def server(input, output, session):
             locationmode="country names",
             color="Parkinson",
             hover_name="País",
-            hover_data={"Parkinson": True},
+            hover_data={"Parkinson": True,"País":False},
             color_continuous_scale="Viridis",
             range_color=(min_parkinson, max_parkinson),
             title=f"Prevalencia del Parkinson en Europa por País y Año - {año_seleccionado}"
@@ -626,7 +626,7 @@ def server(input, output, session):
             locationmode="country names",
             color="Tasa_contaminacion_Aire",
             hover_name="País",
-            hover_data={"Tasa_contaminacion_Aire": True},
+            hover_data={"Tasa_contaminacion_Aire": True,"País":False},
             color_continuous_scale="Viridis",
             range_color=(min_contaminacion, max_contaminacion),
             title=f"Contaminación del Aire - {año_seleccionado}"
@@ -673,7 +673,7 @@ def server(input, output, session):
             locationmode="country names",
             color="Tasa_contaminacion_Aire",
             hover_name="País",
-            hover_data={"Tasa_contaminacion_Aire": True},
+            hover_data={"Tasa_contaminacion_Aire": True,"País":False},
             color_continuous_scale="Viridis",
             range_color=(min_contaminacion, max_contaminacion),
             title=f"Contaminación del Aire en Europa - {año_seleccionado}"
@@ -721,7 +721,7 @@ def server(input, output, session):
             locationmode="country names",
             color="Exp_Plomo",
             hover_name="País",
-            hover_data={"Exp_Plomo": True},
+            hover_data={"Exp_Plomo": True,"País":False},
             color_continuous_scale="Viridis",
             range_color=(min_plomo, max_plomo),
             title=f"Exposición al Plomo - {año_seleccionado}"
@@ -766,7 +766,7 @@ def server(input, output, session):
             locationmode="country names",
             color="Exp_Plomo",
             hover_name="País",
-            hover_data={"Exp_Plomo": True},
+            hover_data={"Exp_Plomo": True,"País":False},
             color_continuous_scale="Viridis",
             range_color=(min_plomo, max_plomo),
             title=f"Exposición al Plomo - {año_seleccionado}"
@@ -813,7 +813,7 @@ def server(input, output, session):
             locationmode="country names",
             color="Muertes_agua",
             hover_name="País",
-            hover_data={"Muertes_agua": True},
+            hover_data={"Muertes_agua": True,"País":False},
             color_continuous_scale="Viridis",
             range_color=(min_agua, max_agua),
             title=f"Muertes de agua - {año_seleccionado}"
@@ -858,7 +858,7 @@ def server(input, output, session):
             locationmode="country names",
             color="Muertes_agua",
             hover_name="País",
-            hover_data={"Muertes_agua": True},
+            hover_data={"Muertes_agua": True,"País":False},
             color_continuous_scale="Viridis",
             range_color=(min_agua, max_agua),
             title=f"Muertes de agua - {año_seleccionado}"
@@ -905,7 +905,7 @@ def server(input, output, session):
             locationmode="country names",
             color="Pesticidas",
             hover_name="País",
-            hover_data={"Pesticidas": True},
+            hover_data={"Pesticidas": True,"País":False},
             color_continuous_scale="Viridis",
             range_color=(min_pepticidas, max_pepticidas),
             title=f"Uso de pepticidas - {año_seleccionado}"
@@ -949,7 +949,7 @@ def server(input, output, session):
             locationmode="country names",
             color="Pesticidas",
             hover_name="País",
-            hover_data={"Pesticidas": True},
+            hover_data={"Pesticidas": True,"País":False},
             color_continuous_scale="Viridis",
             range_color=(min_pepticidas, max_pepticidas),
             title=f"Exposición al Plomo - {año_seleccionado}"
@@ -996,7 +996,7 @@ def server(input, output, session):
             locationmode="country names",
             color="Precipitación (mm)",
             hover_name="País",
-            hover_data={"Precipitación (mm)": True},
+            hover_data={"Precipitación (mm)": True,"País":False},
             color_continuous_scale="Viridis",
             range_color=(min_precipitaciones, max_precipitaciones),
             title=f"Precipitaciones - {año_seleccionado}"
@@ -1038,7 +1038,7 @@ def server(input, output, session):
             locationmode="country names",
             color="Precipitación (mm)",
             hover_name="País",
-            hover_data={"Precipitación (mm)": True},
+            hover_data={"Precipitación (mm)": True,"País":False},
             color_continuous_scale="Viridis",
             range_color=(min_precipitaciones, max_precipitaciones),
             title=f"Precipitaciones - {año_seleccionado}"
@@ -1084,7 +1084,7 @@ def server(input, output, session):
             locationmode="country names",
             color="Parkinson_Predicho_Promedio",
             hover_name="País",
-            hover_data={"Parkinson_Predicho_Promedio": True},
+            hover_data={"Parkinson_Predicho_Promedio": True,"País":False},
             color_continuous_scale="Viridis",
             range_color=(min_val, max_val),
             title=f"Predicción Promedio del Parkinson por País"
@@ -1124,7 +1124,7 @@ def server(input, output, session):
             locationmode="country names",
             color="Desviacion",
             hover_name="País",
-            hover_data={"Desviacion": True},
+            hover_data={"Desviacion": True,"País":False},
             color_continuous_scale="Reds",
             range_color=(min_std, max_std),
             title=f"Desviación Estándar de Predicciones por País (Incertidumbre entre Modelos)"
@@ -1164,7 +1164,7 @@ def server(input, output, session):
             locationmode="country names",
             color="CV",
             hover_name="País",
-            hover_data={"CV": True},
+            hover_data={"CV": True,"País":False},
             color_continuous_scale="YlGnBu",
             range_color=(min_cv, max_cv),
             title=f"Coeficiente de Variación de Predicciones por País (Consistencia relativa entre modelos)"
