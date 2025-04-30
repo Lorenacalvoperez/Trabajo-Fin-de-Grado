@@ -165,37 +165,59 @@ def entrenar_modelo_rf(df, variables_independientes, variable_dependiente, test_
 def entrenar_modelo_xgboost(df, variables_independientes, variable_dependiente, test_size=0.2):
     df = df.copy()
 
-    # Separar las variables predictoras y la variable objetivo
+    # 1. Separar X e y
     X = df[variables_independientes]
     y = df[variable_dependiente]
 
-    # Dividir los datos en entrenamiento y prueba
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=42)
+    # 2. Escalar variables
+    scaler = StandardScaler()
+    X_scaled = pd.DataFrame(scaler.fit_transform(X), columns=variables_independientes)
 
-    # Crear el modelo XGBoost con los parámetros óptimos
+    # 3. Dividir en entrenamiento y test
+    X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=test_size, random_state=42)
+
+    # 4. Definir el modelo
     modelo = xgb.XGBRegressor(
-        n_estimators=1000,         # Número de árboles
-        learning_rate=0.05,        # Tasa de aprendizaje
-        max_depth=7,               # Profundidad máxima de cada árbol
-        min_child_weight=5,        # Mínimo peso de cada hoja
-        subsample=0.8,             # Proporción de muestras para entrenar cada árbol
-        colsample_bytree=1.0,      # Proporción de características para cada árbol
-        random_state=42            # Semilla para asegurar reproducibilidad
+        n_estimators=1000,
+        learning_rate=0.05,
+        max_depth=7,
+        min_child_weight=5,
+        subsample=0.8,
+        colsample_bytree=1.0,
+        random_state=42
     )
-    
-    # Ajustar el modelo
+
+    # 5. Entrenar el modelo
     modelo.fit(X_train, y_train)
 
-    # Evaluar el modelo
+    # 6. Evaluación
     y_pred = modelo.predict(X_test)
     mae = mean_absolute_error(y_test, y_pred)
     rmse = np.sqrt(mean_squared_error(y_test, y_pred))
     r2 = r2_score(y_test, y_pred)
+    print(f"\nMAE: {mae:.2f}, RMSE: {rmse:.2f}, R²: {r2:.2f}")
 
-    # Imprimir los resultados
-    print(f"MAE: {mae:.2f}, RMSE: {rmse:.2f}, R²: {r2:.2f}")
-    
-    # Devolver el modelo entrenado y las variables utilizadas
+    # 7. Importancia estándar de XGBoost
+    importancia = pd.DataFrame({
+        'Variable': variables_independientes,
+        'Importancia': modelo.feature_importances_
+    }).sort_values(by='Importancia', ascending=False)
+
+    print("\nImportancia de las variables (Feature Importance - XGBoost):")
+    print(importancia)
+
+    # 8. Importancia por permutación
+    resultado = permutation_importance(modelo, X_test, y_test, n_repeats=30, random_state=42)
+
+    importancia_perm = pd.DataFrame({
+        'Variable': variables_independientes,
+        'Importancia Media': resultado.importances_mean,
+        'Desviación': resultado.importances_std
+    }).sort_values(by='Importancia Media', ascending=False)
+
+    print("\nImportancia de las variables (Permutación):")
+    print(importancia_perm)
+
     return modelo, variables_independientes
 
 # Modelo SVR 
