@@ -221,41 +221,57 @@ def entrenar_modelo_xgboost(df, variables_independientes, variable_dependiente, 
     return modelo, variables_independientes
 
 # Modelo SVR 
-def entrenar_modelo_svr(df, test_size=0.2):
+def entrenar_modelo_svr(df, variables_independientes, variable_dependiente, test_size=0.2,ranking=False):
     df = df.copy()
 
-    # Crear variables transformadas
-    df['Pesticidas_log'] = np.log1p(df['Pesticidas'])
+    # 1. Separar X e y
+    X = df[variables_independientes]
+    y = df[variable_dependiente]
 
-    # Variables originales y transformadas
-    variables_originales = ['Contaminacion_aire', 'Muertes_agua', 'Exp_plomo']
-    variables_transformadas = ['Pesticidas_log']
-    variables_usar = variables_originales + variables_transformadas
-
-    X = df[variables_usar]
-    y = df['Parkinson']
-
-    # División y escalado
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=42)
+    # 2. Escalar variables
     scaler = StandardScaler()
-    X_train_scaled = scaler.fit_transform(X_train)
-    X_test_scaled = scaler.transform(X_test)
+    X_scaled = pd.DataFrame(scaler.fit_transform(X), columns=variables_independientes)
 
-    # Crear el modelo SVR con los mejores parámetros que ya obtuviste
-    modelo = SVR(C=1000, epsilon=1, gamma=1, kernel='rbf')  # ¡Ojo! gamma=1 aquí según tus mejores resultados
+    # 3. Dividir en entrenamiento y test
+    X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=test_size, random_state=42)
 
-    modelo.fit(X_train_scaled, y_train)
+    # 4. Definir el modelo con tus hiperparámetros óptimos
+    modelo = SVR(C=1000, epsilon=1, gamma=1, kernel='rbf')
 
-    # Evaluar el modelo
-    y_pred = modelo.predict(X_test_scaled)
+    # 5. Entrenar el modelo
+    modelo.fit(X_train, y_train)
+
+    # 6. Evaluación
+    y_pred = modelo.predict(X_test)
     mae = mean_absolute_error(y_test, y_pred)
     rmse = np.sqrt(mean_squared_error(y_test, y_pred))
     r2 = r2_score(y_test, y_pred)
+    print(f"\nMAE: {mae:.2f}, RMSE: {rmse:.2f}, R²: {r2:.2f}")
 
-    print(f"MAE: {mae:.2f}, RMSE: {rmse:.2f}, R²: {r2:.2f}")
+    # 7. Importancia por permutación
+    resultado = permutation_importance(modelo, X_test, y_test, n_repeats=30, random_state=42)
 
-    # Devuelve el modelo y resultados clave
-    return modelo, variables_usar, X_test_scaled, y_test
+    importancia_perm = pd.DataFrame({
+        'Variable': variables_independientes,
+        'Importancia Media': resultado.importances_mean,
+        'Desviación': resultado.importances_std
+    }).sort_values(by='Importancia Media', ascending=False)
+
+    print("\nImportancia de las variables (Permutación - SVR):")
+    print(importancia_perm)
+
+    if ranking:
+        # 8. Gráfico de importancia
+        plt.figure(figsize=(8, 4))
+        plt.barh(importancia_perm['Variable'], importancia_perm['Importancia Media'], 
+                 xerr=importancia_perm['Desviación'])
+        plt.xlabel("Importancia (disminución en score)")
+        plt.title("Importancia de variables - Permutación (SVR)")
+        plt.tight_layout()
+        plt.gca().invert_yaxis()
+        plt.show()
+
+    return modelo, variables_independientes
 
 # Modelo KNN
 def entrenar_modelo_knn(df, test_size=0.2):
