@@ -15,68 +15,80 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 
 # Modelo GLM 
 
+import numpy as np
+import pandas as pd
+from patsy import dmatrices
+import statsmodels.api as sm
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import mean_squared_error, mean_absolute_error
+
 def entrenar_modelo_glm(df, modelo_familia, variables_independientes, variable_dependiente, test_size=0.2, scaler=False):
-    df = df.copy()  # Evitar modificar el original
-    
-    # Aplicar transformaciones a las variables
-    if 'Muertes_agua' in variables_independientes:
-        df['Muertes_agua_2'] = df['Muertes_agua'] ** 2
-    if 'Exp_plomo' in variables_independientes:
-        df['Exp_plomo_2'] = df['Exp_plomo'] ** 2
-    if 'Pesticidas' in variables_independientes:
-        df['Pesticidas_log'] = np.log1p(df['Pesticidas'])
-        
-     # Seleccionar las variables transformadas
-    nuevas_variables = [var for var in df.columns if var in variables_independientes or var.endswith('_2') or var.endswith('_log')]
-   
-    
-    # Definir X (independientes) e y (dependiente)
-    X = df[nuevas_variables]
-    y = df[variable_dependiente]
-    
-    # Dividir en entrenamiento y prueba
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=42)
-    
-    # Alinear índices
+    df = df.copy()
+
+    # Construir fórmula en función de variables
+    transformaciones = {
+        'Contaminacion_aire': ['Contaminacion_aire', 'I(Contaminacion_aire**2)'],
+        'Muertes_agua': ['Muertes_agua', 'I(Muertes_agua**2)','I(Muertes_agua**3)'],
+        'Exp_plomo': ['Exp_plomo', 'I(Exp_plomo**2)', 'I(Exp_plomo**3)'],
+        'Pesticidas': ['np.log1p(Pesticidas)'],
+    }
+
+    # Construir partes de fórmula
+    partes_formula = []
+    for var in variables_independientes:
+        partes_formula.extend(transformaciones.get(var, [var]))
+
+    formula = f"{variable_dependiente} ~ " + " + ".join(partes_formula)
+
+    # Dividir en train/test
+    df_train, df_test = train_test_split(df, test_size=test_size, random_state=42)
+
+    # Crear matrices con patsy
+    y_train, X_train = dmatrices(formula, data=df_train, return_type='dataframe')
+    y_test, X_test = dmatrices(formula, data=df_test, return_type='dataframe')
+
+        # Alinear índices
     X_train = X_train.reset_index(drop=True)
     y_train = y_train.reset_index(drop=True)
     X_test = X_test.reset_index(drop=True)
     y_test = y_test.reset_index(drop=True)
-    
-    # Escalar si es necesario
+
     scaler_model = None
     if scaler:
         scaler_model = StandardScaler()
-        X_train_scaled = scaler_model.fit_transform(X_train)
-        X_test_scaled = scaler_model.transform(X_test)
+    
+        # Separar columna intercepto
+        intercept_train = X_train[['Intercept']]
+        intercept_test = X_test[['Intercept']]
+    
+        # Escalar solo el resto
+        X_train_scaled = scaler_model.fit_transform(X_train.drop(columns='Intercept'))
+        X_test_scaled = scaler_model.transform(X_test.drop(columns='Intercept'))
+    
+        # Reconstruir DataFrames
+        X_train = pd.DataFrame(X_train_scaled, columns=X_train.columns.drop('Intercept'))
+        X_test = pd.DataFrame(X_test_scaled, columns=X_test.columns.drop('Intercept'))
+    
+        # Volver a unir la columna Intercept (sin escalar)
+        X_train = pd.concat([intercept_train.reset_index(drop=True), X_train.reset_index(drop=True)], axis=1)
+        X_test = pd.concat([intercept_test.reset_index(drop=True), X_test.reset_index(drop=True)], axis=1)
 
-        # Reconstruir DataFrames conservando los nombres
-        X_train = pd.DataFrame(X_train_scaled, columns=nuevas_variables)
-        X_test = pd.DataFrame(X_test_scaled, columns=nuevas_variables)
     
-    # Añadir constante
-    X_train = sm.add_constant(X_train, has_constant='add')
-    X_test = sm.add_constant(X_test, has_constant='add')
-    
-    # Entrenar el modelo GLM
+
+    # Entrenar modelo GLM
     modelo = sm.GLM(y_train, X_train, family=modelo_familia).fit()
-    
-    # Mostrar resumen del modelo
     print(modelo.summary())
-    
-    # Verificación antes de predecir
-    if X_test.shape[1] != len(modelo.params):
-        print("⚠ ERROR: Desajuste entre columnas de X_test y los parámetros del modelo.")
-        print("Columnas esperadas por el modelo:", modelo.params.index.tolist())
-        print("Columnas reales en X_test:", X_test.columns.tolist())
-        raise ValueError("¡Número de columnas de X_test no coincide con los parámetros del modelo!")
 
-    # Evaluar el modelo
+    # Evaluación
     y_pred = modelo.predict(X_test)
     rmse = np.sqrt(mean_squared_error(y_test, y_pred))
     mae = mean_absolute_error(y_test, y_pred)
-    
-    return modelo, scaler_model, nuevas_variables
+
+    print(f"\nRMSE: {rmse:.4f}")
+    print(f"MAE: {mae:.4f}")
+
+    return modelo, scaler_model, transformaciones,formula
 
 
 
