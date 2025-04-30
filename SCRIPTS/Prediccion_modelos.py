@@ -56,6 +56,7 @@ def predecir_para_pais(modelos_por_pais, archivo_para_predecir):
     return pd.DataFrame(resultados)
 
 
+
 def predecir_para_pais_RF_XG(modelos_por_pais, archivo_para_predecir):
     df_para_predecir = pd.read_csv(archivo_para_predecir)
     df_para_predecir['Parkinson_Predicho'] = np.nan

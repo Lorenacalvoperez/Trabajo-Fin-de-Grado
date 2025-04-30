@@ -94,14 +94,35 @@ def entrenar_modelo_glm(df, modelo_familia, variables_independientes, variable_d
 
 # Modelo Random Forest
 def entrenar_modelo_rf(df, variables_independientes, variable_dependiente, test_size=0.2):
-    df = df.copy()
+    """
+    Entrena un modelo Random Forest, escala las variables, y calcula la importancia de las variables 
+    tanto por feature importance como por permutación.
+    
+    Parámetros:
+    - df: DataFrame con los datos.
+    - variables_independientes: lista de nombres de las columnas que se usarán como variables independientes.
+    - variable_dependiente: nombre de la columna de la variable dependiente.
+    - test_size: proporción del conjunto de test.
+    
+    Retorna:
+    - modelo_global: el modelo entrenado de Random Forest.
+    - importancia_df: DataFrame con la importancia de las variables (feature importance).
+    - importancia_perm: DataFrame con la importancia por permutación.
+    """
+    
+    # 1. Separar X e y
+    X = df[variables_independientes].copy()
+    y = df[variable_dependiente].copy()
 
-    X = df[variables_independientes]
-    y = df[variable_dependiente]
+    # 2. Escalar las variables independientes
+    scaler = StandardScaler()
+    X_scaled = pd.DataFrame(scaler.fit_transform(X), columns=variables_independientes)
 
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=42)
+    # 3. Dividir en conjuntos de entrenamiento y prueba
+    X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=test_size, random_state=42)
 
-    modelo = RandomForestRegressor(
+    # 4. Entrenar el modelo Random Forest
+    modelo_global = RandomForestRegressor(
         n_estimators=1000,
         max_depth=None,
         min_samples_split=2,
@@ -109,17 +130,36 @@ def entrenar_modelo_rf(df, variables_independientes, variable_dependiente, test_
         max_features='sqrt',
         random_state=42
     )
-    
-    modelo.fit(X_train, y_train)
+    modelo_global.fit(X_train, y_train)
 
-    # Evaluar
-    y_pred = modelo.predict(X_test)
+    # 5. Evaluar el modelo
+    y_pred = modelo_global.predict(X_test)
     rmse = np.sqrt(mean_squared_error(y_test, y_pred))
     mae = mean_absolute_error(y_test, y_pred)
+    print(f"\nMAE: {mae:.2f}, RMSE: {rmse:.2f}")
 
-    print(f"MAE: {mae:.2f}, RMSE: {rmse:.2f}")
+    # 6. Importancia estándar (feature importance)
+    importancia_df = pd.DataFrame({
+        'Variable': variables_independientes,
+        'Importancia': modelo_global.feature_importances_
+    }).sort_values(by='Importancia', ascending=False)
+
+    print("\nImportancia de las variables (Feature Importance):")
+    print(importancia_df)
+
+    # 7. Importancia por permutación
+    resultado = permutation_importance(modelo_global, X_test, y_test, n_repeats=30, random_state=42)
+
+    importancia_perm = pd.DataFrame({
+        'Variable': variables_independientes,
+        'Importancia Media': resultado.importances_mean,
+        'Desviación': resultado.importances_std
+    }).sort_values(by='Importancia Media', ascending=False)
+
+    print("\nImportancia de las variables (Permutación):")
+    print(importancia_perm)
     
-    return modelo, variables_independientes
+    return modelo_global,variables_independientes
 
 # Modelo CGBoost
 def entrenar_modelo_xgboost(df, variables_independientes, variable_dependiente, test_size=0.2):
