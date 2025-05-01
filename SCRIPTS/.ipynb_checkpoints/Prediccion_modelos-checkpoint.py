@@ -76,35 +76,23 @@ def predecir_para_pais_RF_XG(modelos_por_pais, archivo_para_predecir):
     print(df_para_predecir[['País', 'Parkinson_Predicho']])
     return df_para_predecir
 
-def predecir_para_pais_SVR_KNN_MLP(modelos_svr_por_pais, archivo_para_predecir):
-    df_para_predecir = pd.read_csv(archivo_para_predecir)
-    df_para_predecir = df_para_predecir.copy()
+import pandas as pd
+import numpy as np
 
-    # Aplicar las transformaciones necesarias
-    df_para_predecir['Contaminacion_aire_2'] = df_para_predecir['Contaminacion_aire'] ** 2
-    df_para_predecir['Muertes_agua_2'] = df_para_predecir['Muertes_agua'] ** 2
-    df_para_predecir['Exp_plomo_2'] = df_para_predecir['Exp_plomo'] ** 2
-    df_para_predecir['Pesticidas_log'] = np.log1p(df_para_predecir['Pesticidas'])
-
-    # Crear columna para predicción
+def predecir_para_pais_SVR_KNN_MLP(modelos_por_pais, archivo_para_predecir):
+    df_para_predecir = pd.read_csv(archivo_para_predecir).copy()
     df_para_predecir['Parkinson_Predicho'] = np.nan
 
     for pais in df_para_predecir["País"].unique():
         df_pais = df_para_predecir[df_para_predecir["País"] == pais].copy()
 
-        if pais in modelos_svr_por_pais:
-            modelo, columnas_utilizadas = modelos_svr_por_pais[pais]
+        if pais in modelos_por_pais:
+            modelo, columnas_utilizadas = modelos_por_pais[pais]
 
             X_nuevo = df_pais[columnas_utilizadas]
 
-            # Normalizar como en el entrenamiento
-            scaler = StandardScaler()
-            X_nuevo_scaled = scaler.fit_transform(X_nuevo)  # ⚠ Esto solo va bien si los datos están normalizados por país
-
-            # Predicción
-            predicciones = modelo.predict(X_nuevo_scaled)
+            predicciones = modelo.predict(X_nuevo)
             df_para_predecir.loc[df_para_predecir["País"] == pais, 'Parkinson_Predicho'] = predicciones
-
         else:
             print(f"⚠ Modelo no encontrado para {pais}.")
 

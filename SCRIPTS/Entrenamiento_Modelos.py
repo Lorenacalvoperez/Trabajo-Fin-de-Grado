@@ -274,43 +274,57 @@ def entrenar_modelo_svr(df, variables_independientes, variable_dependiente, test
     return modelo, variables_independientes
 
 # Modelo KNN
-def entrenar_modelo_knn(df, test_size=0.2):
+def entrenar_modelo_knn(df, variables_independientes, variable_dependiente, test_size=0.2, ranking=False):
     df = df.copy()
 
-    if 'Pesticidas' in df.columns:
-        df['Pesticidas_log'] = np.log1p(df['Pesticidas'])
+    # 1. Separar X e y
+    X = df[variables_independientes]
+    y = df[variable_dependiente]
 
-    # Variables originales y transformadas
-    variables_originales = ['Contaminacion_aire', 'Muertes_agua', 'Exp_plomo']
-    variables_transformadas = ['Pesticidas_log']
-
-    # Crear variable que combine ambas listas
-    variables_usar = variables_originales + variables_transformadas
-
-    # Crear X e y
-    X = df[variables_usar]
-    y = df['Parkinson']
-    
-    # División y escalado
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=42)
+    # 2. Escalar variables
     scaler = StandardScaler()
-    X_train_scaled = scaler.fit_transform(X_train)
-    X_test_scaled = scaler.transform(X_test)
+    X_scaled = pd.DataFrame(scaler.fit_transform(X), columns=variables_independientes)
 
-    # Crear el modelo KNN con los mejores parámetros encontrados
-    knn_model = KNeighborsRegressor(n_neighbors=11, weights='distance', metric='manhattan')
-    knn_model.fit(X_train_scaled, y_train)
+    # 3. Dividir en entrenamiento y test
+    X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=test_size, random_state=42)
 
-    # Evaluar el modelo
-    y_pred_knn = knn_model.predict(X_test_scaled)
-    mae_knn = mean_absolute_error(y_test, y_pred_knn)
-    rmse_knn = np.sqrt(mean_squared_error(y_test, y_pred_knn))
+    # 4. Definir y entrenar el modelo KNN
+    modelo = KNeighborsRegressor(n_neighbors=11, weights='distance', metric='manhattan')
+    modelo.fit(X_train, y_train)
 
-    print(f"MAE KNN con variables transformadas: {mae_knn:.2f}")
-    print(f"RMSE KNN con variables transformadas: {rmse_knn:.2f}")
+    # 5. Evaluación
+    y_pred = modelo.predict(X_test)
+    mae = mean_absolute_error(y_test, y_pred)
+    rmse = np.sqrt(mean_squared_error(y_test, y_pred))
+    r2 = r2_score(y_test, y_pred)
 
-    # Devuelve también los datos de test ya escalados
-    return knn_model, variables_usar, X_test_scaled, y_test
+    print(f"\nMAE: {mae:.2f}, RMSE: {rmse:.2f}, R²: {r2:.2f}")
+
+    # 6. Importancia por permutación
+    resultado = permutation_importance(modelo, X_test, y_test, n_repeats=30, random_state=42)
+
+    importancia_perm = pd.DataFrame({
+        'Variable': variables_independientes,
+        'Importancia Media': resultado.importances_mean,
+        'Desviación': resultado.importances_std
+    }).sort_values(by='Importancia Media', ascending=False)
+
+    print("\nImportancia de las variables (Permutación - KNN):")
+    print(importancia_perm)
+
+    if ranking:
+        # 7. Gráfico de importancia
+        plt.figure(figsize=(8, 4))
+        plt.barh(importancia_perm['Variable'], importancia_perm['Importancia Media'], 
+                 xerr=importancia_perm['Desviación'])
+        plt.xlabel("Importancia (disminución en score)")
+        plt.title("Importancia de variables - Permutación (KNN)")
+        plt.tight_layout()
+        plt.gca().invert_yaxis()
+        plt.show()
+
+    return modelo, variables_independientes
+
 
 # Modelo MLP
 def entrenar_modelo_mlp(df, test_size=0.2):
