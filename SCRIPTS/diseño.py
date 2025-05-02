@@ -142,15 +142,40 @@ app_ui = ui.page_fluid(
                 margin-left: -40px;  
                 width: 100%;  
             }
+            /* Colores específicos para cada enlace del sidebar */
+            .sidebar-link {
+                display: block;
+                padding: 20px 15px;  /* Más altura y espacio interno */
+                margin: 15px 0;      /* Más separación entre enlaces */
+                color: white;
+                text-decoration: none;
+                border-radius: 10px;
+                text-align: center;
+                font-weight: bold;
+                font-size: 18px;     /* Letra más grande */
+                box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2); /* Sombra sutil */
+                transition: background-color 0.3s ease;
+            }
+            
+            .home-link  { background-color: #1abc9c; }
+            .map-link   { background-color: #3498db; }
+            .env-link   { background-color: #e67e22; }
+            .graph-link { background-color: #9b59b6; }
+            
+            .sidebar-link:hover {
+                opacity: 0.85;  /* Efecto al pasar el cursor */
+                cursor: pointer;}
+
         """),
     ),
     ui.layout_sidebar(
         ui.sidebar(
             ui.div(
-                ui.a("🏠 Home", id="home_btn", onclick="Shiny.setInputValue('page', 'home')"),
-                ui.a("Mapa Global del Parkinson", class_="nav-item", onclick="Shiny.setInputValue('page', 'section1')"),
-                ui.a("Impacto de las Variables Ambientales", class_="nav-item", onclick="Shiny.setInputValue('page', 'section2')"),
-                ui.a("Análisis Gráfico y Correlaciones", class_="nav-item", onclick="Shiny.setInputValue('page', 'section3')"),
+                ui.a("🏠 Home", class_="sidebar-link home-link", onclick="Shiny.setInputValue('page', 'home')"),
+                ui.a("Mapa Mundial del Parkinson", class_="sidebar-link map-link", onclick="Shiny.setInputValue('page', 'section1')"),
+                ui.a("Variables Ambientales", class_="sidebar-link env-link", onclick="Shiny.setInputValue('page', 'section2')"),
+                ui.a("Análisis Gráfico y Correlaciones", class_="sidebar-link graph-link", onclick="Shiny.setInputValue('page', 'section3')"),
+
                 class_="sidebar"
             )
         ),
@@ -269,16 +294,42 @@ def server(input, output, session):
 
         elif page == "section2":
             return ui.div(
-                # Barra lateral horizontal con botones
+                # Título de la aplicación
                 ui.div(
-                    ui.input_action_button("show_contaminacion", "Contaminación del Aire", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'contaminacion')"),
-                    ui.input_action_button("show_plomo", "Exposición al Plomo", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'plomo')"),
-                    ui.input_action_button("show_agua", "Muertes por aguas inseguras", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'agua')"),
-                    ui.input_action_button("show_pesticidas", "Uso de pesticidas", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'pesticidas')"),
-                    ui.input_action_button("show_precipitaciones", "Precipitaciones", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'precipitaciones')"),
-                    style="display: flex; justify-content: space-around; margin-bottom: 20px;"  # Estilo para la barra horizontal
+                    ui.h1("🌍 Parkinson Worldview",
+                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"
+                    ),
+                    style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
+                ),
+        
+                # Instrucciones y resumen de variables
+                ui.div(
+                    ui.p(
+                        "Explora cómo distintas variables ambientales están relacionadas con la prevalencia de la enfermedad de Parkinson en diferentes partes del mundo.",
+                        style="font-size: 17px; margin: 10px 20px; color: #333;"
+                    ),
+                    ui.tags.ul(
+                        ui.tags.li("🌫️ Contaminación del Aire."),
+                        ui.tags.li("🔩 Exposición al Plomo."),
+                        ui.tags.li("🚰 Aguas Inseguras."),
+                        ui.tags.li("🌿 Uso de Pesticidas."),
+                        ui.tags.li("🌧️ Precipitaciones."),
+                        style="font-size: 16px; color: #444; padding: 10px 30px;"
+                    )
+                ),
+        
+                # Botones de navegación
+                ui.div(
+                    ui.input_action_button("show_contaminacion", "🌫️Contaminación del Aire", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'contaminacion')"),
+                    ui.input_action_button("show_plomo", "🔩 Exposición al Plomo", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'plomo')"),
+                    ui.input_action_button("show_agua", "🚰 Muertes por aguas inseguras", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'agua')"),
+                    ui.input_action_button("show_pesticidas", "🌿 Uso de pesticidas", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'pesticidas')"),
+                    ui.input_action_button("show_precipitaciones", " 🌧️ Precipitaciones", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'precipitaciones')"),
+                    style="display: flex; justify-content: space-around; margin: 30px 0 20px 0;"
                 )
             )
+
+
 
         elif page == "contaminacion":
             return ui.div(
@@ -363,7 +414,7 @@ def server(input, output, session):
                         "go_back", 
                         "🔙 Volver al Mapa Global", 
                         class_="btn btn-secondary",
-                        onclick="Shiny.setInputValue('page', 'contaminacion')"
+                        onclick="Shiny.setInputValue('page', 'plomo')"
                     ),
                     style="margin-bottom: 20px;"
                 ),
@@ -414,7 +465,7 @@ def server(input, output, session):
                         "go_back", 
                         "🔙 Volver al Mapa Global", 
                         class_="btn btn-secondary",
-                        onclick="Shiny.setInputValue('page', 'contaminacion')"
+                        onclick="Shiny.setInputValue('page', 'agua')"
                     ),
                     style="margin-bottom: 20px;"
                 ),
@@ -465,7 +516,7 @@ def server(input, output, session):
                         "go_back", 
                         "🔙 Volver al Mapa Global", 
                         class_="btn btn-secondary",
-                        onclick="Shiny.setInputValue('page', 'contaminacion')"
+                        onclick="Shiny.setInputValue('page', 'pesticidas')"
                     ),
                     style="margin-bottom: 20px;"
                 ),
@@ -516,7 +567,7 @@ def server(input, output, session):
                         "go_back", 
                         "🔙 Volver al Mapa Global", 
                         class_="btn btn-secondary",
-                        onclick="Shiny.setInputValue('page', 'contaminacion')"
+                        onclick="Shiny.setInputValue('page', 'precipitaciones')"
                     ),
                     style="margin-bottom: 20px;"
                 ),
@@ -1123,7 +1174,7 @@ def server(input, output, session):
             hover_data={"Parkinson_Predicho_Promedio": True,"País":False},
             color_continuous_scale="Viridis",
             range_color=(min_val, max_val),
-            title=f"Predicción Promedio del Parkinson por País"
+            title=f"Prevalencia del Parkinson Promedio predicho por País"
         )
         fig_modelos.update_geos(
         projection_type="equirectangular",  # <- Mapa plano
@@ -1134,9 +1185,9 @@ def server(input, output, session):
 
         fig_modelos.update_layout(
             title={
-                'text': f"<b>Predicción Promedio del Parkinson por País </b>",
+                'text': f"<b>Prevalencia de Parkinson Promedio predicho por País </b>",
                 'font': {'size': 20},
-                'x': 0.7,
+                'x': 0.8,
                 'y' : 0.98,
                 'xanchor': 'right'
             },
@@ -1163,7 +1214,7 @@ def server(input, output, session):
             hover_data={"Desviacion": True,"País":False},
             color_continuous_scale="Reds",
             range_color=(min_std, max_std),
-            title=f"Desviación Estándar de Predicciones por País (Incertidumbre entre Modelos)"
+            title=f"Prevalencia del Parkinson (Desviación Estándar) por País"
         )
         fig_modelos_prueba.update_geos(
         projection_type="equirectangular",  # <- Mapa plano
@@ -1173,9 +1224,9 @@ def server(input, output, session):
      )
         fig_modelos_prueba.update_layout(
             title={
-                'text': f"<b>Desviación Estándar de Predicciones por País",
+                'text': f"<b>Prevalencia del Parkinson (Desviación Estándar) por País",
                 'font': {'size': 20},
-                'x': 0.7,
+                'x': 0.85,
                 'y' : 0.98,
                 'xanchor': 'right'
             },
