@@ -163,24 +163,60 @@ def server(input, output, session):
     @output
     @render.ui
     def content_display():
-        if input.page() == "home":  
+        if input.page() == "home":
             return ui.div(
-                ui.navset_bar(
-                    ui.nav_panel("Overview", "Información general sobre el proyecto"),
-                    ui.nav_panel("Data", "Datos analizados sobre el Parkinson"),
-                    title="Parkinson Worldview"
-                ),
+                # Franja de color con el título
                 ui.div(
-                    ui.img(src="https://upload.wikimedia.org/wikipedia/commons/8/80/World_map_-_low_resolution.svg", height="300px"),
-                    class_="home-container"
+                    ui.h1("🌍 Parkinson Worldview",
+                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"
+                    ),
+                    style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
                 ),
+        
+                # Imagen flotante a la izquierda y texto fluyendo a la derecha
                 ui.div(
-                    ui.h3("Parkinson Worldview: Impacto Ambiental en el Parkinson", class_="home-title"),
-                    ui.p("Esta aplicación visualiza cómo ciertas variables ambientales afectan la prevalencia y desarrollo de la enfermedad de Parkinson en diferentes países.",
-                        class_="home-subtitle"),
-                    class_="content-box"
-                )
+                    ui.img(
+                        src="https://upload.wikimedia.org/wikipedia/commons/8/80/World_map_-_low_resolution.svg",
+                        height="200px",
+                        style="float: left; margin-right: 20px; margin-bottom: 10px; border-radius: 8px;"
+                    ),
+                    ui.p(
+                        "Esta aplicación es una herramienta visual que explora la relación entre diferentes variables ambientales y la prevalencia de la enfermedad de Parkinson en diversas regiones del mundo. "
+                        "El objetivo de esta app es proporcionar una visión comprensible y accesible sobre cómo factores ambientales, "
+                        "pueden tener un impacto en la aparición y progresión de esta enfermedad neurodegenerativa.",
+                        style="font-size: 18px; font-family: 'Verdana', sans-serif; color: #333333; line-height: 1.6;"
+                    ),
+                    ui.h3("¿De dónde provienen los datos?",
+                          style="font-size: 24px; font-weight: bold; color: #2C3E50; clear: both;"),
+                    ui.p(
+                        "Los datos utilizados provienen de Our World in Data (OWID), una plataforma global que recopila y presenta datos de salud pública, sociales y ambientales de todo el mundo. "
+                    "La misión de OWID es hacer que los datos sean accesibles para cualquier persona, con el fin de fomentar una mayor comprensión y toma de decisiones informadas. En nuestro caso, hemos utilizado información sobre la Tasa de mortalidad por contaminación del aire, "
+                    "la Tasa de carga de enfermedad por exposición al plomo, muertes atribuidas a fuentes de agua inseguras, el uso de pesticidas y precipitaciones anuales. ",
+                        style="font-size: 18px; line-height: 1.6; color: #333333;"
+                    ),
+                    ui.a("Visita Our World in Data para más detalles", href="https://ourworldindata.org/", target="_blank", 
+                     style="font-size: 18px; color: #3498db; text-decoration: none;"),
+                    ui.p(
+                        "Al combinar estos datos con análisis estadísticos y modelos predictivos, se puede obtener una visión más clara de cómo estos factores ambientales pueden afectar la prevalencia del Parkinson. "
+                        "Además, este enfoque también ayuda a identificar posibles áreas geográficas donde el riesgo de Parkinson es más alto, lo que puede llevar a una mejor planificación de políticas públicas y estrategias de salud.",
+                        style="font-size: 18px; line-height: 1.6; color: #333333;"
+                    ),
+                    ui.h3("¿Qué analizamos?", style="font-size: 24px; font-weight: bold; color: #2C3E50; margin-top: 20px;"),
+                    ui.p(
+                        "A través de esta aplicación, analizamos diferentes aspectos de la prevalencia de la enfermedad de Parkinson en función de los factores ambientales. "
+                        "Entre los análisis realizados se incluyen la visualización geográfica de los países más afectados por la enfermedad, "
+                        "y el uso de modelos predictivos entrenados con estos datos para predecir la prevalencia futura en distintas regiones del mundo.",
+                        style="font-size: 18px; line-height: 1.6; color: #333333;"
+                    ),
+                ),
             )
+        
+
+
+
+            
+
+
 
         page = input.page()
         if page == "section1":
