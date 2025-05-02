@@ -99,39 +99,29 @@ def predecir_para_pais_SVR_KNN_MLP(modelos_por_pais, archivo_para_predecir):
     print(df_para_predecir[['País', 'Parkinson_Predicho']])
     return df_para_predecir
 
-def predecir_para_pais_MLP(modelos_mlp_por_pais, archivo_para_predecir):
-    # Cargar los datos a predecir
-    df_para_predecir = pd.read_csv(archivo_para_predecir)
-    df_para_predecir = df_para_predecir.copy()
+import pandas as pd
+import numpy as np
 
-    # Aplicar las transformaciones necesarias a las variables
-    df_para_predecir['Contaminacion_aire_2'] = df_para_predecir['Contaminacion_aire'] ** 2
-    df_para_predecir['Muertes_agua_2'] = df_para_predecir['Muertes_agua'] ** 2
-    df_para_predecir['Exp_plomo_2'] = df_para_predecir['Exp_plomo'] ** 2
-    df_para_predecir['Pesticidas_log'] = np.log1p(df_para_predecir['Pesticidas'])
-
-    # Crear columna para las predicciones
+def predecir_para_pais_MLP(modelos_por_pais, archivo_para_predecir):
+    df_para_predecir = pd.read_csv(archivo_para_predecir).copy()
     df_para_predecir['Parkinson_Predicho'] = np.nan
 
-    # Recorrer los países y hacer predicciones
     for pais in df_para_predecir["País"].unique():
         df_pais = df_para_predecir[df_para_predecir["País"] == pais].copy()
 
-        if pais in modelos_mlp_por_pais:
-            modelo, scaler, columnas_utilizadas = modelos_mlp_por_pais[pais]
+        if pais in modelos_por_pais:
+            modelo, scaler, columnas_utilizadas = modelos_por_pais[pais]
 
-            if all(col in df_para_predecir.columns for col in columnas_utilizadas):
-                X_nuevo = df_pais[columnas_utilizadas]
-                X_nuevo_scaled = scaler.transform(X_nuevo)
-                predicciones = modelo.predict(X_nuevo_scaled)
+            X_nuevo = df_pais[columnas_utilizadas]
+            X_nuevo_scaled = scaler.transform(X_nuevo)
 
-                df_para_predecir.loc[df_para_predecir["País"] == pais, 'Parkinson_Predicho'] = predicciones
-            else:
-                print(f"⚠ Faltan columnas necesarias para predecir {pais}.")
+            # ✅ Convertimos el array escalado en DataFrame para mantener los nombres de columnas
+            X_nuevo_scaled_df = pd.DataFrame(X_nuevo_scaled, columns=columnas_utilizadas)
+
+            predicciones = modelo.predict(X_nuevo_scaled_df)
+            df_para_predecir.loc[df_para_predecir["País"] == pais, 'Parkinson_Predicho'] = predicciones
         else:
             print(f"⚠ Modelo no encontrado para {pais}.")
 
-    # Mostrar las predicciones
     print(df_para_predecir[['País', 'Parkinson_Predicho']])
-
     return df_para_predecir

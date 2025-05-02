@@ -12,6 +12,9 @@ from sklearn.neural_network import MLPRegressor
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+from sklearn.inspection import permutation_importance
+import matplotlib.pyplot as plt
+
 
 # Modelo GLM 
 
@@ -327,42 +330,53 @@ def entrenar_modelo_knn(df, variables_independientes, variable_dependiente, test
 
 
 # Modelo MLP
-def entrenar_modelo_mlp(df, test_size=0.2):
+def entrenar_modelo_mlp(df, variables_independientes, variable_dependiente, test_size=0.2, ranking=False):
     df = df.copy()
 
-    # Aplicar transformaciones si las columnas existen
-    if 'Muertes_agua' in df.columns:
-        df['Muertes_agua_2'] = df['Muertes_agua'] ** 2
-    if 'Pesticidas' in df.columns:
-        df['Pesticidas_log'] = np.log1p(df['Pesticidas'])
+    # 1. Separar X e y
+    X = df[variables_independientes]
+    y = df[variable_dependiente]
 
-    # Variables originales y transformadas
-    variables_originales = ['Contaminacion_aire', 'Exp_plomo', 'Pesticidas']
-    variables_transformadas = [ 'Muertes_agua_2', 'Pesticidas_log']
-
-    # ✅ Crear variable que combine ambas listas
-    variables_usar = variables_originales + variables_transformadas
-
-    # Crear X e y
-    X = df[variables_usar]
-    y = df['Parkinson']
-
-    # División y escalado
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=42)
+    # 2. Escalar variables
     scaler = StandardScaler()
-    X_train_scaled = scaler.fit_transform(X_train)
-    X_test_scaled = scaler.transform(X_test)
+    X_scaled = pd.DataFrame(scaler.fit_transform(X), columns=variables_independientes)
 
-    # Crear el modelo MLP
-    mlp_model = MLPRegressor(hidden_layer_sizes=(256, 128), activation='relu', max_iter=10000, alpha=0.01, random_state=42)
-    mlp_model.fit(X_train_scaled, y_train)
+    # 3. Dividir en entrenamiento y test
+    X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=test_size, random_state=42)
 
-    # Evaluar el modelo
-    y_pred_mlp = mlp_model.predict(X_test_scaled)
-    mae_mlp = mean_absolute_error(y_test, y_pred_mlp)
-    rmse_mlp = np.sqrt(mean_squared_error(y_test, y_pred_mlp))
+    # 4. Definir y entrenar el modelo MLP
+    modelo = MLPRegressor(hidden_layer_sizes=(256, 128), activation='relu', max_iter=10000, alpha=0.01, random_state=42)
+    modelo.fit(X_train, y_train)
 
-    print(f"MAE MLP con variables transformadas: {mae_mlp:.2f}")
-    print(f"RMSE MLP con variables transformadas: {rmse_mlp:.2f}")
+    # 5. Evaluación
+    y_pred = modelo.predict(X_test)
+    mae = mean_absolute_error(y_test, y_pred)
+    rmse = np.sqrt(mean_squared_error(y_test, y_pred))
+    r2 = r2_score(y_test, y_pred)
 
-    return mlp_model, scaler, variables_usar, X_test_scaled, y_test
+    print(f"\nMAE: {mae:.2f}, RMSE: {rmse:.2f}, R²: {r2:.2f}")
+
+    # 6. Importancia por permutación
+    resultado = permutation_importance(modelo, X_test, y_test, n_repeats=30, random_state=42)
+
+    importancia_perm = pd.DataFrame({
+        'Variable': variables_independientes,
+        'Importancia Media': resultado.importances_mean,
+        'Desviación': resultado.importances_std
+    }).sort_values(by='Importancia Media', ascending=False)
+
+    print("\nImportancia de las variables (Permutación - MLP):")
+    print(importancia_perm)
+
+    if ranking:
+        # 7. Gráfico de importancia
+        plt.figure(figsize=(8, 4))
+        plt.barh(importancia_perm['Variable'], importancia_perm['Importancia Media'],
+                 xerr=importancia_perm['Desviación'])
+        plt.xlabel("Importancia (disminución en score)")
+        plt.title("Importancia de variables - Permutación (MLP)")
+        plt.tight_layout()
+        plt.gca().invert_yaxis()
+        plt.show()
+
+    return modelo, scaler,variables_independientes
