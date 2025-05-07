@@ -12,6 +12,7 @@ df_precipitaciones = pd.read_csv('Precipitaciones.csv').round(2)
 df_pred_promedio = pd.read_csv("predicciones_modelos_promedio.csv").round(2)
 df_pred_desviacion = pd.read_csv("predicciones_modelos_desviacion.csv").round(2)
 df_pred_CV = pd.read_csv("predicciones_modelos_CV.csv").round(2)
+df_realesVSpredichos = pd.read_csv("RealesVSPredichos.csv").round(2)
 
 #Misma escala de distribicon para todos los mapas
 
@@ -43,6 +44,11 @@ max_std = df_pred_desviacion["Desviacion"].quantile(0.95)
 
 min_cv = df_pred_CV['CV'].min()
 max_cv = df_pred_CV['CV'].quantile(0.95)
+
+# Mínimo y máximo reales (no truncados)
+        
+real_min = df_realesVSpredichos['Error_Absoluto'].min()
+real_max = df_realesVSpredichos['Error_Absoluto'].max()
 
 
 # Definir la interfaz de usuario con CSS global
@@ -593,7 +599,7 @@ def server(input, output, session):
                 ui.div(
                     ui.output_ui("plot_modelos_mapa"),
                     ui.output_ui("plot_modelos"),
-                    ui.output_ui("plot_modelos_CV"),
+                    ui.output_ui("plot_vs"),
                     style="display: flex; flex-direction: column; align-items: center; gap: 20px;"
                 ),
                 class_="content-box"
@@ -716,6 +722,7 @@ def server(input, output, session):
             hover_data={"Tasa_contaminacion_Aire": True,"País":False},
             color_continuous_scale="Viridis",
             range_color=(min_contaminacion, max_contaminacion),
+            labels={"Tasa_contaminacion_Aire": "Tasa de mortalidad por contaminación del aire"},
             title=f"Contaminación del Aire - {año_seleccionado}"
         )
 
@@ -789,7 +796,7 @@ def server(input, output, session):
                 len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
                 thickness=15,
                 y=0.5,
-                title="Contaminación_aire"
+                title="Tasa de mortalidad por contaminación del aire"
             )
         )
 
@@ -811,6 +818,7 @@ def server(input, output, session):
             hover_data={"Exp_Plomo": True,"País":False},
             color_continuous_scale="Viridis",
             range_color=(min_plomo, max_plomo),
+            labels={"Exp_Plomo": "Tasa de carga de enferemdad por exposición al plomo"},
             title=f"Exposición al Plomo - {año_seleccionado}"
         )
 
@@ -882,7 +890,7 @@ def server(input, output, session):
                 len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
                 thickness=15,
                 y=0.5,
-                title="Exp_Plomo"
+                title="Tasa de carga de enferemdad por exposición al plomo"
             )
         )
 
@@ -903,6 +911,7 @@ def server(input, output, session):
             hover_data={"Muertes_agua": True,"País":False},
             color_continuous_scale="Viridis",
             range_color=(min_agua, max_agua),
+            labels={"Muertes_agua": "Muertes por fuentes de agua inseguras"},
             title=f"Muertes de agua - {año_seleccionado}"
         )
 
@@ -974,7 +983,7 @@ def server(input, output, session):
                 len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
                 thickness=15,
                 y=0.5,
-                title="Muertes_agua"
+                title="Muertes por fuentes de agua inseguras"
             )
         )
 
@@ -995,6 +1004,7 @@ def server(input, output, session):
             hover_data={"Pesticidas": True,"País":False},
             color_continuous_scale="Viridis",
             range_color=(min_pepticidas, max_pepticidas),
+            labels={"Pesticidas": "Uso de pesticidas (Toneladas)"},
             title=f"Uso de pepticidas - {año_seleccionado}"
         )
 
@@ -1065,7 +1075,7 @@ def server(input, output, session):
                 len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
                 thickness=15,
                 y=0.5,
-                title="Pesticidas"
+                title="Uso de pesticidas (Toneladas)"
             )
         )
 
@@ -1086,6 +1096,7 @@ def server(input, output, session):
             hover_data={"Precipitación (mm)": True,"País":False},
             color_continuous_scale="Viridis",
             range_color=(min_precipitaciones, max_precipitaciones),
+            labels={"Precipitación (mm)": "Cantidad de Precipitacion (mm)"},
             title=f"Precipitaciones - {año_seleccionado}"
         )
         fig_precipitaciones_filtrado.update_geos(
@@ -1154,7 +1165,7 @@ def server(input, output, session):
                 len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
                 thickness=15,
                 y=0.5,
-                title="Precipitación"
+                title="Cantidad de Precicpitaciones (mm)"
             )
         )
 
@@ -1187,7 +1198,7 @@ def server(input, output, session):
             title={
                 'text': f"<b>Prevalencia de Parkinson Promedio predicho por País </b>",
                 'font': {'size': 20},
-                'x': 0.8,
+                'x': 0.78,
                 'y' : 0.98,
                 'xanchor': 'right'
             },
@@ -1197,7 +1208,7 @@ def server(input, output, session):
                 len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
                 thickness=20,
                 y=0.5,
-                title="Parkinson"
+                title="Prevalencia Parkinson"
             )
         )
         return ui.HTML(fig_modelos.to_html(full_html=False))
@@ -1226,7 +1237,7 @@ def server(input, output, session):
             title={
                 'text': f"<b>Prevalencia del Parkinson (Desviación Estándar) por País",
                 'font': {'size': 20},
-                'x': 0.85,
+                'x': 0.82,
                 'y' : 0.98,
                 'xanchor': 'right'
             },
@@ -1236,7 +1247,7 @@ def server(input, output, session):
                 len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
                 thickness=20,
                 y=0.5,
-                title="Desviación"
+                title="Prevalencia Parkinson"
             )
         )
         return ui.HTML(fig_modelos_prueba.to_html(full_html=False))
@@ -1244,42 +1255,67 @@ def server(input, output, session):
 
     @output
     @render.ui
-    def plot_modelos_CV():
-        fig_modelos_CV = px.choropleth(
-            data_frame=df_pred_CV,
+    def plot_vs():
+        # Escala visual centrada en el 95% del valor absol
+        midpoint_relative = (0 - real_min) / (real_max -real_min)
+        # Escala de colores personalizada con 0 real en blanco
+        colorscale = [
+        [0.0, "red"],
+        [midpoint_relative, "white"],
+        [1.0, "blue"]
+    ]
+    
+        fig_vs = px.choropleth(
+            data_frame=df_realesVSpredichos,
             locations="País",
             locationmode="country names",
-            color="CV",
+            color="Error_Absoluto",
             hover_name="País",
-            hover_data={"CV": True,"País":False},
-            color_continuous_scale="YlGnBu",
-            range_color=(min_cv, max_cv),
-            title=f"Coeficiente de Variación de Predicciones por País (Consistencia relativa entre modelos)"
+            hover_data={
+                "Parkinson_Predicho_Promedio": True,
+                "Parkinson_Real": True,
+                "Error_Absoluto": True,
+                "País": False
+            },
+            color_continuous_scale=colorscale,
+            #color_continuous_midpoint=0,
+            range_color=(real_min, real_max),  # Control visual
+            title="Error Absoluto de Predicción de Parkinson por País"
         )
-        fig_modelos_CV.update_geos(
-        projection_type="equirectangular",  # <- Mapa plano
-        showcoastlines=True,
-        showland=True,
-        fitbounds="locations"
-     )
-        fig_modelos_CV.update_layout(
+    
+        fig_vs.update_geos(
+            projection_type="equirectangular",
+            showcoastlines=True,
+            showland=True,
+            fitbounds="locations"
+        )
+    
+        fig_vs.update_layout(
             title={
-                'text': f"<b>Coeficiente de Variación de Predicciones por País",
+                'text': "<b>Prevalencia de Parkinson: Real vs. Predicha por país",
                 'font': {'size': 20},
-                'x': 0.7,
-                'y' : 0.98,
+                'x': 0.75,
+                'y': 0.98,
                 'xanchor': 'right'
             },
             height=400,
             margin={"r": 10, "t": 10, "l": 0, "b": 0},
             coloraxis_colorbar=dict(
-                len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
+                len=0.8,
                 thickness=20,
+                tickvals=[real_min, 0, real_max],  # Posiciones de los ticks
+                ticktext=[f"{real_min:.2f}", "0", f"{real_max:.2f}"],  # Etiquetas visibles
                 y=0.5,
-                title="CV"
+                title="Prevalencia Parkinson",
+
             )
         )
-        return ui.HTML(fig_modelos_CV.to_html(full_html=False))
+    
+        return ui.HTML(fig_vs.to_html(full_html=False))
+
+
+
+
 
 # Crear y ejecutar la aplicación
 app = App(app_ui, server)
