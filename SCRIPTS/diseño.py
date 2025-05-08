@@ -252,6 +252,15 @@ def server(input, output, session):
         page = input.page()
         if page == "section1":
             return ui.div(
+                # Franja de título
+                ui.div(
+                    ui.h1("🌍 Parkinson Worldview",
+                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"
+                    ),
+                    style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
+                ),
+        
+                # Contenido principal
                 ui.div(
                     ui.output_ui("plot_parkinson"),
                     ui.div(
@@ -271,9 +280,18 @@ def server(input, output, session):
                 ),
                 class_="content-box"
             )
-            
+        
         elif page == "europe_map":
             return ui.div(
+                # Franja de título
+                ui.div(
+                    ui.h1("🌍 Parkinson Worldview",
+                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"
+                    ),
+                    style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
+                ),
+        
+                # Contenido principal
                 ui.div(
                     ui.input_action_button(
                         "go_back", 
@@ -307,7 +325,7 @@ def server(input, output, session):
                     ),
                     style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
                 ),
-        
+            
                 # Instrucciones y resumen de variables
                 ui.div(
                     ui.p(
@@ -323,7 +341,7 @@ def server(input, output, session):
                         style="font-size: 16px; color: #444; padding: 10px 30px;"
                     )
                 ),
-        
+            
                 # Botones de navegación
                 ui.div(
                     ui.input_action_button("show_contaminacion", "🌫️Contaminación del Aire", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'contaminacion')"),
@@ -332,6 +350,15 @@ def server(input, output, session):
                     ui.input_action_button("show_pesticidas", "🌿 Uso de pesticidas", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'pesticidas')"),
                     ui.input_action_button("show_precipitaciones", " 🌧️ Precipitaciones", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'precipitaciones')"),
                     style="display: flex; justify-content: space-around; margin: 30px 0 20px 0;"
+                ),
+        
+                # Texto informativo (Tooltip o Texto destacando la acción)
+                ui.div(
+                    ui.p(
+                        "💡 Para explorar cada variable en diferentes países, haz clic en los botones de arriba. Esto te llevará a ver los datos específicos de cada variable. ¡Explora y conoce más cada una de ellas!",
+                        style="font-size: 16px; color: #555; text-align: center; margin-top: 20px; background-color: #ecf0f1; padding: 10px; border-radius: 8px;"
+                    ),
+                    style="margin-top: 20px;"
                 )
             )
 
@@ -339,6 +366,11 @@ def server(input, output, session):
 
         elif page == "contaminacion":
             return ui.div(
+                ui.div(
+                    ui.h1("🌍 Parkinson Worldview",
+                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
+                    style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
+                ),
                 ui.div(
                     ui.output_ui("plot_contaminacion"),
                     ui.div(
@@ -351,7 +383,8 @@ def server(input, output, session):
                         style="margin-top: 10px;"
                     ),
                     ui.div(
-                        ui.input_action_button("go_to_europe_aire", "🌍 Ver Mapa Europeo", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'plot_europe_aire')"),
+                        ui.input_action_button("go_to_europe_aire", "🌍 Ver Mapa Europeo", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'plot_europe_aire')")
+                    ),
                     ui.div(
                         ui.input_action_button("go_back", "Volver atrás", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'section2')"),
                         style="margin-top: 10px;"
@@ -360,10 +393,14 @@ def server(input, output, session):
                 ),
                 class_="content-box"
             )
-            )
 
         elif page == "plot_europe_aire":
             return ui.div(
+                ui.div(
+                    ui.h1("🌍 Parkinson Worldview",
+                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
+                    style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
+                ),
                 ui.div(
                     ui.input_action_button(
                         "go_back", 
@@ -388,8 +425,14 @@ def server(input, output, session):
                 class_="content-box"
             )
 
+
         elif page == "plomo":
             return ui.div(
+                ui.div(
+                    ui.h1("🌍 Parkinson Worldview",
+                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
+                    style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
+                ),
                 ui.div(
                     ui.output_ui("plot_plomo"),
                     ui.div(
@@ -415,6 +458,11 @@ def server(input, output, session):
 
         elif page == "plot_europe_plomo":
             return ui.div(
+                ui.div(
+                    ui.h1("🌍 Parkinson Worldview",
+                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
+                    style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
+                ),
                 ui.div(
                     ui.input_action_button(
                         "go_back", 
@@ -442,6 +490,11 @@ def server(input, output, session):
         elif page == "agua":
             return ui.div(
                 ui.div(
+                    ui.h1("🌍 Parkinson Worldview",
+                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
+                    style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
+                ),
+                ui.div(
                     ui.output_ui("plot_agua"),
                     ui.div(
                         ui.input_slider("year", "Selecciona el Año", 
@@ -466,6 +519,11 @@ def server(input, output, session):
 
         elif page == "plot_europe_agua":
             return ui.div(
+                ui.div(
+                    ui.h1("🌍 Parkinson Worldview",
+                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
+                    style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
+                ),
                 ui.div(
                     ui.input_action_button(
                         "go_back", 
@@ -493,6 +551,11 @@ def server(input, output, session):
         elif page == "pesticidas":
             return ui.div(
                 ui.div(
+                    ui.h1("🌍 Parkinson Worldview",
+                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
+                    style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
+                ),
+                ui.div(
                     ui.output_ui("plot_pepticidas"),
                     ui.div(
                         ui.input_slider("year", "Selecciona el Año", 
@@ -517,6 +580,11 @@ def server(input, output, session):
 
         elif page == "plot_europe_pepticidas":
             return ui.div(
+                ui.div(
+                    ui.h1("🌍 Parkinson Worldview",
+                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
+                    style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
+                ),
                 ui.div(
                     ui.input_action_button(
                         "go_back", 
@@ -544,6 +612,11 @@ def server(input, output, session):
         elif page == "precipitaciones":
             return ui.div(
                 ui.div(
+                    ui.h1("🌍 Parkinson Worldview",
+                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
+                    style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
+                ),
+                ui.div(
                     ui.output_ui("plot_precipitaciones"),
                     ui.div(
                         ui.input_slider("year", "Selecciona el Año", 
@@ -568,6 +641,11 @@ def server(input, output, session):
 
         elif page == "plot_europe_precipitaciones":
             return ui.div(
+                ui.div(
+                    ui.h1("🌍 Parkinson Worldview",
+                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
+                    style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
+                ),
                 ui.div(
                     ui.input_action_button(
                         "go_back", 
@@ -596,6 +674,15 @@ def server(input, output, session):
         
         elif page == "section3":
             return ui.div(
+                # Franja de color con el título
+                ui.div(
+                    ui.h1("🌍 Parkinson Worldview",
+                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"
+                    ),
+                    style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
+                ),
+        
+                # Contenido principal
                 ui.div(
                     ui.output_ui("plot_modelos_mapa"),
                     ui.output_ui("plot_modelos"),
