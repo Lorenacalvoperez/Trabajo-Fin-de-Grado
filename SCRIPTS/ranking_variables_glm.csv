@@ -1,0 +1,5 @@
+Variable,P>|z|
+Exp_plomo,0.00000
+Muertes_agua,0.00000
+Contaminacion_aire,0.00000
+np.log1p(Pesticidas),0.00004

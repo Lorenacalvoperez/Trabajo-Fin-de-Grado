@@ -1,0 +1,10 @@
+Variable,P>|z|,hue
+Exp_plomo,1.49503075494772e-74,p-valor
+I(Exp_plomo ** 2),2.4273652974081256e-16,p-valor
+Muertes_agua,9.352637569619498e-16,p-valor
+I(Muertes_agua ** 2),2.6251134634944347e-11,p-valor
+I(Muertes_agua ** 3),2.228605043245972e-08,p-valor
+Contaminacion_aire,7.106134461346126e-08,p-valor
+np.log1p(Pesticidas),3.7728699147912655e-05,p-valor
+I(Exp_plomo ** 3),7.072309460157877e-05,p-valor
+I(Contaminacion_aire ** 2),0.029702760600210744,p-valor

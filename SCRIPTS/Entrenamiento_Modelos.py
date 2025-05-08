@@ -25,8 +25,9 @@ import statsmodels.api as sm
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import mean_squared_error, mean_absolute_error
+import seaborn as sns
 
-def entrenar_modelo_glm(df, modelo_familia, variables_independientes, variable_dependiente, test_size=0.2, scaler=False):
+def entrenar_modelo_glm(df, modelo_familia, variables_independientes, variable_dependiente, test_size=0.2,ranking=False, scaler=False):
     df = df.copy()
 
     # Construir fórmula en función de variables
@@ -90,13 +91,39 @@ def entrenar_modelo_glm(df, modelo_familia, variables_independientes, variable_d
 
     print(f"\nRMSE: {rmse:.4f}")
     print(f"MAE: {mae:.4f}")
+    if ranking:
+        resumen = modelo.summary2().tables[1].reset_index().rename(columns={'index': 'Variable'})
+        resumen = resumen[['Variable', 'P>|z|']]
+        resumen = resumen[resumen['Variable'] != 'Intercept']
+        resumen = resumen.sort_values(by='P>|z|', ascending=True).reset_index(drop=True)
 
-    return modelo, scaler_model, transformaciones,formula
+        # Convertir p-valores a formato legible sin notación científica
+        resumen['P>|z|'] = resumen['P>|z|'].apply(lambda x: f'{x:.5f}')  # Limitar a 5 decimales, o el formato que necesites
 
+        # Mostrar el ranking por pantalla
+        print("\nRanking de variables por p-valor (GLM):")
+        print(resumen)
+        resumen.to_csv("ranking_variables_glm.csv", index=False)
+
+        # Gráfico de p-valores
+        plt.figure(figsize=(8, max(4, len(resumen) * 0.4)))
+        # Asignar un hue ficticio para evitar el mensaje de advertencia
+        resumen['hue'] = 'p-valor'
+        sns.barplot(data=resumen, y='Variable', x='P>|z|', hue='hue', palette='Blues_r')
+
+        plt.title("Ranking de variables por p-valor (GLM)")
+        plt.xlabel("P-valor")
+        plt.ylabel("Variable")
+        plt.legend()
+        plt.tight_layout()
+        plt.gca().invert_yaxis()
+        plt.show()
+
+    return modelo, scaler_model, transformaciones, formula
 
 
 # Modelo Random Forest
-def entrenar_modelo_rf(df, variables_independientes, variable_dependiente, test_size=0.2):
+def entrenar_modelo_rf(df, variables_independientes, variable_dependiente, test_size=0.2,ranking=False):
     """
     Entrena un modelo Random Forest, escala las variables, y calcula la importancia de las variables 
     tanto por feature importance como por permutación.
@@ -161,11 +188,23 @@ def entrenar_modelo_rf(df, variables_independientes, variable_dependiente, test_
 
     print("\nImportancia de las variables (Permutación):")
     print(importancia_perm)
+    importancia_perm.to_csv("ranking_variables_rf.csv", index=False)
+
+    if ranking:
+        # 8. Gráfico de importancia
+        plt.figure(figsize=(8, 4))
+        plt.barh(importancia_perm['Variable'], importancia_perm['Importancia Media'], 
+                 xerr=importancia_perm['Desviación'])
+        plt.xlabel("Importancia (disminución en score)")
+        plt.title("Importancia de variables - Permutación (RF)")
+        plt.tight_layout()
+        plt.gca().invert_yaxis()
+        plt.show()
     
     return modelo_global,variables_independientes
 
 # Modelo CGBoost
-def entrenar_modelo_xgboost(df, variables_independientes, variable_dependiente, test_size=0.2):
+def entrenar_modelo_xgboost(df, variables_independientes, variable_dependiente, test_size=0.2,ranking=False):
     df = df.copy()
 
     # 1. Separar X e y
@@ -221,6 +260,19 @@ def entrenar_modelo_xgboost(df, variables_independientes, variable_dependiente, 
     print("\nImportancia de las variables (Permutación):")
     print(importancia_perm)
 
+    importancia_perm.to_csv("ranking_variables_xg.csv", index=False)
+
+    if ranking:
+        # 8. Gráfico de importancia
+        plt.figure(figsize=(8, 4))
+        plt.barh(importancia_perm['Variable'], importancia_perm['Importancia Media'], 
+                 xerr=importancia_perm['Desviación'])
+        plt.xlabel("Importancia (disminución en score)")
+        plt.title("Importancia de variables - Permutación (XGBOOST)")
+        plt.tight_layout()
+        plt.gca().invert_yaxis()
+        plt.show()
+    
     return modelo, variables_independientes
 
 # Modelo SVR 
@@ -262,6 +314,7 @@ def entrenar_modelo_svr(df, variables_independientes, variable_dependiente, test
 
     print("\nImportancia de las variables (Permutación - SVR):")
     print(importancia_perm)
+    importancia_perm.to_csv("ranking_variables_svr.csv", index=False)
 
     if ranking:
         # 8. Gráfico de importancia
@@ -314,6 +367,7 @@ def entrenar_modelo_knn(df, variables_independientes, variable_dependiente, test
 
     print("\nImportancia de las variables (Permutación - KNN):")
     print(importancia_perm)
+    importancia_perm.to_csv("ranking_variables_knn.csv", index=False)
 
     if ranking:
         # 7. Gráfico de importancia
@@ -367,6 +421,7 @@ def entrenar_modelo_mlp(df, variables_independientes, variable_dependiente, test
 
     print("\nImportancia de las variables (Permutación - MLP):")
     print(importancia_perm)
+    importancia_perm.to_csv("ranking_variables_mlp.csv", index=False)
 
     if ranking:
         # 7. Gráfico de importancia
