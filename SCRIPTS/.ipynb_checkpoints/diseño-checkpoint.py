@@ -168,6 +168,7 @@ app_ui = ui.page_fluid(
             .map-link   { background-color: #3498db; }
             .env-link   { background-color: #e67e22; }
             .graph-link { background-color: #9b59b6; }
+            .contact-link {background-color: #34495E }
             
             .sidebar-link:hover {
                 opacity: 0.85;  /* Efecto al pasar el cursor */
@@ -182,7 +183,8 @@ app_ui = ui.page_fluid(
                 ui.a("🧠 Enfermedad del Parkinson", class_="sidebar-link park-link", onclick="Shiny.setInputValue('page', 'section1')"),
                 ui.a("🗺️ Mapa Mundial del Parkinson", class_="sidebar-link map-link", onclick="Shiny.setInputValue('page', 'section2')"),
                 ui.a("🌿 Variables Ambientales", class_="sidebar-link env-link", onclick="Shiny.setInputValue('page', 'section3')"),
-                ui.a("Análisis Gráfico y Correlaciones", class_="sidebar-link graph-link", onclick="Shiny.setInputValue('page', 'section4')"),
+                ui.a("📈 Predicciones", class_="sidebar-link graph-link", onclick="Shiny.setInputValue('page', 'section4')"),
+                ui.a("📞 Contacto", class_="sidebar-link contact-link", onclick="Shiny.setInputValue('page', 'section5')"),
 
                 class_="sidebar"
             )
@@ -412,25 +414,33 @@ def server(input, output, session):
                         "Explora cómo distintas variables ambientales están relacionadas con la prevalencia de la enfermedad de Parkinson en diferentes partes del mundo.",
                         style="font-size: 17px; margin: 10px 20px; color: #333;"
                     ),
+
+                     #Factores Ambientales
+                    ui.h3("🌍 Factores Ambientales que Pueden Influir", style="color: #2C3E50; text-align: left; margin-top: 30px; font-size: 24px;"),
+        
+                    ui.p(
+                        "Diversos factores ambientales pueden influir en el riesgo de desarrollar la enfermedad de Parkinson, incluyendo:",
+                        style="font-size: 16px; text-align: justify; margin: 10px 20px; color: #333;"
+                    ),
                     ui.tags.ul(
                          ui.tags.li([
-                        "🌫️ Contaminación del Aire. ",
+                        "🌫️ Contaminación del Aire: La exposición crónica a partículas finas (PM2.5) y dióxido de nitrógeno (NO₂) ha sido relacionada con un aumento en el riesgo de padecer Parkinson. ",
                         ui.tags.a("Accede aqui a los datos", href="https://ourworldindata.org/grapher/death-rates-from-air-pollution?tab=table", target="_blank", style="margin-left: 5px; color: #2980B9;")
                     ]),
                      ui.tags.li([
-                        "🔩 Exposición al Plomo. ",
+                        "🔩 Exposición al Plomo: La exposición prolongada a metales pesados, como el plomo, puede afectar el sistema nervioso central y se ha vinculado con el Parkinson. ",
                         ui.tags.a("Accede aqui a los datos", href="https://ourworldindata.org/grapher/rate-disease-burden-lead?tab=table", target="_blank", style="margin-left: 5px; color: #2980B9;")
                     ]),
                     ui.tags.li([
-                        "🚰 Aguas Inseguras. ",
+                        "🚰 Aguas Inseguras:  El consumo de agua contaminada por metales pesados o sustancias tóxicas también se ha relacionado con un posible mayor riesgo de Parkinson.  ",
                         ui.tags.a("Accede aqui a los datos", href="https://ourworldindata.org/grapher/deaths-due-to-unsafe-water-sources?tab=table", target="_blank", style="margin-left: 5px; color: #2980B9;")
                     ]),
                     ui.tags.li([
-                        "🌿 Uso de Pesticidas. ",
+                        "🌿 Uso de Pesticidas: Sustancias como el paraquat y maneb, utilizados en la agricultura, han sido asociados con un mayor riesgo de Parkinson. ",
                         ui.tags.a("Accede aqui a los datos", href="https://ourworldindata.org/grapher/pesticide-use-tonnes?tab=table", target="_blank", style="margin-left: 5px; color: #2980B9;")
                     ]),
                     ui.tags.li([
-                        "🌧️ Precipitaciones. ",
+                        "🌧️ Precipitaciones: Cambios en los patrones de lluvia pueden afectar la exposición a pesticidas o contaminantes ambientales. ",
                         ui.tags.a("Accede aqui a los datos", href="https://ourworldindata.org/grapher/average-precipitation-per-year?tab=table", target="_blank", style="margin-left: 5px; color: #2980B9;")
                     ]),
                     )
@@ -786,7 +796,52 @@ def server(input, output, session):
                 class_="content-box"
             )
 
-            
+        elif page == "section5":
+            return ui.div(
+                # Franja de color con el título
+                ui.div(
+                    ui.h1("🌍 Parkinson Worldview",
+                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"
+                    ),
+                    style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
+                ),
+                
+                # Cuerpo con información de contacto (Estilo atractivo)
+                ui.div(
+                    ui.p("¿Tienes preguntas, sugerencias o quieres colaborar? Ponte en contacto conmigo:",
+                         style="font-size: 18px; margin: 20px; text-align: center; color: #333;"
+                    ),
+                    ui.div(
+                        # Correo Electrónico
+                        ui.div(
+                            ui.h3("📧 Correo Electrónico", style="font-size: 20px; color: #8E44AD; text-align: center;"),
+                            ui.p("Envíame un correo para cualquier consulta o inquietud.", style="text-align: center; font-size: 16px;"),
+                            # Enlace mailto para el correo
+                            ui.p(ui.tags.a("lorenainiciativa@gmail.com", href="mailto:tuemail@gmail.com", target="_blank", style="color: #2980B9; font-size: 18px;")),
+                            style="background-color: #F2F3F4; padding: 20px; margin: 10px 0; border-radius: 8px;"
+                        ),
+                        
+                        # GitHub
+                        ui.div(
+                            ui.h3("💻 GitHub", style="font-size: 20px; color: #8E44AD; text-align: center;"),
+                            ui.p("Visita mi perfil de GitHub para ver otros proyectos y colaboraciones.", style="text-align: center; font-size: 16px;"),
+                            ui.p(ui.tags.a("github.com/Lorenacalvoperez", href="https://github.com/Lorenacalvoperez", target="_blank", style="color: #2980B9; font-size: 18px;")),
+                            style="background-color: #F2F3F4; padding: 20px; margin: 10px 0; border-radius: 8px;"
+                        ),
+                        
+                        # Descomenta el siguiente bloque si deseas agregar teléfono
+                        # ui.div(
+                        #     ui.h3("📱 Teléfono", style="font-size: 20px; color: #8E44AD; text-align: center;"),
+                        #     ui.p("Si prefieres contactar por teléfono, no dudes en llamarme.", style="text-align: center; font-size: 16px;"),
+                        #     ui.p("+34 123 456 789", style="text-align: center; font-size: 18px; font-weight: bold; color: #2980B9;"),
+                        #     style="background-color: #F2F3F4; padding: 20px; margin: 10px 0; border-radius: 8px;"
+                        # ),
+                        style="margin: 0 10px;"
+                    ),
+                    style="text-align: center; margin-top: 20px;"
+                )
+            )
+
 
 
 
