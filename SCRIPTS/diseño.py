@@ -168,6 +168,7 @@ app_ui = ui.page_fluid(
             .map-link   { background-color: #3498db; }
             .env-link   { background-color: #e67e22; }
             .graph-link { background-color: #9b59b6; }
+            .analisis-link {background-color: #8A2BE2}
             .contact-link {background-color: #34495E }
             
             .sidebar-link:hover {
@@ -184,7 +185,8 @@ app_ui = ui.page_fluid(
                 ui.a("🗺️ Mapa Mundial del Parkinson", class_="sidebar-link map-link", onclick="Shiny.setInputValue('page', 'section2')"),
                 ui.a("🌿 Variables Ambientales", class_="sidebar-link env-link", onclick="Shiny.setInputValue('page', 'section3')"),
                 ui.a("📈 Predicciones", class_="sidebar-link graph-link", onclick="Shiny.setInputValue('page', 'section4')"),
-                ui.a("📞 Contacto", class_="sidebar-link contact-link", onclick="Shiny.setInputValue('page', 'section5')"),
+                ui.a("🔍 Análisis de datos", class_="sidebar-link analisis-link", onclick="Shiny.setInputValue('page', 'section5')"),
+                ui.a("📞 Contacto", class_="sidebar-link contact-link", onclick="Shiny.setInputValue('page', 'section6')"),
 
                 class_="sidebar"
             )
@@ -221,6 +223,13 @@ def server(input, output, session):
                         "pueden tener un impacto en la aparición y progresión de esta enfermedad neurodegenerativa.",
                         style="font-size: 18px; font-family: 'Verdana', sans-serif; color: #333333; line-height: 1.6;"
                     ),
+                    ui.h3("¿Qué analizamos?", style="font-size: 24px; font-weight: bold; color: #2C3E50; margin-top: 20px;"),
+                    ui.p(
+                        "A través de esta aplicación, analizamos diferentes aspectos de la prevalencia de la enfermedad de Parkinson en función de los factores ambientales. "
+                        "Entre los análisis realizados se incluyen la visualización geográfica de los países más afectados por la enfermedad, "
+                        "y el uso de modelos predictivos entrenados con estos datos para predecir la prevalencia futura en distintas regiones del mundo.",
+                        style="font-size: 18px; line-height: 1.6; color: #333333;"
+                    ),
                     ui.h3("¿De dónde provienen los datos?",
                           style="font-size: 24px; font-weight: bold; color: #2C3E50; clear: both;"),
                     ui.p(
@@ -234,13 +243,6 @@ def server(input, output, session):
                     ui.p(
                         "Al combinar estos datos con análisis estadísticos y modelos predictivos, se puede obtener una visión más clara de cómo estos factores ambientales pueden afectar la prevalencia del Parkinson. "
                         "Además, este enfoque también ayuda a identificar posibles áreas geográficas donde el riesgo de Parkinson es más alto, lo que puede llevar a una mejor planificación de políticas públicas y estrategias de salud.",
-                        style="font-size: 18px; line-height: 1.6; color: #333333;"
-                    ),
-                    ui.h3("¿Qué analizamos?", style="font-size: 24px; font-weight: bold; color: #2C3E50; margin-top: 20px;"),
-                    ui.p(
-                        "A través de esta aplicación, analizamos diferentes aspectos de la prevalencia de la enfermedad de Parkinson en función de los factores ambientales. "
-                        "Entre los análisis realizados se incluyen la visualización geográfica de los países más afectados por la enfermedad, "
-                        "y el uso de modelos predictivos entrenados con estos datos para predecir la prevalencia futura en distintas regiones del mundo.",
                         style="font-size: 18px; line-height: 1.6; color: #333333;"
                     ),
                 ),
@@ -795,8 +797,14 @@ def server(input, output, session):
                 ),
                 class_="content-box"
             )
-
-        elif page == "section5":
+            
+        elif page =="section5":
+            return ui.div(
+                ui.div(
+                    ui.h1("🌍 Parkinson Worldview",style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
+                    style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"),
+            )
+        elif page == "section6":
             return ui.div(
                 # Franja de color con el título
                 ui.div(
@@ -829,13 +837,6 @@ def server(input, output, session):
                             style="background-color: #F2F3F4; padding: 20px; margin: 10px 0; border-radius: 8px;"
                         ),
                         
-                        # Descomenta el siguiente bloque si deseas agregar teléfono
-                        # ui.div(
-                        #     ui.h3("📱 Teléfono", style="font-size: 20px; color: #8E44AD; text-align: center;"),
-                        #     ui.p("Si prefieres contactar por teléfono, no dudes en llamarme.", style="text-align: center; font-size: 16px;"),
-                        #     ui.p("+34 123 456 789", style="text-align: center; font-size: 18px; font-weight: bold; color: #2980B9;"),
-                        #     style="background-color: #F2F3F4; padding: 20px; margin: 10px 0; border-radius: 8px;"
-                        # ),
                         style="margin: 0 10px;"
                     ),
                     style="text-align: center; margin-top: 20px;"
