@@ -164,6 +164,7 @@ app_ui = ui.page_fluid(
             }
             
             .home-link  { background-color: #1abc9c; }
+            .park-link {background-color: #C0392B;  /* Rojo ladrillo para sección 1 */}
             .map-link   { background-color: #3498db; }
             .env-link   { background-color: #e67e22; }
             .graph-link { background-color: #9b59b6; }
@@ -178,9 +179,10 @@ app_ui = ui.page_fluid(
         ui.sidebar(
             ui.div(
                 ui.a("🏠 Home", class_="sidebar-link home-link", onclick="Shiny.setInputValue('page', 'home')"),
-                ui.a("Mapa Mundial del Parkinson", class_="sidebar-link map-link", onclick="Shiny.setInputValue('page', 'section1')"),
-                ui.a("Variables Ambientales", class_="sidebar-link env-link", onclick="Shiny.setInputValue('page', 'section2')"),
-                ui.a("Análisis Gráfico y Correlaciones", class_="sidebar-link graph-link", onclick="Shiny.setInputValue('page', 'section3')"),
+                ui.a("🧠 Enfermedad del Parkinson", class_="sidebar-link park-link", onclick="Shiny.setInputValue('page', 'section1')"),
+                ui.a("🗺️ Mapa Mundial del Parkinson", class_="sidebar-link map-link", onclick="Shiny.setInputValue('page', 'section2')"),
+                ui.a("🌿 Variables Ambientales", class_="sidebar-link env-link", onclick="Shiny.setInputValue('page', 'section3')"),
+                ui.a("Análisis Gráfico y Correlaciones", class_="sidebar-link graph-link", onclick="Shiny.setInputValue('page', 'section4')"),
 
                 class_="sidebar"
             )
@@ -244,13 +246,90 @@ def server(input, output, session):
         
 
 
+        page = input.page()
+        if page == "section1":
+            return ui.div(
+                # Franja de título
+                ui.div(
+                    ui.h1("🌍 Parkinson Worldview",
+                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"
+                    ),
+                    style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
+                ),
+                
+                # Información sobre la Enfermedad de Parkinson
+                ui.div(
+                    # Título de la sección
+                    ui.h2("🧠 ¿Qué es la Enfermedad de Parkinson?", style="color: black; text-align: center; margin-top: 20px;"),
+            
+                    # Descripción general de la enfermedad
+                    ui.p(
+                        "La enfermedad de Parkinson es un trastorno neurodegenerativo crónico y progresivo que afecta el sistema nervioso central, "
+                        "especialmente las áreas del cerebro encargadas del control del movimiento. Se caracteriza por síntomas como temblores, rigidez "
+                        "muscular, lentitud de movimientos (bradicinesia) y problemas de equilibrio y coordinación.",
+                         style="color: black; font-size: 16px; margin-bottom: 10px; text-align: left; background-color: #ecf0f1; padding: 10px; border-radius: 8px;"
+                    ),
+            
+                    ui.p(
+                        "Aunque se desconoce la causa exacta del Parkinson, se sabe que resulta de la degeneración de las neuronas dopaminérgicas en "
+                        "una región del cerebro llamada sustancia negra. Sin embargo, investigaciones recientes sugieren que factores ambientales pueden "
+                        "jugar un papel relevante en el desarrollo de la enfermedad, especialmente en personas con cierta predisposición genética.",
+                         style="color: black; font-size: 16px; margin-bottom: 10px; text-align: left; background-color: #ecf0f1; padding: 10px; border-radius: 8px;"
+                    ),
+            
+                    # Título de síntomas comunes
+                    ui.h3("🚶‍♂️ Síntomas Comunes del Parkinson", style="color: black; text-align: center; margin-top: 20px;"),
+            
+                    # Descripción de los síntomas comunes
+                    ui.p(
+                        "Temblores: Los temblores son uno de los síntomas más reconocibles. Aparecen en reposo y afectan típicamente las manos, brazos y piernas.",
+                        style="color: black; font-size: 16px; margin-bottom: 10px; text-align: left; background-color: #ecf0f1; padding: 10px; border-radius: 8px;"
+                    ),
+                    ui.p(
+                        "Rigidez muscular: La rigidez en los músculos puede dificultar los movimientos y causar dolor.",
+                        style="color: black; font-size: 16px; margin-bottom: 10px; text-align: left; background-color: #ecf0f1; padding: 10px; border-radius: 8px;"
+                    ),
+                    ui.p(
+                        "Bradicinesia (lentitud de movimientos): La disminución de la velocidad al realizar movimientos, como caminar o escribir.",
+                        style="color: black; font-size: 16px; margin-bottom: 10px; text-align: left; background-color: #ecf0f1; padding: 10px; border-radius: 8px;"
+                    ),
+                    ui.p(
+                        "Inestabilidad postural: Los pacientes pueden tener problemas para mantener el equilibrio, lo que aumenta el riesgo de caídas.",
+                        style="color: black; font-size: 16px; margin-bottom: 10px; text-align: left; background-color: #ecf0f1; padding: 10px; border-radius: 8px;"
+                    ),
+            
+                    # Título de factores de riesgo
+                    ui.h3("⚠️ Factores de Riesgo", style="color: black; text-align: center; margin-top: 20px;"),
+            
+                    # Descripción de los factores de riesgo
+                    ui.p(
+                        "Edad: La mayoría de las personas con Parkinson son mayores de 60 años.",
+                        style="color: black; font-size: 16px; margin-bottom: 10px; text-align: left; background-color: #ecf0f1; padding: 10px; border-radius: 8px;"
+                    ),
+                    ui.p(
+                        "Genética: Algunos casos tienen una predisposición genética, pero la mayoría de los casos son esporádicos (no hereditarios).",
+                        style="color: black; font-size: 16px; margin-bottom: 10px; text-align: left; background-color: #ecf0f1; padding: 10px; border-radius: 8px;"
+                    ),
+                    ui.p(
+                        "Sexo: Los hombres tienen un mayor riesgo de desarrollar Parkinson que las mujeres.",
+                        style="color: black; font-size: 16px; margin-bottom: 10px; text-align: left; background-color: #ecf0f1; padding: 10px; border-radius: 8px;"
+                    ),
+                    ui.p(
+                        "Factores Ambientales: Exposición a sustancias químicas, como pesticidas, y la contaminación del aire pueden aumentar el riesgo.",
+                        style="color: black; font-size: 16px; margin-bottom: 10px; text-align: left; background-color: #ecf0f1; padding: 10px; border-radius: 8px;"
+                    ),
+                )
+            )
 
+
+
+        
             
 
 
 
-        page = input.page()
-        if page == "section1":
+       
+        elif page == "section2":
             return ui.div(
                 # Franja de título
                 ui.div(
@@ -316,7 +395,8 @@ def server(input, output, session):
                 class_="content-box"
             )
 
-        elif page == "section2":
+
+        elif page == "section3":
             return ui.div(
                 # Título de la aplicación
                 ui.div(
@@ -333,12 +413,26 @@ def server(input, output, session):
                         style="font-size: 17px; margin: 10px 20px; color: #333;"
                     ),
                     ui.tags.ul(
-                        ui.tags.li("🌫️ Contaminación del Aire."),
-                        ui.tags.li("🔩 Exposición al Plomo."),
-                        ui.tags.li("🚰 Aguas Inseguras."),
-                        ui.tags.li("🌿 Uso de Pesticidas."),
-                        ui.tags.li("🌧️ Precipitaciones."),
-                        style="font-size: 16px; color: #444; padding: 10px 30px;"
+                         ui.tags.li([
+                        "🌫️ Contaminación del Aire. ",
+                        ui.tags.a("Accede aqui a los datos", href="https://ourworldindata.org/grapher/death-rates-from-air-pollution?tab=table", target="_blank", style="margin-left: 5px; color: #2980B9;")
+                    ]),
+                     ui.tags.li([
+                        "🔩 Exposición al Plomo. ",
+                        ui.tags.a("Accede aqui a los datos", href="https://ourworldindata.org/grapher/rate-disease-burden-lead?tab=table", target="_blank", style="margin-left: 5px; color: #2980B9;")
+                    ]),
+                    ui.tags.li([
+                        "🚰 Aguas Inseguras. ",
+                        ui.tags.a("Accede aqui a los datos", href="https://ourworldindata.org/grapher/deaths-due-to-unsafe-water-sources?tab=table", target="_blank", style="margin-left: 5px; color: #2980B9;")
+                    ]),
+                    ui.tags.li([
+                        "🌿 Uso de Pesticidas. ",
+                        ui.tags.a("Accede aqui a los datos", href="https://ourworldindata.org/grapher/pesticide-use-tonnes?tab=table", target="_blank", style="margin-left: 5px; color: #2980B9;")
+                    ]),
+                    ui.tags.li([
+                        "🌧️ Precipitaciones. ",
+                        ui.tags.a("Accede aqui a los datos", href="https://ourworldindata.org/grapher/average-precipitation-per-year?tab=table", target="_blank", style="margin-left: 5px; color: #2980B9;")
+                    ]),
                     )
                 ),
             
@@ -672,7 +766,7 @@ def server(input, output, session):
 
     
         
-        elif page == "section3":
+        elif page == "section4":
             return ui.div(
                 # Franja de color con el título
                 ui.div(
@@ -1150,7 +1244,7 @@ def server(input, output, session):
 
         fig_europa_pepticidas.update_layout(
             title={
-                'text': f"<b>Exposición al Plomo - {año_seleccionado}</b>",
+                'text': f"<b>Uso de pepticidas - {año_seleccionado}</b>",
                 'font': {'size': 20},
                 'x': 0.7,
                 'y' : 0.98,
