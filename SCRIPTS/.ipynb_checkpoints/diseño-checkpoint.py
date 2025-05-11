@@ -13,7 +13,12 @@ df_pred_promedio = pd.read_csv("predicciones_modelos_promedio.csv").round(2)
 df_pred_desviacion = pd.read_csv("predicciones_modelos_desviacion.csv").round(2)
 df_pred_CV = pd.read_csv("predicciones_modelos_CV.csv").round(2)
 df_realesVSpredichos = pd.read_csv("RealesVSPredichos.csv").round(2)
-
+df_predicciones_GLM = pd.read_csv("pred_GLM.csv").round(2)
+df_predicciones_RF = pd.read_csv("pred_RF.csv").round(2)
+df_predicciones_XG = pd.read_csv("pred_XG.csv").round(2)
+df_predicciones_SVR = pd.read_csv("pred_SVR.csv").round(2)
+df_predicciones_KNN = pd.read_csv('pred_KNN.csv').round(2)
+df_predicciones_MLP = pd.read_csv("pred_MLP.csv").round(2)
 #Misma escala de distribicon para todos los mapas
 
 min_parkinson = df_parkinson["Parkinson"].min()
@@ -36,6 +41,24 @@ max_pepticidas = df_pepticidas["Pesticidas"].quantile(0.90)
 min_precipitaciones = df_precipitaciones["Precipitación (mm)"].min()
 max_precipitaciones = df_precipitaciones["Precipitación (mm)"].quantile(0.90)
 
+min_val_glm = df_predicciones_GLM["Parkinson_Predicho"].min()
+max_val_glm =df_predicciones_GLM["Parkinson_Predicho"].quantile(0.95)
+
+min_val_rf = df_predicciones_RF["Parkinson_Predicho"].min()
+max_val_rf =df_predicciones_RF["Parkinson_Predicho"].quantile(0.95)
+
+min_val_xg = df_predicciones_XG["Parkinson_Predicho"].min()
+max_val_xg = df_predicciones_XG["Parkinson_Predicho"].quantile(0.95)
+
+min_val_svr = df_predicciones_SVR["Parkinson_Predicho"].min()
+max_val_svr = df_predicciones_SVR["Parkinson_Predicho"].quantile(0.95)
+
+min_val_knn = df_predicciones_KNN ["Parkinson_Predicho"].min()
+max_val_knn = df_predicciones_KNN ["Parkinson_Predicho"].quantile(0.95)
+
+min_val_mlp = df_predicciones_MLP  ["Parkinson_Predicho"].min()
+max_val_mlp = df_predicciones_MLP  ["Parkinson_Predicho"].quantile(0.95)
+
 min_val = df_pred_promedio["Parkinson_Predicho_Promedio"].min()
 max_val = df_pred_promedio["Parkinson_Predicho_Promedio"].quantile(0.95)
 
@@ -44,6 +67,7 @@ max_std = df_pred_desviacion["Desviacion"].quantile(0.95)
 
 min_cv = df_pred_CV['CV'].min()
 max_cv = df_pred_CV['CV'].quantile(0.95)
+
 
 # Mínimo y máximo reales (no truncados)
         
@@ -469,7 +493,6 @@ def server(input, output, session):
             )
 
 
-
         elif page == "contaminacion":
             return ui.div(
                 ui.div(
@@ -804,14 +827,328 @@ def server(input, output, session):
                     ui.h1("🌍 Parkinson Worldview",style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
                     style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"),
                 ui.div(
-                    ui.input_action_button("show_contaminacion", "Modelo GLM", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'contaminacion')"),
-                    ui.input_action_button("show_plomo", "Modelo Random Forest", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'plomo')"),
-                    ui.input_action_button("show_agua", "Modelo XGBoost Regressor", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'agua')"),
-                    ui.input_action_button("show_pesticidas", "Modelo SVR Regressor", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'pesticidas')"),
-                    ui.input_action_button("show_precipitaciones", "Modelo KNN Regressor", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'precipitaciones')"),
-                     ui.input_action_button("show_precipitaciones", "Modelo MLP Regressor", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'precipitaciones')"),
+                    ui.input_action_button("show_glm", "GLM", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'modelo GLM')"),
+                    ui.input_action_button("show_rf", " Random Forest", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'modelo RF')"),
+                    ui.input_action_button("show_xg", "XGBoost Regressor", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'modelo XGBoost')"),
+                    ui.input_action_button("show_svr", "SVR Regressor", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'modelo SVR')"),
+                    ui.input_action_button("show_knn", " KNN Regressor", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'modelo KNN')"),
+                     ui.input_action_button("show_mlp", "MLP Regressor", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'modelo MLP')"),
                     style="display: flex; justify-content: space-around; margin: 30px 0 20px 0;"
                 ),
+  
+            )
+
+        elif page == "modelo GLM":
+            return ui.div(
+                ui.div(
+                    ui.h1("🌍 Parkinson Worldview",
+                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
+                    style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
+                ),
+                ui.div(
+                    ui.output_ui("plot_predict_glm"),
+                    ui.div(
+                        ui.input_action_button(
+                            "plot_europe_predict_glm",
+                            "🌍 Ver Mapa Europeo",
+                            class_="btn btn-primary",
+                            onclick="Shiny.setInputValue('page', 'plot_europe_predict_glm')"
+                        ),
+                        style="margin-top: 20px;"  # <-- AQUÍ ESTÁ EL ESPACIO
+                    ),
+                    ui.div(
+                        ui.input_action_button(
+                            "go_back",
+                            "Volver atrás",
+                            class_="btn btn-primary",
+                            onclick="Shiny.setInputValue('page', 'section5')"
+                        ),
+                        style="margin-top: 10px;"
+                    ),
+                    class_="map-container"
+                ),
+                class_="content-box"
+            )
+
+        elif page == "plot_europe_predict_glm":
+            return ui.div(
+                ui.div(
+                    ui.h1("🌍 Parkinson Worldview",
+                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
+                    style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
+                ),
+                ui.div(
+                    ui.input_action_button(
+                        "go_back", 
+                        "🔙 Volver al Mapa Global", 
+                        class_="btn btn-secondary",
+                        onclick="Shiny.setInputValue('page', 'modelo GLM')"
+                    ),
+                    style="margin-bottom: 20px;"
+                ),
+                ui.output_ui("plot_europe_predict_glm"),
+                class_="content-box"
+            )
+
+        elif page == "modelo RF":
+            return ui.div(
+                ui.div(
+                    ui.h1("🌍 Parkinson Worldview",
+                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
+                    style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
+                ),
+                ui.div(
+                    ui.output_ui("plot_predict_rf"),
+                    ui.div(
+                        ui.input_action_button(
+                            "plot_europe_predict_rf",
+                            "🌍 Ver Mapa Europeo",
+                            class_="btn btn-primary",
+                            onclick="Shiny.setInputValue('page', 'plot_europe_predict_rf')"
+                        ),
+                        style="margin-top: 20px;"  # <-- AQUÍ ESTÁ EL ESPACIO
+                    ),
+                    ui.div(
+                        ui.input_action_button(
+                            "go_back",
+                            "Volver atrás",
+                            class_="btn btn-primary",
+                            onclick="Shiny.setInputValue('page', 'section5')"
+                        ),
+                        style="margin-top: 10px;"
+                    ),
+                    class_="map-container"
+                ),
+                class_="content-box"
+            )
+
+        elif page == "plot_europe_predict_rf":
+            return ui.div(
+                ui.div(
+                    ui.h1("🌍 Parkinson Worldview",
+                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
+                    style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
+                ),
+                ui.div(
+                    ui.input_action_button(
+                        "go_back", 
+                        "🔙 Volver al Mapa Global", 
+                        class_="btn btn-secondary",
+                        onclick="Shiny.setInputValue('page', 'modelo RF')"
+                    ),
+                    style="margin-bottom: 20px;"
+                ),
+                ui.output_ui("plot_europe_predict_rf"),
+                class_="content-box"
+            )
+
+
+        elif page == "modelo XGBoost":
+            return ui.div(
+                ui.div(
+                    ui.h1("🌍 Parkinson Worldview",
+                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
+                    style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
+                ),
+                ui.div(
+                    ui.output_ui("plot_predict_xg"),
+                    ui.div(
+                        ui.input_action_button(
+                            "plot_europe_predict_xg",
+                            "🌍 Ver Mapa Europeo",
+                            class_="btn btn-primary",
+                            onclick="Shiny.setInputValue('page', 'plot_europe_predict_xg')"
+                        ),
+                        style="margin-top: 20px;"  # <-- AQUÍ ESTÁ EL ESPACIO
+                    ),
+                    ui.div(
+                        ui.input_action_button(
+                            "go_back",
+                            "Volver atrás",
+                            class_="btn btn-primary",
+                            onclick="Shiny.setInputValue('page', 'section5')"
+                        ),
+                        style="margin-top: 10px;"
+                    ),
+                    class_="map-container"
+                ),
+                class_="content-box"
+            )
+
+        elif page == "plot_europe_predict_xg":
+            return ui.div(
+                ui.div(
+                    ui.h1("🌍 Parkinson Worldview",
+                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
+                    style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
+                ),
+                ui.div(
+                    ui.input_action_button(
+                        "go_back", 
+                        "🔙 Volver al Mapa Global", 
+                        class_="btn btn-secondary",
+                        onclick="Shiny.setInputValue('page', 'modelo XGBoost')"
+                    ),
+                    style="margin-bottom: 20px;"
+                ),
+                ui.output_ui("plot_europe_predict_xg"),
+                class_="content-box"
+            )
+
+        elif page == "modelo SVR":
+            return ui.div(
+                ui.div(
+                    ui.h1("🌍 Parkinson Worldview",
+                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
+                    style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
+                ),
+                ui.div(
+                    ui.output_ui("plot_predict_svr"),
+                    ui.div(
+                        ui.input_action_button(
+                            "plot_europe_predict_svr",
+                            "🌍 Ver Mapa Europeo",
+                            class_="btn btn-primary",
+                            onclick="Shiny.setInputValue('page', 'plot_europe_predict_svr')"
+                        ),
+                        style="margin-top: 20px;"  # <-- AQUÍ ESTÁ EL ESPACIO
+                    ),
+                    ui.div(
+                        ui.input_action_button(
+                            "go_back",
+                            "Volver atrás",
+                            class_="btn btn-primary",
+                            onclick="Shiny.setInputValue('page', 'section5')"
+                        ),
+                        style="margin-top: 10px;"
+                    ),
+                    class_="map-container"
+                ),
+                class_="content-box"
+            )
+
+        elif page == "plot_europe_predict_svr":
+            return ui.div(
+                ui.div(
+                    ui.h1("🌍 Parkinson Worldview",
+                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
+                    style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
+                ),
+                ui.div(
+                    ui.input_action_button(
+                        "go_back", 
+                        "🔙 Volver al Mapa Global", 
+                        class_="btn btn-secondary",
+                        onclick="Shiny.setInputValue('page', 'modelo SVR')"
+                    ),
+                    style="margin-bottom: 20px;"
+                ),
+                ui.output_ui("plot_europe_predict_svr"),
+                class_="content-box"
+            )
+
+        elif page == "modelo KNN":
+            return ui.div(
+                ui.div(
+                    ui.h1("🌍 Parkinson Worldview",
+                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
+                    style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
+                ),
+                ui.div(
+                    ui.output_ui("plot_predict_knn"),
+                    ui.div(
+                        ui.input_action_button(
+                            "plot_europe_predict_knn",
+                            "🌍 Ver Mapa Europeo",
+                            class_="btn btn-primary",
+                            onclick="Shiny.setInputValue('page', 'plot_europe_predict_knn')"
+                        ),
+                        style="margin-top: 20px;"  # <-- AQUÍ ESTÁ EL ESPACIO
+                    ),
+                    ui.div(
+                        ui.input_action_button(
+                            "go_back",
+                            "Volver atrás",
+                            class_="btn btn-primary",
+                            onclick="Shiny.setInputValue('page', 'section5')"
+                        ),
+                        style="margin-top: 10px;"
+                    ),
+                    class_="map-container"
+                ),
+                class_="content-box"
+            )
+
+        elif page == "plot_europe_predict_knn":
+            return ui.div(
+                ui.div(
+                    ui.h1("🌍 Parkinson Worldview",
+                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
+                    style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
+                ),
+                ui.div(
+                    ui.input_action_button(
+                        "go_back", 
+                        "🔙 Volver al Mapa Global", 
+                        class_="btn btn-secondary",
+                        onclick="Shiny.setInputValue('page', 'modelo KNN')"
+                    ),
+                    style="margin-bottom: 20px;"
+                ),
+                ui.output_ui("plot_europe_predict_knn"),
+                class_="content-box"
+            )
+
+        elif page == "modelo MLP":
+            return ui.div(
+                ui.div(
+                    ui.h1("🌍 Parkinson Worldview",
+                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
+                    style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
+                ),
+                ui.div(
+                    ui.output_ui("plot_predict_mlp"),
+                    ui.div(
+                        ui.input_action_button(
+                            "plot_europe_predict_mlp",
+                            "🌍 Ver Mapa Europeo",
+                            class_="btn btn-primary",
+                            onclick="Shiny.setInputValue('page', 'plot_europe_predict_mlp')"
+                        ),
+                        style="margin-top: 20px;"  # <-- AQUÍ ESTÁ EL ESPACIO
+                    ),
+                    ui.div(
+                        ui.input_action_button(
+                            "go_back",
+                            "Volver atrás",
+                            class_="btn btn-primary",
+                            onclick="Shiny.setInputValue('page', 'section5')"
+                        ),
+                        style="margin-top: 10px;"
+                    ),
+                    class_="map-container"
+                ),
+                class_="content-box"
+            )
+
+        elif page == "plot_europe_predict_mlp":
+            return ui.div(
+                ui.div(
+                    ui.h1("🌍 Parkinson Worldview",
+                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
+                    style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
+                ),
+                ui.div(
+                    ui.input_action_button(
+                        "go_back", 
+                        "🔙 Volver al Mapa Global", 
+                        class_="btn btn-secondary",
+                        onclick="Shiny.setInputValue('page', 'modelo MLP')"
+                    ),
+                    style="margin-bottom: 20px;"
+                ),
+                ui.output_ui("plot_europe_predict_mlp"),
+                class_="content-box"
             )
         elif page == "section6":
             return ui.div(
@@ -1418,6 +1755,607 @@ def server(input, output, session):
 
     
         return ui.HTML(fig_europa_precipitaciones.to_html(full_html=False))
+
+
+    @output
+    @render.ui
+    def plot_predict_glm():
+        fig_glm = px.choropleth(
+            data_frame=df_predicciones_GLM,
+            locations="País",
+            locationmode="country names",
+            color="Parkinson_Predicho",
+            hover_name="País",
+            hover_data={"Parkinson_Predicho": True,"País":False},
+            color_continuous_scale="Viridis",
+            range_color=(min_val_glm, max_val_glm),
+            title=f"Predicción Prevalencia del Parkinson GLM"
+        )
+        fig_glm.update_geos(
+        projection_type="equirectangular",  # <- Mapa plano
+        showcoastlines=True,
+        showland=True,
+        fitbounds="locations"
+     )
+
+        fig_glm.update_layout(
+            title={
+                'text': f"<b>Predicción Prevalencia del Parkinson GLM </b>",
+                'font': {'size': 20},
+                'x': 0.78,
+                'y' : 0.98,
+                'xanchor': 'right'
+            },
+            height=400,
+            margin={"r": 10, "t": 10, "l": 0, "b": 0},
+            coloraxis_colorbar=dict(
+                len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
+                thickness=20,
+                y=0.5,
+                title="Prevalencia Parkinson"
+            )
+        )
+        return ui.HTML(fig_glm.to_html(full_html=False))
+
+    @output
+    @render.ui
+    def plot_europe_predict_glm():
+
+        # Lista de países de Europa
+        paises_europa = [
+            "Spain", "France", "Germany", "Italy", "United Kingdom", "Netherlands", 
+            "Belgium", "Switzerland", "Portugal", "Sweden", "Norway", "Finland", "Denmark", 
+            "Poland", "Austria", "Greece", "Hungary", "Ireland", "Czechia", "Slovakia", "Iceland",
+            "Romania", "Bulgaria", "Serbia", "Croatia", "Slovenia", "Estonia", "Latvia", "Cyprus", 
+            "Luxembourg", "Malta", "Lithuania", "Ukraine", "Bosnia and Herzegovina", 
+            "North Macedonia", "Albania", "Montenegro", "Moldova", "Russia"
+        ]
+
+        df_europa = df_predicciones_GLM[df_predicciones_GLM["País"].isin(paises_europa)]
+    
+    
+        fig_europa_glm= px.choropleth(
+            df_europa,
+            locations="País",
+            locationmode="country names",
+            color="Parkinson_Predicho",
+            hover_name="País",
+            hover_data={"Parkinson_Predicho": True,"País":False},
+            color_continuous_scale="Viridis",
+            range_color=(min_val_glm, max_val_glm),
+            title=f"Predicción Prevalencia del Parkinson GLM"
+        )
+    
+        # Usamos 'scope=europe' para centrar solo en Europa
+        fig_europa_glm.update_geos(
+            projection_type="equirectangular",
+            scope="europe",
+            showland=True,
+            landcolor="white",
+            countrycolor="black"
+        )
+
+        fig_europa_glm.update_layout(
+            title={
+                'text': f"<b>Predicción Prevalencia del Parkinson GLM </b>",
+                'font': {'size': 20},
+                'x': 0.7,
+                'y' : 0.98,
+                'xanchor': 'right'
+            },
+            height=400,
+            margin={"r": 10, "t": 10, "l": 0, "b": 0},
+            coloraxis_colorbar=dict(
+                len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
+                thickness=15,
+                y=0.5,
+                title="Prevalencia Parkinson"
+            )
+        )
+
+
+    
+        return ui.HTML(fig_europa_glm.to_html(full_html=False))
+
+    @output
+    @render.ui
+    def plot_predict_rf():
+        fig_rf = px.choropleth(
+            data_frame=df_predicciones_RF,
+            locations="País",
+            locationmode="country names",
+            color="Parkinson_Predicho",
+            hover_name="País",
+            hover_data={"Parkinson_Predicho": True,"País":False},
+            color_continuous_scale="Viridis",
+            range_color=(min_val_rf, max_val_rf),
+            title=f"Predicción Prevalencia del Parkinson RF"
+        )
+        fig_rf.update_geos(
+        projection_type="equirectangular",  # <- Mapa plano
+        showcoastlines=True,
+        showland=True,
+        fitbounds="locations"
+     )
+
+        fig_rf.update_layout(
+            title={
+                'text': f"<b>Predicción Prevalencia del Parkinson RF </b>",
+                'font': {'size': 20},
+                'x': 0.78,
+                'y' : 0.98,
+                'xanchor': 'right'
+            },
+            height=400,
+            margin={"r": 10, "t": 10, "l": 0, "b": 0},
+            coloraxis_colorbar=dict(
+                len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
+                thickness=20,
+                y=0.5,
+                title="Prevalencia Parkinson"
+            )
+        )
+        return ui.HTML(fig_rf.to_html(full_html=False))
+
+    @output
+    @render.ui
+    def plot_europe_predict_rf():
+
+        # Lista de países de Europa
+        paises_europa = [
+            "Spain", "France", "Germany", "Italy", "United Kingdom", "Netherlands", 
+            "Belgium", "Switzerland", "Portugal", "Sweden", "Norway", "Finland", "Denmark", 
+            "Poland", "Austria", "Greece", "Hungary", "Ireland", "Czechia", "Slovakia", "Iceland",
+            "Romania", "Bulgaria", "Serbia", "Croatia", "Slovenia", "Estonia", "Latvia", "Cyprus", 
+            "Luxembourg", "Malta", "Lithuania", "Ukraine", "Bosnia and Herzegovina", 
+            "North Macedonia", "Albania", "Montenegro", "Moldova", "Russia"
+        ]
+
+        df_europa = df_predicciones_RF[df_predicciones_RF["País"].isin(paises_europa)]
+    
+    
+        fig_europa_rf= px.choropleth(
+            df_europa,
+            locations="País",
+            locationmode="country names",
+            color="Parkinson_Predicho",
+            hover_name="País",
+            hover_data={"Parkinson_Predicho": True,"País":False},
+            color_continuous_scale="Viridis",
+            range_color=(min_val_rf, max_val_rf),
+            title=f"Predicción Prevalencia del Parkinson RF"
+        )
+    
+        # Usamos 'scope=europe' para centrar solo en Europa
+        fig_europa_rf.update_geos(
+            projection_type="equirectangular",
+            scope="europe",
+            showland=True,
+            landcolor="white",
+            countrycolor="black"
+        )
+
+        fig_europa_rf.update_layout(
+            title={
+                'text': f"<b>Predicción Prevalencia del Parkinson RF </b>",
+                'font': {'size': 20},
+                'x': 0.7,
+                'y' : 0.98,
+                'xanchor': 'right'
+            },
+            height=400,
+            margin={"r": 10, "t": 10, "l": 0, "b": 0},
+            coloraxis_colorbar=dict(
+                len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
+                thickness=15,
+                y=0.5,
+                title="Prevalencia Parkinson"
+            )
+        )
+
+
+    
+        return ui.HTML(fig_europa_rf.to_html(full_html=False))
+
+    @output
+    @render.ui
+    def plot_predict_xg():
+        fig_xg = px.choropleth(
+            data_frame=df_predicciones_XG,
+            locations="País",
+            locationmode="country names",
+            color="Parkinson_Predicho",
+            hover_name="País",
+            hover_data={"Parkinson_Predicho": True,"País":False},
+            color_continuous_scale="Viridis",
+            range_color=(min_val_xg, max_val_xg),
+            title=f"Predicción Prevalencia del Parkinson XGBoost Regressor"
+        )
+        fig_xg.update_geos(
+        projection_type="equirectangular",  # <- Mapa plano
+        showcoastlines=True,
+        showland=True,
+        fitbounds="locations"
+     )
+
+        fig_xg.update_layout(
+            title={
+                'text': f"<b>Predicción Prevalencia del Parkinson XGBoost Regressor </b>",
+                'font': {'size': 20},
+                'x': 0.78,
+                'y' : 0.98,
+                'xanchor': 'right'
+            },
+            height=400,
+            margin={"r": 10, "t": 10, "l": 0, "b": 0},
+            coloraxis_colorbar=dict(
+                len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
+                thickness=20,
+                y=0.5,
+                title="Prevalencia Parkinson"
+            )
+        )
+        return ui.HTML(fig_xg.to_html(full_html=False))
+
+    @output
+    @render.ui
+    def plot_europe_predict_xg():
+
+        # Lista de países de Europa
+        paises_europa = [
+            "Spain", "France", "Germany", "Italy", "United Kingdom", "Netherlands", 
+            "Belgium", "Switzerland", "Portugal", "Sweden", "Norway", "Finland", "Denmark", 
+            "Poland", "Austria", "Greece", "Hungary", "Ireland", "Czechia", "Slovakia", "Iceland",
+            "Romania", "Bulgaria", "Serbia", "Croatia", "Slovenia", "Estonia", "Latvia", "Cyprus", 
+            "Luxembourg", "Malta", "Lithuania", "Ukraine", "Bosnia and Herzegovina", 
+            "North Macedonia", "Albania", "Montenegro", "Moldova", "Russia"
+        ]
+
+        df_europa = df_predicciones_XG[df_predicciones_XG["País"].isin(paises_europa)]
+    
+    
+        fig_europa_xg= px.choropleth(
+            df_europa,
+            locations="País",
+            locationmode="country names",
+            color="Parkinson_Predicho",
+            hover_name="País",
+            hover_data={"Parkinson_Predicho": True,"País":False},
+            color_continuous_scale="Viridis",
+            range_color=(min_val_xg, max_val_xg),
+            title=f"Predicción Prevalencia del Parkinson XGBoost Regressor"
+        )
+    
+        # Usamos 'scope=europe' para centrar solo en Europa
+        fig_europa_xg.update_geos(
+            projection_type="equirectangular",
+            scope="europe",
+            showland=True,
+            landcolor="white",
+            countrycolor="black"
+        )
+
+        fig_europa_xg.update_layout(
+            title={
+                'text': f"<b>Predicción Prevalencia del Parkinson XGBoost Regressor </b>",
+                'font': {'size': 20},
+                'x': 0.7,
+                'y' : 0.98,
+                'xanchor': 'right'
+            },
+            height=400,
+            margin={"r": 10, "t": 10, "l": 0, "b": 0},
+            coloraxis_colorbar=dict(
+                len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
+                thickness=15,
+                y=0.5,
+                title="Prevalencia Parkinson"
+            )
+        )
+
+
+    
+        return ui.HTML(fig_europa_xg.to_html(full_html=False))
+        
+    @output
+    @render.ui
+    def plot_predict_svr():
+        fig_svr = px.choropleth(
+            data_frame=df_predicciones_SVR,
+            locations="País",
+            locationmode="country names",
+            color="Parkinson_Predicho",
+            hover_name="País",
+            hover_data={"Parkinson_Predicho": True,"País":False},
+            color_continuous_scale="Viridis",
+            range_color=(min_val_svr, max_val_svr),
+            title=f"Predicción Prevalencia del Parkinson SVR Regressor"
+        )
+        fig_svr.update_geos(
+        projection_type="equirectangular",  # <- Mapa plano
+        showcoastlines=True,
+        showland=True,
+        fitbounds="locations"
+     )
+
+        fig_svr.update_layout(
+            title={
+                'text': f"<b>Predicción Prevalencia del Parkinson SVR Regressor </b>",
+                'font': {'size': 20},
+                'x': 0.78,
+                'y' : 0.98,
+                'xanchor': 'right'
+            },
+            height=400,
+            margin={"r": 10, "t": 10, "l": 0, "b": 0},
+            coloraxis_colorbar=dict(
+                len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
+                thickness=20,
+                y=0.5,
+                title="Prevalencia Parkinson"
+            )
+        )
+        return ui.HTML(fig_svr.to_html(full_html=False))
+
+    @output
+    @render.ui
+    def plot_europe_predict_svr():
+
+        # Lista de países de Europa
+        paises_europa = [
+            "Spain", "France", "Germany", "Italy", "United Kingdom", "Netherlands", 
+            "Belgium", "Switzerland", "Portugal", "Sweden", "Norway", "Finland", "Denmark", 
+            "Poland", "Austria", "Greece", "Hungary", "Ireland", "Czechia", "Slovakia", "Iceland",
+            "Romania", "Bulgaria", "Serbia", "Croatia", "Slovenia", "Estonia", "Latvia", "Cyprus", 
+            "Luxembourg", "Malta", "Lithuania", "Ukraine", "Bosnia and Herzegovina", 
+            "North Macedonia", "Albania", "Montenegro", "Moldova", "Russia"
+        ]
+
+        df_europa = df_predicciones_SVR[df_predicciones_SVR["País"].isin(paises_europa)]
+    
+    
+        fig_europa_svr= px.choropleth(
+            df_europa,
+            locations="País",
+            locationmode="country names",
+            color="Parkinson_Predicho",
+            hover_name="País",
+            hover_data={"Parkinson_Predicho": True,"País":False},
+            color_continuous_scale="Viridis",
+            range_color=(min_val_svr, max_val_svr),
+            title=f"Predicción Prevalencia del Parkinson SVR Regressor"
+        )
+    
+        # Usamos 'scope=europe' para centrar solo en Europa
+        fig_europa_svr.update_geos(
+            projection_type="equirectangular",
+            scope="europe",
+            showland=True,
+            landcolor="white",
+            countrycolor="black"
+        )
+
+        fig_europa_svr.update_layout(
+            title={
+                'text': f"<b>Predicción Prevalencia del Parkinson SVR Regressor </b>",
+                'font': {'size': 20},
+                'x': 0.7,
+                'y' : 0.98,
+                'xanchor': 'right'
+            },
+            height=400,
+            margin={"r": 10, "t": 10, "l": 0, "b": 0},
+            coloraxis_colorbar=dict(
+                len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
+                thickness=15,
+                y=0.5,
+                title="Prevalencia Parkinson"
+            )
+        )
+
+
+    
+        return ui.HTML(fig_europa_svr.to_html(full_html=False))
+
+    @output
+    @render.ui
+    def plot_predict_knn():
+        fig_knn = px.choropleth(
+            data_frame=df_predicciones_KNN,
+            locations="País",
+            locationmode="country names",
+            color="Parkinson_Predicho",
+            hover_name="País",
+            hover_data={"Parkinson_Predicho": True,"País":False},
+            color_continuous_scale="Viridis",
+            range_color=(min_val_svr, max_val_svr),
+            title=f"Predicción Prevalencia del Parkinson KNN Regressor"
+        )
+        fig_knn.update_geos(
+        projection_type="equirectangular",  # <- Mapa plano
+        showcoastlines=True,
+        showland=True,
+        fitbounds="locations"
+     )
+
+        fig_knn.update_layout(
+            title={
+                'text': f"<b>Predicción Prevalencia del Parkinson KNN Regressor </b>",
+                'font': {'size': 20},
+                'x': 0.78,
+                'y' : 0.98,
+                'xanchor': 'right'
+            },
+            height=400,
+            margin={"r": 10, "t": 10, "l": 0, "b": 0},
+            coloraxis_colorbar=dict(
+                len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
+                thickness=20,
+                y=0.5,
+                title="Prevalencia Parkinson"
+            )
+        )
+        return ui.HTML(fig_knn.to_html(full_html=False))
+
+    @output
+    @render.ui
+    def plot_europe_predict_knn():
+
+        # Lista de países de Europa
+        paises_europa = [
+            "Spain", "France", "Germany", "Italy", "United Kingdom", "Netherlands", 
+            "Belgium", "Switzerland", "Portugal", "Sweden", "Norway", "Finland", "Denmark", 
+            "Poland", "Austria", "Greece", "Hungary", "Ireland", "Czechia", "Slovakia", "Iceland",
+            "Romania", "Bulgaria", "Serbia", "Croatia", "Slovenia", "Estonia", "Latvia", "Cyprus", 
+            "Luxembourg", "Malta", "Lithuania", "Ukraine", "Bosnia and Herzegovina", 
+            "North Macedonia", "Albania", "Montenegro", "Moldova", "Russia"
+        ]
+
+        df_europa = df_predicciones_KNN[df_predicciones_KNN["País"].isin(paises_europa)]
+    
+    
+        fig_europa_knn= px.choropleth(
+            df_europa,
+            locations="País",
+            locationmode="country names",
+            color="Parkinson_Predicho",
+            hover_name="País",
+            hover_data={"Parkinson_Predicho": True,"País":False},
+            color_continuous_scale="Viridis",
+            range_color=(min_val_knn, max_val_knn),
+            title=f"Predicción Prevalencia del Parkinson SVR Regressor"
+        )
+    
+        # Usamos 'scope=europe' para centrar solo en Europa
+        fig_europa_knn.update_geos(
+            projection_type="equirectangular",
+            scope="europe",
+            showland=True,
+            landcolor="white",
+            countrycolor="black"
+        )
+
+        fig_europa_knn.update_layout(
+            title={
+                'text': f"<b>Predicción Prevalencia del Parkinson KNN Regressor </b>",
+                'font': {'size': 20},
+                'x': 0.7,
+                'y' : 0.98,
+                'xanchor': 'right'
+            },
+            height=400,
+            margin={"r": 10, "t": 10, "l": 0, "b": 0},
+            coloraxis_colorbar=dict(
+                len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
+                thickness=15,
+                y=0.5,
+                title="Prevalencia Parkinson"
+            )
+        )
+
+
+    
+        return ui.HTML(fig_europa_knn.to_html(full_html=False))
+
+    @output
+    @render.ui
+    def plot_predict_mlp():
+        fig_mlp = px.choropleth(
+            data_frame=df_predicciones_MLP,
+            locations="País",
+            locationmode="country names",
+            color="Parkinson_Predicho",
+            hover_name="País",
+            hover_data={"Parkinson_Predicho": True,"País":False},
+            color_continuous_scale="Viridis",
+            range_color=(min_val_mlp, max_val_mlp),
+            title=f"Predicción Prevalencia del Parkinson MLP Regressor"
+        )
+        fig_mlp.update_geos(
+        projection_type="equirectangular",  # <- Mapa plano
+        showcoastlines=True,
+        showland=True,
+        fitbounds="locations"
+     )
+
+        fig_mlp.update_layout(
+            title={
+                'text': f"<b>Predicción Prevalencia del Parkinson MLP Regressor </b>",
+                'font': {'size': 20},
+                'x': 0.78,
+                'y' : 0.98,
+                'xanchor': 'right'
+            },
+            height=400,
+            margin={"r": 10, "t": 10, "l": 0, "b": 0},
+            coloraxis_colorbar=dict(
+                len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
+                thickness=20,
+                y=0.5,
+                title="Prevalencia Parkinson"
+            )
+        )
+        return ui.HTML(fig_mlp.to_html(full_html=False))
+
+    @output
+    @render.ui
+    def plot_europe_predict_mlp():
+
+        # Lista de países de Europa
+        paises_europa = [
+            "Spain", "France", "Germany", "Italy", "United Kingdom", "Netherlands", 
+            "Belgium", "Switzerland", "Portugal", "Sweden", "Norway", "Finland", "Denmark", 
+            "Poland", "Austria", "Greece", "Hungary", "Ireland", "Czechia", "Slovakia", "Iceland",
+            "Romania", "Bulgaria", "Serbia", "Croatia", "Slovenia", "Estonia", "Latvia", "Cyprus", 
+            "Luxembourg", "Malta", "Lithuania", "Ukraine", "Bosnia and Herzegovina", 
+            "North Macedonia", "Albania", "Montenegro", "Moldova", "Russia"
+        ]
+
+        df_europa = df_predicciones_MLP[df_predicciones_MLP["País"].isin(paises_europa)]
+    
+    
+        fig_europa_mlp= px.choropleth(
+            df_europa,
+            locations="País",
+            locationmode="country names",
+            color="Parkinson_Predicho",
+            hover_name="País",
+            hover_data={"Parkinson_Predicho": True,"País":False},
+            color_continuous_scale="Viridis",
+            range_color=(min_val_mlp, max_val_mlp),
+            title=f"Predicción Prevalencia del Parkinson MLP Regressor"
+        )
+    
+        # Usamos 'scope=europe' para centrar solo en Europa
+        fig_europa_mlp.update_geos(
+            projection_type="equirectangular",
+            scope="europe",
+            showland=True,
+            landcolor="white",
+            countrycolor="black"
+        )
+
+        fig_europa_mlp.update_layout(
+            title={
+                'text': f"<b>Predicción Prevalencia del Parkinson MLP Regressor </b>",
+                'font': {'size': 20},
+                'x': 0.7,
+                'y' : 0.98,
+                'xanchor': 'right'
+            },
+            height=400,
+            margin={"r": 10, "t": 10, "l": 0, "b": 0},
+            coloraxis_colorbar=dict(
+                len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
+                thickness=15,
+                y=0.5,
+                title="Prevalencia Parkinson"
+            )
+        )
+
+
+    
+        return ui.HTML(fig_europa_mlp.to_html(full_html=False))
 
     @output
     @render.ui
