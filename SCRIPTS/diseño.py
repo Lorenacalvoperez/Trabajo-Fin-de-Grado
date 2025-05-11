@@ -803,6 +803,15 @@ def server(input, output, session):
                 ui.div(
                     ui.h1("🌍 Parkinson Worldview",style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
                     style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"),
+                ui.div(
+                    ui.input_action_button("show_contaminacion", "Modelo GLM", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'contaminacion')"),
+                    ui.input_action_button("show_plomo", "Modelo Random Forest", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'plomo')"),
+                    ui.input_action_button("show_agua", "Modelo XGBoost Regressor", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'agua')"),
+                    ui.input_action_button("show_pesticidas", "Modelo SVR Regressor", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'pesticidas')"),
+                    ui.input_action_button("show_precipitaciones", "Modelo KNN Regressor", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'precipitaciones')"),
+                     ui.input_action_button("show_precipitaciones", "Modelo MLP Regressor", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'precipitaciones')"),
+                    style="display: flex; justify-content: space-around; margin: 30px 0 20px 0;"
+                ),
             )
         elif page == "section6":
             return ui.div(
