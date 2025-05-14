@@ -1,14 +1,18 @@
 from shiny import App, reactive, render, ui
 import plotly.express as px
 import pandas as pd
+from io import StringIO
+import os
+import io
+
 
 # Cargar los archivos CSV en DataFrames
-df_parkinson = pd.read_csv('Parkinson.csv').round(2)
-df_contaminacion = pd.read_csv('Contaminacion_aire.csv').round(2)
-df_plomo = pd.read_csv('Plomo.csv').round(2)
+df_parkinson = pd.read_csv('Datos_Parkinson.csv').round(2)
+df_contaminacion = pd.read_csv('Datos_contaminación_aire.csv').round(2)
+df_plomo = pd.read_csv("Datos_exp_plomo.csv").round(2)
 df_agua  = pd.read_csv("Datos_muertes_agua.csv").round(2)
-df_pepticidas = pd.read_csv('Pepticidas.csv').round(2)
-df_precipitaciones = pd.read_csv('Precipitaciones.csv').round(2)
+df_pepticidas = pd.read_csv("Datos_uso_pepticidas.csv").round(2)
+df_precipitaciones =  pd.read_csv("Datos_precipitaciones.csv").round(2)
 df_pred_promedio = pd.read_csv("predicciones_modelos_promedio.csv").round(2)
 df_pred_desviacion = pd.read_csv("predicciones_modelos_desviacion.csv").round(2)
 df_pred_CV = pd.read_csv("predicciones_modelos_CV.csv").round(2)
@@ -24,11 +28,11 @@ df_predicciones_MLP = pd.read_csv("pred_MLP.csv").round(2)
 min_parkinson = df_parkinson["Parkinson"].min()
 max_parkinson = df_parkinson["Parkinson"].quantile(0.90)
 
-min_contaminacion = df_contaminacion["Tasa_contaminacion_Aire"].min()
-max_contaminacion = df_contaminacion["Tasa_contaminacion_Aire"].quantile(0.90)
+min_contaminacion = df_contaminacion["Contaminacion_aire"].min()
+max_contaminacion = df_contaminacion["Contaminacion_aire"].quantile(0.90)
 
-min_plomo = df_plomo["Exp_Plomo"].min()
-max_plomo = df_plomo["Exp_Plomo"].quantile(0.90)
+min_plomo = df_plomo["Exp_plomo"].min()
+max_plomo = df_plomo["Exp_plomo"].quantile(0.90)
 
 
 
@@ -38,8 +42,8 @@ max_agua = df_agua["Muertes_agua"].quantile(0.75)
 min_pepticidas = df_pepticidas["Pesticidas"].min()
 max_pepticidas = df_pepticidas["Pesticidas"].quantile(0.90)
 
-min_precipitaciones = df_precipitaciones["Precipitación (mm)"].min()
-max_precipitaciones = df_precipitaciones["Precipitación (mm)"].quantile(0.90)
+min_precipitaciones = df_precipitaciones["Precipitaciones"].min()
+max_precipitaciones = df_precipitaciones["Precipitaciones"].quantile(0.90)
 
 min_val_glm = df_predicciones_GLM["Parkinson_Predicho"].min()
 max_val_glm =df_predicciones_GLM["Parkinson_Predicho"].quantile(0.95)
@@ -74,6 +78,9 @@ max_cv = df_pred_CV['CV'].quantile(0.95)
 real_min = df_realesVSpredichos['Error_Absoluto'].min()
 real_max = df_realesVSpredichos['Error_Absoluto'].max()
 
+years = df_parkinson['Año'].unique().tolist()
+
+countries = df_parkinson['País'].unique().tolist()
 
 # Definir la interfaz de usuario con CSS global
 app_ui = ui.page_fluid(
@@ -217,10 +224,12 @@ app_ui = ui.page_fluid(
         ),
         ui.output_ui("content_display")
     )
+    
 )
 
 # Definir la lógica del servidor
 def server(input, output, session):
+
     @output
     @render.ui
     def content_display():
@@ -233,7 +242,7 @@ def server(input, output, session):
                     ),
                     style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
                 ),
-        
+            
                 # Imagen flotante a la izquierda y texto fluyendo a la derecha
                 ui.div(
                     ui.img(
@@ -272,7 +281,6 @@ def server(input, output, session):
                 ),
             )
         
-
 
         page = input.page()
         if page == "section1":
@@ -350,7 +358,7 @@ def server(input, output, session):
             )
 
 
-
+        
         
             
 
@@ -377,17 +385,48 @@ def server(input, output, session):
                                         value=df_parkinson["Año"].min(), 
                                         step=1, 
                                         sep=""),
+                        
                         style="margin-top: 10px;"
                     ),
+                    # Botón para ir al mapa europeo
                     ui.div(
                         ui.input_action_button("go_to_europe", "🌍 Ver Mapa Europeo", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'europe_map')"),
                         style="margin-top: 10px;"
                     ),
+                    # Selector de años y países con múltiples selecciones
+                    ui.div(
+                        # Selector de años
+                        ui.input_select(
+                            "years_select",
+                            "Selecciona los años",
+                            choices=years,
+                            selected=[],
+                            multiple=True,
+                            selectize=True  # Habilitar búsqueda para años
+                        ),
+                        
+                        # Selector de países (con múltiples opciones)
+                        ui.input_select(
+                            "countries_select",
+                            "Selecciona los países",
+                            choices=countries,
+                            selected=[],  # Ningún país seleccionado por defecto
+                            multiple=True,  # Permite seleccionar múltiples países
+                            selectize=True  # Habilitar búsqueda dentro del selector
+                        ),
+                        
+                        style="width: 80%; margin-top: 10px; margin-left: auto; margin-right: auto;"
+                    ),
+                    
+                    # Botones de descarga
+                    ui.download_button("downloadData", "Descargar CSV Filtrado"),
+                    ui.download_button("downloadAll", "Descargar CSV Completo"), 
+        
                     class_="map-container"
                 ),
+            
                 class_="content-box"
             )
-        
         elif page == "europe_map":
             return ui.div(
                 # Franja de título
@@ -404,7 +443,7 @@ def server(input, output, session):
                         "go_back", 
                         "🔙 Volver al Mapa Global", 
                         class_="btn btn-secondary",
-                        onclick="Shiny.setInputValue('page', 'section1')"
+                        onclick="Shiny.setInputValue('page', 'section2')"
                     ),
                     style="margin-bottom: 20px;"
                 ),
@@ -514,6 +553,35 @@ def server(input, output, session):
                     ui.div(
                         ui.input_action_button("go_to_europe_aire", "🌍 Ver Mapa Europeo", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'plot_europe_aire')")
                     ),
+                    # Selector de años y países con múltiples selecciones
+                    ui.div(
+                        # Selector de años
+                        ui.input_select(
+                            "years_select",
+                            "Selecciona los años",
+                            choices=years,
+                            selected=[],
+                            multiple=True,
+                            selectize=True  # Habilitar búsqueda para años
+                        ),
+                        
+                        # Selector de países (con múltiples opciones)
+                        ui.input_select(
+                            "countries_select",
+                            "Selecciona los países",
+                            choices=countries,
+                            selected=[],  # Ningún país seleccionado por defecto
+                            multiple=True,  # Permite seleccionar múltiples países
+                            selectize=True  # Habilitar búsqueda dentro del selector
+                        ),
+                        
+                        style="width: 80%; margin-top: 10px; margin-left: auto; margin-right: auto;"
+                    ),
+                    
+                    # Botones de descarga
+                    ui.download_button("downloadData_contaminacion", "Descargar CSV Filtrado"),
+                    ui.download_button("downloadAll_contaminacion", "Descargar CSV Completo"), 
+                    
                     ui.div(
                         ui.input_action_button("go_back", "Volver atrás", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'section2')"),
                         style="margin-top: 10px;"
@@ -575,6 +643,34 @@ def server(input, output, session):
                     ),
                     ui.div(
                         ui.input_action_button("go_to_europe_plomo", "🌍 Ver Mapa Europeo", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'plot_europe_plomo')"),
+                    # Selector de años y países con múltiples selecciones
+                    ui.div(
+                        # Selector de años
+                        ui.input_select(
+                            "years_select",
+                            "Selecciona los años",
+                            choices=years,
+                            selected=[],
+                            multiple=True,
+                            selectize=True  # Habilitar búsqueda para años
+                        ),
+                        
+                        # Selector de países (con múltiples opciones)
+                        ui.input_select(
+                            "countries_select",
+                            "Selecciona los países",
+                            choices=countries,
+                            selected=[],  # Ningún país seleccionado por defecto
+                            multiple=True,  # Permite seleccionar múltiples países
+                            selectize=True  # Habilitar búsqueda dentro del selector
+                        ),
+                        
+                        style="width: 80%; margin-top: 10px; margin-left: auto; margin-right: auto;"
+                    ),
+                    
+                    # Botones de descarga
+                    ui.download_button("downloadData_exposicion_plomo", "Descargar CSV Filtrado"),
+                    ui.download_button("downloadAll_exposicion_plomo", "Descargar CSV Completo"), 
                     ui.div(
                         ui.input_action_button("go_back", "Volver atrás", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'section2')"),
                         style="margin-top: 10px;"
@@ -637,6 +733,33 @@ def server(input, output, session):
                     ui.div(
                         ui.input_action_button("go_to_europe_agua", "🌍 Ver Mapa Europeo", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'plot_europe_agua')"),
                     ui.div(
+                        # Selector de años
+                        ui.input_select(
+                            "years_select",
+                            "Selecciona los años",
+                            choices=years,
+                            selected=[],
+                            multiple=True,
+                            selectize=True  # Habilitar búsqueda para años
+                        ),
+                        
+                        # Selector de países (con múltiples opciones)
+                        ui.input_select(
+                            "countries_select",
+                            "Selecciona los países",
+                            choices=countries,
+                            selected=[],  # Ningún país seleccionado por defecto
+                            multiple=True,  # Permite seleccionar múltiples países
+                            selectize=True  # Habilitar búsqueda dentro del selector
+                        ),
+                        
+                        style="width: 80%; margin-top: 10px; margin-left: auto; margin-right: auto;"
+                    ),
+                    
+                    # Botones de descarga
+                    ui.download_button("downloadData_muertes_agua", "Descargar CSV Filtrado"),
+                    ui.download_button("downloadAll_muertes_agua", "Descargar CSV Completo"), 
+                    ui.div(
                         ui.input_action_button("go_back", "Volver atrás", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'section2')"),
                         style="margin-top: 10px;"
                     ),
@@ -698,6 +821,33 @@ def server(input, output, session):
                     ui.div(
                         ui.input_action_button("go_to_europe_pepticidas", "🌍 Ver Mapa Europeo", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'plot_europe_pepticidas')"),
                     ui.div(
+                        # Selector de años
+                        ui.input_select(
+                            "years_select",
+                            "Selecciona los años",
+                            choices=years,
+                            selected=[],
+                            multiple=True,
+                            selectize=True  # Habilitar búsqueda para años
+                        ),
+                        
+                        # Selector de países (con múltiples opciones)
+                        ui.input_select(
+                            "countries_select",
+                            "Selecciona los países",
+                            choices=countries,
+                            selected=[],  # Ningún país seleccionado por defecto
+                            multiple=True,  # Permite seleccionar múltiples países
+                            selectize=True  # Habilitar búsqueda dentro del selector
+                        ),
+                        
+                        style="width: 80%; margin-top: 10px; margin-left: auto; margin-right: auto;"
+                    ),
+                    
+                    # Botones de descarga
+                    ui.download_button("downloadData_uso_pesticidas", "Descargar CSV Filtrado"),
+                    ui.download_button("downloadAll_uso_pesticidas", "Descargar CSV Completo"), 
+                    ui.div(
                         ui.input_action_button("go_back", "Volver atrás", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'section2')"),
                         style="margin-top: 10px;"
                     ),
@@ -758,6 +908,33 @@ def server(input, output, session):
                     ),
                     ui.div(
                         ui.input_action_button("go_to_europe_precipitaciones", "🌍 Ver Mapa Europeo", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'plot_europe_precipitaciones')"),
+                    ui.div(
+                        # Selector de años
+                        ui.input_select(
+                            "years_select",
+                            "Selecciona los años",
+                            choices=years,
+                            selected=[],
+                            multiple=True,
+                            selectize=True  # Habilitar búsqueda para años
+                        ),
+                        
+                        # Selector de países (con múltiples opciones)
+                        ui.input_select(
+                            "countries_select",
+                            "Selecciona los países",
+                            choices=countries,
+                            selected=[],  # Ningún país seleccionado por defecto
+                            multiple=True,  # Permite seleccionar múltiples países
+                            selectize=True  # Habilitar búsqueda dentro del selector
+                        ),
+                        
+                        style="width: 80%; margin-top: 10px; margin-left: auto; margin-right: auto;"
+                    ),
+                    
+                    # Botones de descarga
+                    ui.download_button("downloadData_precipitaciones", "Descargar CSV Filtrado"),
+                    ui.download_button("downloadAll_precipitaciones", "Descargar CSV Completo"), 
                     ui.div(
                         ui.input_action_button("go_back", "Volver atrás", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'section2')"),
                         style="margin-top: 10px;"
@@ -1189,8 +1366,181 @@ def server(input, output, session):
                 )
             )
 
+    
 
+    @output
+    @render.download(filename="Parkinson_filtrado.csv")
+    def downloadData():
+        selected_years = [int(year) for year in input.years_select()]
+        selected_countries = input.countries_select()  # Obtener los países seleccionados
+        
+        # Filtrar los datos por los años y países seleccionados
+        if selected_years and selected_countries:
+            filtered_df = df_parkinson[df_parkinson['Año'].isin(selected_years) & df_parkinson['País'].isin(selected_countries)]
+        elif selected_years:
+            filtered_df = df_parkinson[df_parkinson['Año'].isin(selected_years)]
+        elif selected_countries:
+            filtered_df = df_parkinson[df_parkinson['País'].isin(selected_countries)]
+        else:
+            filtered_df = df_parkinson  # Si no se selecciona ningún filtro, usar el DataFrame completo
+        
+        buffer = io.StringIO()
+        filtered_df.to_csv(buffer, index=False)
+        buffer.seek(0)
+        return buffer
 
+    @output
+    @render.download(filename="Parkinson_completo.csv")
+    def downloadAll():
+        buffer = io.StringIO()
+        df_parkinson.to_csv(buffer, index=False)
+        buffer.seek(0)
+        return buffer
+
+    @output
+    @render.download(filename="Tasa_contaminacion_aire_filtrado.csv")
+    def downloadData_contaminacion():
+        selected_years = [int(year) for year in input.years_select()]
+        selected_countries = input.countries_select()  # Obtener los países seleccionados
+        
+        # Filtrar los datos por los años y países seleccionados
+        if selected_years and selected_countries:
+            filtered_df = df_parkinson[df_parkinson['Año'].isin(selected_years) & df_parkinson['País'].isin(selected_countries)]
+        elif selected_years:
+            filtered_df = df_parkinson[df_parkinson['Año'].isin(selected_years)]
+        elif selected_countries:
+            filtered_df = df_parkinson[df_parkinson['País'].isin(selected_countries)]
+        else:
+            filtered_df = df_parkinson  # Si no se selecciona ningún filtro, usar el DataFrame completo
+        
+        buffer = io.StringIO()
+        filtered_df.to_csv(buffer, index=False)
+        buffer.seek(0)
+        return buffer
+
+    @output
+    @render.download(filename="Tasa_contaminacion_aire_completo.csv")
+    def downloadAll_contaminacion():
+        buffer = io.StringIO()
+        df_parkinson.to_csv(buffer, index=False)
+        buffer.seek(0)
+        return buffer
+
+    @output
+    @render.download(filename="Exposicion_plomo_filtrado.csv")
+    def downloadData_exposicion_plomo():
+        selected_years = [int(year) for year in input.years_select()]
+        selected_countries = input.countries_select()  # Obtener los países seleccionados
+        
+        # Filtrar los datos por los años y países seleccionados
+        if selected_years and selected_countries:
+            filtered_df = df_parkinson[df_parkinson['Año'].isin(selected_years) & df_parkinson['País'].isin(selected_countries)]
+        elif selected_years:
+            filtered_df = df_parkinson[df_parkinson['Año'].isin(selected_years)]
+        elif selected_countries:
+            filtered_df = df_parkinson[df_parkinson['País'].isin(selected_countries)]
+        else:
+            filtered_df = df_parkinson  # Si no se selecciona ningún filtro, usar el DataFrame completo
+        
+        buffer = io.StringIO()
+        filtered_df.to_csv(buffer, index=False)
+        buffer.seek(0)
+        return buffer
+
+    @output
+    @render.download(filename="Exposicion_plomo_completo.csv")
+    def downloadAll_exposicion_plomo():
+        buffer = io.StringIO()
+        df_parkinson.to_csv(buffer, index=False)
+        buffer.seek(0)
+        return buffer
+
+    @output
+    @render.download(filename="Muertes_agua_filtrado.csv")
+    def downloadData_muertes_agua():
+        selected_years = [int(year) for year in input.years_select()]
+        selected_countries = input.countries_select()  # Obtener los países seleccionados
+        
+        # Filtrar los datos por los años y países seleccionados
+        if selected_years and selected_countries:
+            filtered_df = df_parkinson[df_parkinson['Año'].isin(selected_years) & df_parkinson['País'].isin(selected_countries)]
+        elif selected_years:
+            filtered_df = df_parkinson[df_parkinson['Año'].isin(selected_years)]
+        elif selected_countries:
+            filtered_df = df_parkinson[df_parkinson['País'].isin(selected_countries)]
+        else:
+            filtered_df = df_parkinson  # Si no se selecciona ningún filtro, usar el DataFrame completo
+        
+        buffer = io.StringIO()
+        filtered_df.to_csv(buffer, index=False)
+        buffer.seek(0)
+        return buffer
+
+    @output
+    @render.download(filename="Muertes_agua_completo.csv")
+    def downloadAll_muertes_agua():
+        buffer = io.StringIO()
+        df_parkinson.to_csv(buffer, index=False)
+        buffer.seek(0)
+        return buffer
+    
+    @output
+    @render.download(filename="Uso_pesticidas_filtrado.csv")
+    def downloadData_uso_pesticidas():
+        selected_years = [int(year) for year in input.years_select()]
+        selected_countries = input.countries_select()  # Obtener los países seleccionados
+        
+        # Filtrar los datos por los años y países seleccionados
+        if selected_years and selected_countries:
+            filtered_df = df_parkinson[df_parkinson['Año'].isin(selected_years) & df_parkinson['País'].isin(selected_countries)]
+        elif selected_years:
+            filtered_df = df_parkinson[df_parkinson['Año'].isin(selected_years)]
+        elif selected_countries:
+            filtered_df = df_parkinson[df_parkinson['País'].isin(selected_countries)]
+        else:
+            filtered_df = df_parkinson  # Si no se selecciona ningún filtro, usar el DataFrame completo
+        
+        buffer = io.StringIO()
+        filtered_df.to_csv(buffer, index=False)
+        buffer.seek(0)
+        return buffer
+
+    @output
+    @render.download(filename="Precipitaciones_completo.csv")
+    def downloadAll_precipitaciones():
+        buffer = io.StringIO()
+        df_parkinson.to_csv(buffer, index=False)
+        buffer.seek(0)
+        return buffer
+
+    @output
+    @render.download(filename="Precipitaciones_filtrado.csv")
+    def downloadData_precipitaciones():
+        selected_years = [int(year) for year in input.years_select()]
+        selected_countries = input.countries_select()  # Obtener los países seleccionados
+        
+        # Filtrar los datos por los años y países seleccionados
+        if selected_years and selected_countries:
+            filtered_df = df_parkinson[df_parkinson['Año'].isin(selected_years) & df_parkinson['País'].isin(selected_countries)]
+        elif selected_years:
+            filtered_df = df_parkinson[df_parkinson['Año'].isin(selected_years)]
+        elif selected_countries:
+            filtered_df = df_parkinson[df_parkinson['País'].isin(selected_countries)]
+        else:
+            filtered_df = df_parkinson  # Si no se selecciona ningún filtro, usar el DataFrame completo
+        
+        buffer = io.StringIO()
+        filtered_df.to_csv(buffer, index=False)
+        buffer.seek(0)
+        return buffer
+
+    @output
+    @render.download(filename="Uso_pesticidas_completo.csv")
+    def downloadAll_uso_pesticidas():
+        buffer = io.StringIO()
+        df_parkinson.to_csv(buffer, index=False)
+        buffer.seek(0)
+        return buffer
 
     @output
     @render.ui
@@ -1300,12 +1650,12 @@ def server(input, output, session):
             df_contaminacion[df_contaminacion["Año"] == año_seleccionado],
             locations="País",
             locationmode="country names",
-            color="Tasa_contaminacion_Aire",
+            color="Contaminacion_aire",
             hover_name="País",
-            hover_data={"Tasa_contaminacion_Aire": True,"País":False},
+            hover_data={"Contaminacion_aire": True,"País":False},
             color_continuous_scale="Viridis",
             range_color=(min_contaminacion, max_contaminacion),
-            labels={"Tasa_contaminacion_Aire": "Tasa de mortalidad por contaminación del aire"},
+            labels={"Contaminacion_aire": "Tasa de mortalidad por contaminación del aire"},
             title=f"Contaminación del Aire - {año_seleccionado}"
         )
 
@@ -1348,9 +1698,9 @@ def server(input, output, session):
             df_europa,
             locations="País",
             locationmode="country names",
-            color="Tasa_contaminacion_Aire",
+            color="Contaminacion_aire",
             hover_name="País",
-            hover_data={"Tasa_contaminacion_Aire": True,"País":False},
+            hover_data={"Contaminacion_aire": True,"País":False},
             color_continuous_scale="Viridis",
             range_color=(min_contaminacion, max_contaminacion),
             title=f"Contaminación del Aire en Europa - {año_seleccionado}"
@@ -1396,12 +1746,12 @@ def server(input, output, session):
             df_plomo[df_plomo["Año"] == año_seleccionado],
             locations="País",
             locationmode="country names",
-            color="Exp_Plomo",
+            color="Exp_plomo",
             hover_name="País",
-            hover_data={"Exp_Plomo": True,"País":False},
+            hover_data={"Exp_plomo": True,"País":False},
             color_continuous_scale="Viridis",
             range_color=(min_plomo, max_plomo),
-            labels={"Exp_Plomo": "Tasa de carga de enferemdad por exposición al plomo"},
+            labels={"Exp_plomo": "Tasa de carga de enferemdad por exposición al plomo"},
             title=f"Exposición al Plomo - {año_seleccionado}"
         )
 
@@ -1442,9 +1792,9 @@ def server(input, output, session):
             df_europa,
             locations="País",
             locationmode="country names",
-            color="Exp_Plomo",
+            color="Exp_plomo",
             hover_name="País",
-            hover_data={"Exp_Plomo": True,"País":False},
+            hover_data={"Exp_plomo": True,"País":False},
             color_continuous_scale="Viridis",
             range_color=(min_plomo, max_plomo),
             title=f"Exposición al Plomo - {año_seleccionado}"
@@ -1574,6 +1924,7 @@ def server(input, output, session):
     
         return ui.HTML(fig_europa_agua.to_html(full_html=False))
     
+    
     @output
     @render.ui
     def plot_pepticidas():
@@ -1674,12 +2025,12 @@ def server(input, output, session):
             df_precipitaciones[df_precipitaciones["Año"] == año_seleccionado],
             locations="País",
             locationmode="country names",
-            color="Precipitación (mm)",
+            color="Precipitaciones",
             hover_name="País",
-            hover_data={"Precipitación (mm)": True,"País":False},
+            hover_data={"Precipitaciones)": True,"País":False},
             color_continuous_scale="Viridis",
             range_color=(min_precipitaciones, max_precipitaciones),
-            labels={"Precipitación (mm)": "Cantidad de Precipitacion (mm)"},
+            labels={"Precipitaciones": "Cantidad de Precipitacion (mm)"},
             title=f"Precipitaciones - {año_seleccionado}"
         )
         fig_precipitaciones_filtrado.update_geos(
@@ -1717,9 +2068,9 @@ def server(input, output, session):
             df_europa,
             locations="País",
             locationmode="country names",
-            color="Precipitación (mm)",
+            color="Precipitaciones",
             hover_name="País",
-            hover_data={"Precipitación (mm)": True,"País":False},
+            hover_data={"Precipitaciones": True,"País":False},
             color_continuous_scale="Viridis",
             range_color=(min_precipitaciones, max_precipitaciones),
             title=f"Precipitaciones - {año_seleccionado}"
