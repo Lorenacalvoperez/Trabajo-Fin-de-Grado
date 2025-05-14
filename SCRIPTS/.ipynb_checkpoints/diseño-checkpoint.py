@@ -395,36 +395,50 @@ def server(input, output, session):
                     ),
                     # Selector de años y países con múltiples selecciones
                     ui.div(
-                        # Selector de años
-                        ui.input_select(
-                            "years_select",
-                            "Selecciona los años",
-                            choices=years,
-                            selected=[],
-                            multiple=True,
-                            selectize=True  # Habilitar búsqueda para años
+                        # Título antes de los selectores
+                        ui.h3("📅 Filtra los datos por año y país", 
+                              style="text-align: center; margin-bottom: 10px; font-family: 'Arial', sans-serif;"),
+                        ui.div(
+                            # Columna izquierda: selectores
+                            ui.div(
+                                ui.div(
+                                    ui.input_select(
+                                        "years_select",
+                                        "Selecciona los años",
+                                        choices=years,
+                                        selected=[],
+                                        multiple=True,
+                                        selectize=True
+                                    ),
+                                    style="margin-bottom: 15px;"
+                                ),
+                                ui.input_select(
+                                    "countries_select",
+                                    "Selecciona los países",
+                                    choices=countries,
+                                    selected=[],
+                                    multiple=True,
+                                    selectize=True
+                                ),
+                                style="flex: 2; padding-right: 20px;"
+                            ),
+        
+                            # Columna derecha: botones
+                            ui.div(
+                                ui.download_button("downloadData", "Descargar CSV Filtrado"),
+                                ui.download_button("downloadAll", "Descargar CSV Completo"),
+                                style="flex: 1; display: flex; flex-direction: column; gap: 10px; justify-content: flex-start; margin-top: 25px;"
+                            ),
+        
+                            style="display: flex; width: 100%;"
                         ),
-                        
-                        # Selector de países (con múltiples opciones)
-                        ui.input_select(
-                            "countries_select",
-                            "Selecciona los países",
-                            choices=countries,
-                            selected=[],  # Ningún país seleccionado por defecto
-                            multiple=True,  # Permite seleccionar múltiples países
-                            selectize=True  # Habilitar búsqueda dentro del selector
-                        ),
-                        
-                        style="width: 80%; margin-top: 10px; margin-left: auto; margin-right: auto;"
+        
+                        style="width: 90%; margin: auto; margin-top: 20px;"
                     ),
-                    
-                    # Botones de descarga
-                    ui.download_button("downloadData", "Descargar CSV Filtrado"),
-                    ui.download_button("downloadAll", "Descargar CSV Completo"), 
         
                     class_="map-container"
                 ),
-            
+        
                 class_="content-box"
             )
         elif page == "europe_map":
@@ -553,44 +567,62 @@ def server(input, output, session):
                     ui.div(
                         ui.input_action_button("go_to_europe_aire", "🌍 Ver Mapa Europeo", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'plot_europe_aire')")
                     ),
-                    # Selector de años y países con múltiples selecciones
                     ui.div(
-                        # Selector de años
-                        ui.input_select(
-                            "years_select",
-                            "Selecciona los años",
-                            choices=years,
-                            selected=[],
-                            multiple=True,
-                            selectize=True  # Habilitar búsqueda para años
+                        # Título antes de los selectores
+                        ui.h3("📅 Filtra los datos por año y país", 
+                              style="text-align: center; margin-bottom: 10px; font-family: 'Arial', sans-serif;"),
+                        ui.div(
+                            # Columna izquierda: selectores
+                            ui.div(
+                                ui.div(
+                                    ui.input_select(
+                                        "years_select",
+                                        "Selecciona los años",
+                                        choices=years,
+                                        selected=[],
+                                        multiple=True,
+                                        selectize=True
+                                    ),
+                                    style="margin-bottom: 15px;"
+                                ),
+                                ui.input_select(
+                                    "countries_select",
+                                    "Selecciona los países",
+                                    choices=countries,
+                                    selected=[],
+                                    multiple=True,
+                                    selectize=True
+                                ),
+                                style="flex: 2; padding-right: 20px;"
+                            ),
+        
+                            # Columna derecha: botones
+                            ui.div(
+                                ui.download_button("downloadData_contaminacion", "Descargar CSV Filtrado"),
+                                ui.download_button("downloadAll_contaminacion", "Descargar CSV Completo"),
+                                style="flex: 1; display: flex; flex-direction: column; gap: 10px; justify-content: flex-start; margin-top: 25px;"
+                            ),
+        
+                            style="display: flex; width: 100%;"
                         ),
-                        
-                        # Selector de países (con múltiples opciones)
-                        ui.input_select(
-                            "countries_select",
-                            "Selecciona los países",
-                            choices=countries,
-                            selected=[],  # Ningún país seleccionado por defecto
-                            multiple=True,  # Permite seleccionar múltiples países
-                            selectize=True  # Habilitar búsqueda dentro del selector
-                        ),
-                        
-                        style="width: 80%; margin-top: 10px; margin-left: auto; margin-right: auto;"
+        
+                        style="width: 90%; margin: auto; margin-top: 20px;"
                     ),
-                    
-                    # Botones de descarga
-                    ui.download_button("downloadData_contaminacion", "Descargar CSV Filtrado"),
-                    ui.download_button("downloadAll_contaminacion", "Descargar CSV Completo"), 
-                    
                     ui.div(
-                        ui.input_action_button("go_back", "Volver atrás", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'section2')"),
-                        style="margin-top: 10px;"
+                        ui.input_action_button(
+                            "volver_atras_contaminacion",
+                            "🔙 Volver Atrás",
+                            class_="btn btn-secondary",
+                            onclick="Shiny.setInputValue('page', 'section3')"
+                        ),
+                        style="text-align: center; margin-top: 30px;"
                     ),
+        
                     class_="map-container"
                 ),
+        
                 class_="content-box"
             )
-
         elif page == "plot_europe_aire":
             return ui.div(
                 ui.div(
@@ -645,38 +677,59 @@ def server(input, output, session):
                         ui.input_action_button("go_to_europe_plomo", "🌍 Ver Mapa Europeo", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'plot_europe_plomo')"),
                     # Selector de años y países con múltiples selecciones
                     ui.div(
-                        # Selector de años
-                        ui.input_select(
-                            "years_select",
-                            "Selecciona los años",
-                            choices=years,
-                            selected=[],
-                            multiple=True,
-                            selectize=True  # Habilitar búsqueda para años
+                        # Título antes de los selectores
+                        ui.h3("📅 Filtra los datos por año y país", 
+                              style="text-align: center; margin-bottom: 10px; font-family: 'Arial', sans-serif;"),
+                        ui.div(
+                            # Columna izquierda: selectores
+                            ui.div(
+                                ui.div(
+                                    ui.input_select(
+                                        "years_select",
+                                        "Selecciona los años",
+                                        choices=years,
+                                        selected=[],
+                                        multiple=True,
+                                        selectize=True
+                                    ),
+                                    style="margin-bottom: 15px;"
+                                ),
+                                ui.input_select(
+                                    "countries_select",
+                                    "Selecciona los países",
+                                    choices=countries,
+                                    selected=[],
+                                    multiple=True,
+                                    selectize=True
+                                ),
+                                style="flex: 2; padding-right: 20px;"
+                            ),
+        
+                            # Columna derecha: botones
+                            ui.div(
+                                ui.download_button("downloadData_exposicion_plomo", "Descargar CSV Filtrado"),
+                                ui.download_button("downloadAll_exposicion_plomo", "Descargar CSV Completo"),
+                                style="flex: 1; display: flex; flex-direction: column; gap: 10px; justify-content: flex-start; margin-top: 25px;"
+                            ),
+        
+                            style="display: flex; width: 100%;"
                         ),
-                        
-                        # Selector de países (con múltiples opciones)
-                        ui.input_select(
-                            "countries_select",
-                            "Selecciona los países",
-                            choices=countries,
-                            selected=[],  # Ningún país seleccionado por defecto
-                            multiple=True,  # Permite seleccionar múltiples países
-                            selectize=True  # Habilitar búsqueda dentro del selector
-                        ),
-                        
-                        style="width: 80%; margin-top: 10px; margin-left: auto; margin-right: auto;"
+        
+                        style="width: 90%; margin: auto; margin-top: 20px;"
                     ),
-                    
-                    # Botones de descarga
-                    ui.download_button("downloadData_exposicion_plomo", "Descargar CSV Filtrado"),
-                    ui.download_button("downloadAll_exposicion_plomo", "Descargar CSV Completo"), 
                     ui.div(
-                        ui.input_action_button("go_back", "Volver atrás", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'section2')"),
-                        style="margin-top: 10px;"
+                        ui.input_action_button(
+                            "volver_atras_plomo",
+                            "🔙 Volver Atrás",
+                            class_="btn btn-secondary",
+                            onclick="Shiny.setInputValue('page', 'section3')"
+                        ),
+                        style="text-align: center; margin-top: 30px;"
                     ),
+        
                     class_="map-container"
                 ),
+        
                 class_="content-box"
             )
             )
@@ -733,38 +786,59 @@ def server(input, output, session):
                     ui.div(
                         ui.input_action_button("go_to_europe_agua", "🌍 Ver Mapa Europeo", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'plot_europe_agua')"),
                     ui.div(
-                        # Selector de años
-                        ui.input_select(
-                            "years_select",
-                            "Selecciona los años",
-                            choices=years,
-                            selected=[],
-                            multiple=True,
-                            selectize=True  # Habilitar búsqueda para años
+                        # Título antes de los selectores
+                        ui.h3("📅 Filtra los datos por año y país", 
+                              style="text-align: center; margin-bottom: 10px; font-family: 'Arial', sans-serif;"),
+                        ui.div(
+                            # Columna izquierda: selectores
+                            ui.div(
+                                ui.div(
+                                    ui.input_select(
+                                        "years_select",
+                                        "Selecciona los años",
+                                        choices=years,
+                                        selected=[],
+                                        multiple=True,
+                                        selectize=True
+                                    ),
+                                    style="margin-bottom: 15px;"
+                                ),
+                                ui.input_select(
+                                    "countries_select",
+                                    "Selecciona los países",
+                                    choices=countries,
+                                    selected=[],
+                                    multiple=True,
+                                    selectize=True
+                                ),
+                                style="flex: 2; padding-right: 20px;"
+                            ),
+        
+                            # Columna derecha: botones
+                            ui.div(
+                                ui.download_button("downloadData_muertes_agua", "Descargar CSV Filtrado"),
+                                ui.download_button("downloadAll_muertes_agua", "Descargar CSV Completo"),
+                                style="flex: 1; display: flex; flex-direction: column; gap: 10px; justify-content: flex-start; margin-top: 25px;"
+                            ),
+        
+                            style="display: flex; width: 100%;"
                         ),
-                        
-                        # Selector de países (con múltiples opciones)
-                        ui.input_select(
-                            "countries_select",
-                            "Selecciona los países",
-                            choices=countries,
-                            selected=[],  # Ningún país seleccionado por defecto
-                            multiple=True,  # Permite seleccionar múltiples países
-                            selectize=True  # Habilitar búsqueda dentro del selector
-                        ),
-                        
-                        style="width: 80%; margin-top: 10px; margin-left: auto; margin-right: auto;"
+        
+                        style="width: 90%; margin: auto; margin-top: 20px;"
                     ),
-                    
-                    # Botones de descarga
-                    ui.download_button("downloadData_muertes_agua", "Descargar CSV Filtrado"),
-                    ui.download_button("downloadAll_muertes_agua", "Descargar CSV Completo"), 
                     ui.div(
-                        ui.input_action_button("go_back", "Volver atrás", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'section2')"),
-                        style="margin-top: 10px;"
+                        ui.input_action_button(
+                            "volver_atras_agua",
+                            "🔙 Volver Atrás",
+                            class_="btn btn-secondary",
+                            onclick="Shiny.setInputValue('page', 'section3')"
+                        ),
+                        style="text-align: center; margin-top: 30px;"
                     ),
+        
                     class_="map-container"
                 ),
+        
                 class_="content-box"
             )
             )
@@ -821,38 +895,59 @@ def server(input, output, session):
                     ui.div(
                         ui.input_action_button("go_to_europe_pepticidas", "🌍 Ver Mapa Europeo", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'plot_europe_pepticidas')"),
                     ui.div(
-                        # Selector de años
-                        ui.input_select(
-                            "years_select",
-                            "Selecciona los años",
-                            choices=years,
-                            selected=[],
-                            multiple=True,
-                            selectize=True  # Habilitar búsqueda para años
+                        # Título antes de los selectores
+                        ui.h3("📅 Filtra los datos por año y país", 
+                              style="text-align: center; margin-bottom: 10px; font-family: 'Arial', sans-serif;"),
+                        ui.div(
+                            # Columna izquierda: selectores
+                            ui.div(
+                                ui.div(
+                                    ui.input_select(
+                                        "years_select",
+                                        "Selecciona los años",
+                                        choices=years,
+                                        selected=[],
+                                        multiple=True,
+                                        selectize=True
+                                    ),
+                                    style="margin-bottom: 15px;"
+                                ),
+                                ui.input_select(
+                                    "countries_select",
+                                    "Selecciona los países",
+                                    choices=countries,
+                                    selected=[],
+                                    multiple=True,
+                                    selectize=True
+                                ),
+                                style="flex: 2; padding-right: 20px;"
+                            ),
+        
+                            # Columna derecha: botones
+                            ui.div(
+                                ui.download_button("downloadData_uso_pesticidas", "Descargar CSV Filtrado"),
+                                ui.download_button("downloadAll_uso_pesticidas", "Descargar CSV Completo"),
+                                style="flex: 1; display: flex; flex-direction: column; gap: 10px; justify-content: flex-start; margin-top: 25px;"
+                            ),
+        
+                            style="display: flex; width: 100%;"
                         ),
-                        
-                        # Selector de países (con múltiples opciones)
-                        ui.input_select(
-                            "countries_select",
-                            "Selecciona los países",
-                            choices=countries,
-                            selected=[],  # Ningún país seleccionado por defecto
-                            multiple=True,  # Permite seleccionar múltiples países
-                            selectize=True  # Habilitar búsqueda dentro del selector
-                        ),
-                        
-                        style="width: 80%; margin-top: 10px; margin-left: auto; margin-right: auto;"
+        
+                        style="width: 90%; margin: auto; margin-top: 20px;"
                     ),
-                    
-                    # Botones de descarga
-                    ui.download_button("downloadData_uso_pesticidas", "Descargar CSV Filtrado"),
-                    ui.download_button("downloadAll_uso_pesticidas", "Descargar CSV Completo"), 
                     ui.div(
-                        ui.input_action_button("go_back", "Volver atrás", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'section2')"),
-                        style="margin-top: 10px;"
+                        ui.input_action_button(
+                            "volver_atras_pesticidas",
+                            "🔙 Volver Atrás",
+                            class_="btn btn-secondary",
+                            onclick="Shiny.setInputValue('page', 'section3')"
+                        ),
+                        style="text-align: center; margin-top: 30px;"
                     ),
+        
                     class_="map-container"
                 ),
+        
                 class_="content-box"
             )
             )
@@ -887,6 +982,7 @@ def server(input, output, session):
                 ui.output_ui("plot_europe_pepticidas"),
                 class_="content-box"
             )
+            
 
         elif page == "precipitaciones":
             return ui.div(
@@ -909,38 +1005,59 @@ def server(input, output, session):
                     ui.div(
                         ui.input_action_button("go_to_europe_precipitaciones", "🌍 Ver Mapa Europeo", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'plot_europe_precipitaciones')"),
                     ui.div(
-                        # Selector de años
-                        ui.input_select(
-                            "years_select",
-                            "Selecciona los años",
-                            choices=years,
-                            selected=[],
-                            multiple=True,
-                            selectize=True  # Habilitar búsqueda para años
+                        # Título antes de los selectores
+                        ui.h3("📅 Filtra los datos por año y país", 
+                              style="text-align: center; margin-bottom: 10px; font-family: 'Arial', sans-serif;"),
+                        ui.div(
+                            # Columna izquierda: selectores
+                            ui.div(
+                                ui.div(
+                                    ui.input_select(
+                                        "years_select",
+                                        "Selecciona los años",
+                                        choices=years,
+                                        selected=[],
+                                        multiple=True,
+                                        selectize=True
+                                    ),
+                                    style="margin-bottom: 15px;"
+                                ),
+                                ui.input_select(
+                                    "countries_select",
+                                    "Selecciona los países",
+                                    choices=countries,
+                                    selected=[],
+                                    multiple=True,
+                                    selectize=True
+                                ),
+                                style="flex: 2; padding-right: 20px;"
+                            ),
+        
+                            # Columna derecha: botones
+                            ui.div(
+                                ui.download_button("downloadData_precipitaciones", "Descargar CSV Filtrado"),
+                                ui.download_button("downloadAll_precipitaciones", "Descargar CSV Completo"),
+                                style="flex: 1; display: flex; flex-direction: column; gap: 10px; justify-content: flex-start; margin-top: 25px;"
+                            ),
+        
+                            style="display: flex; width: 100%;"
                         ),
-                        
-                        # Selector de países (con múltiples opciones)
-                        ui.input_select(
-                            "countries_select",
-                            "Selecciona los países",
-                            choices=countries,
-                            selected=[],  # Ningún país seleccionado por defecto
-                            multiple=True,  # Permite seleccionar múltiples países
-                            selectize=True  # Habilitar búsqueda dentro del selector
-                        ),
-                        
-                        style="width: 80%; margin-top: 10px; margin-left: auto; margin-right: auto;"
+        
+                        style="width: 90%; margin: auto; margin-top: 20px;"
                     ),
-                    
-                    # Botones de descarga
-                    ui.download_button("downloadData_precipitaciones", "Descargar CSV Filtrado"),
-                    ui.download_button("downloadAll_precipitaciones", "Descargar CSV Completo"), 
                     ui.div(
-                        ui.input_action_button("go_back", "Volver atrás", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'section2')"),
-                        style="margin-top: 10px;"
+                        ui.input_action_button(
+                            "volver_atras_precipitaciones",
+                            "🔙 Volver Atrás",
+                            class_="btn btn-secondary",
+                            onclick="Shiny.setInputValue('page', 'section3')"
+                        ),
+                        style="text-align: center; margin-top: 30px;"
                     ),
+        
                     class_="map-container"
                 ),
+        
                 class_="content-box"
             )
             )
