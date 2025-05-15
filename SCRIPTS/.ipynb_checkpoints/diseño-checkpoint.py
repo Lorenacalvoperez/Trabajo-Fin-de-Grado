@@ -4,7 +4,9 @@ import pandas as pd
 from io import StringIO
 import os
 import io
-
+import matplotlib.pyplot as plt
+import seaborn as sns
+import base64
 
 # Cargar los archivos CSV en DataFrames
 df_parkinson = pd.read_csv('Datos_Parkinson.csv').round(2)
@@ -23,6 +25,8 @@ df_predicciones_XG = pd.read_csv("pred_XG.csv").round(2)
 df_predicciones_SVR = pd.read_csv("pred_SVR.csv").round(2)
 df_predicciones_KNN = pd.read_csv('pred_KNN.csv').round(2)
 df_predicciones_MLP = pd.read_csv("pred_MLP.csv").round(2)
+df_ranking = pd.read_csv("ranking_global_promedio.csv")
+
 #Misma escala de distribicon para todos los mapas
 
 min_parkinson = df_parkinson["Parkinson"].min()
@@ -1150,19 +1154,41 @@ def server(input, output, session):
                 class_="content-box"
             )
 
-        elif page =="section5":
+        elif page == "section5":
             return ui.div(
                 ui.div(
-                    ui.h1("🌍 Parkinson Worldview",style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
-                    style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"),
+                    ui.h1("🌍 Parkinson Worldview", style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
+                    style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
+                ),
+                ui.div(
+                    ui.p(
+                        "En esta sección se presenta un análisis global de la importancia de las variables utilizadas en los modelos de predicción de Parkinson. "
+                        "El gráfico que verás a continuación resume la influencia promedio de cada variable, calculada a partir de todos los modelos entrenados. "
+                        "Esto proporciona una visión integral sobre qué factores tienen mayor peso en la predicción a nivel mundial. "
+                        "Cuanto más bajo es el valor del ranking, mayor es la importancia de esa variable en los modelos. "
+                        "Por ejemplo, la exposicion al plomo muestra el ranking promedio más bajo, lo que indica que es una de las variables más influyentes y consistentes en la predicción de la enfermedad. "
+                        "Este tipo de visualización permite identificar patrones comunes en los modelos y orientar futuras investigaciones o estrategias de intervención.",
+                        style="font-size: 16px; font-family: 'Arial', sans-serif; text-align: justify; margin-bottom: 20px;"
+                    ),
+                    ui.output_ui("plot_ranking_global"),  # Aquí se renderiza el gráfico
+                    ui.div(
+                        ui.p(
+                            "Para explorar los resultados de cada modelo de forma individual, selecciona una de las opciones disponibles a continuación.",
+                            style="font-size: 16px; font-family: 'Arial', sans-serif; text-align: justify; margin: 0;"
+                        ),
+                        style="background-color: #f2f2f2; padding: 15px; border-radius: 8px; margin-top: 40px;"
+                    ),
+                ),
                 ui.div(
                     ui.input_action_button("show_glm", "Modelo lineal", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'modelo GLM')"),
                     ui.input_action_button("show_tree_models", "Modelos basados en árboles", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'modelos_arboles')"),
                     ui.input_action_button("show_learning_models", "Modelos de Aprendizaje Automático", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'modelos_learning')"),
                     style="display: flex; justify-content: space-around; margin: 30px 0 20px 0;"
-                ),
-  
+                )
             )
+
+
+
         elif page == "modelo GLM":
             return ui.div(
                 ui.div(
@@ -1202,6 +1228,7 @@ def server(input, output, session):
                           style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
                     style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
                 ),
+                
                 ui.div(
                     ui.input_action_button(
                         "go_back", 
@@ -1217,19 +1244,33 @@ def server(input, output, session):
         elif page == "modelos_arboles":
             return ui.div(
                 ui.div(
-                    ui.h1("🌍 Modelos basados en árboles", style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
+                    ui.h1("🌍 Modelos basados en árboles", 
+                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
                     style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
                 ),
+        
+                ui.div(  # Bloque explicativo justo debajo del título
+                    ui.p(
+                        "En esta sección puedes visualizar el comportamiento del modelo de predicción basado en bosques aleatorios (Random Forest). "
+                        "Este modelo es capaz de capturar relaciones complejas entre las variables y ofrece un alto nivel de precisión. "
+                        "También puedes explorar el modelo XGBoost, que es una técnica de boosting muy potente y ampliamente utilizada en competencias de ciencia de datos.",
+                        style="font-size: 16px; font-family: 'Arial', sans-serif; text-align: justify; margin: 0;"
+                    ),
+                    style="background-color: #f2f2f2; padding: 15px; border-radius: 8px; margin-bottom: 30px;"
+                ),
+        
                 ui.div(
                     ui.input_action_button("show_rf", "Random Forest", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'modelo RF')"),
                     ui.input_action_button("show_xg", "XGBoost Regressor", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'modelo XGBoost')"),
                     style="display: flex; justify-content: space-around; margin: 30px 0 20px 0;"
                 ),
+                
                 ui.div(
                     ui.input_action_button("go_back", "🔙 Volver", class_="btn btn-secondary", onclick="Shiny.setInputValue('page', 'section5')"),
                     style="text-align: center; margin-top: 20px;"
                 )
             )
+
         elif page == "modelo RF":
             return ui.div(
                 ui.div(
@@ -1332,11 +1373,34 @@ def server(input, output, session):
                 ui.output_ui("plot_europe_predict_xg"),
                 class_="content-box"
             )
+
         elif page == "modelos_learning":
             return ui.div(
                 ui.div(
                     ui.h1("🌍 Modelos basados de aprendizaje automático", style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
                     style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
+                ),
+                ui.div(  # Descripción general
+                    ui.p(
+                        "En esta sección puedes explorar distintos modelos de aprendizaje automático aplicados a la predicción de Parkinson. "
+                        "Al hacer clic en los botones que aparecen a continuación, podrás visualizar cómo se comporta cada modelo (SVR, KNN y MLP) y comparar sus resultados. "
+                        "Esta exploración te permitirá identificar patrones de rendimiento y entender mejor cómo cada algoritmo procesa la información.",
+                        style="font-size: 16px; font-family: 'Arial', sans-serif; text-align: justify; margin: 0;"
+                    ),
+                    style="background-color: #f2f2f2; padding: 15px; border-radius: 8px; margin-bottom: 20px;"
+                ),
+        
+                ui.div(  # Descripciones de cada modelo
+                    ui.p(
+                        "• SVR (Support Vector Regressor): utiliza los principios de las máquinas de soporte vectorial para realizar regresiones precisas, "
+                        "siendo especialmente útil cuando existen relaciones no lineales entre las variables.\n\n"
+                        "• KNN (K-Nearest Neighbors): predice el valor de un punto en función de sus 'k' vecinos más cercanos. "
+                        "Es un modelo simple pero eficaz cuando los datos están bien distribuidos.\n\n"
+                        "• MLP (Multi-Layer Perceptron): es una red neuronal con múltiples capas ocultas que permite aprender representaciones complejas, "
+                        "lo que la hace poderosa para captar patrones no evidentes.",
+                        style="font-size: 15px; font-family: 'Arial', sans-serif; white-space: pre-line; text-align: justify; margin-bottom: 30px;"
+                    ),
+                    style="background-color: #e8e8e8; padding: 15px; border-radius: 8px;"
                 ),
                 ui.div(
                     ui.input_action_button("show_svr", "SVR Regressor", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'modelo SVR')"),
@@ -3017,8 +3081,36 @@ def server(input, output, session):
         )
         return ui.HTML(fig_modelos_prueba.to_html(full_html=False))
 
-
-
+    @output
+    @render.ui
+    def plot_ranking_global():
+        # Crear el gráfico
+        plt.figure(figsize=(10, max(4, len(df_ranking) * 0.5)))
+        sns.barplot(
+            data=df_ranking,
+            y='Variable',
+            x='Ranking_Promedio',
+            hue='Variable',
+            palette='viridis',
+            dodge=False,
+            order=df_ranking.sort_values('Ranking_Promedio')['Variable']
+        )
+        plt.xlabel("Ranking Promedio (menor = más importante)")
+        plt.ylabel("Variable")
+        plt.title("Ranking Global Promedio de Variables")
+        plt.tight_layout()
+        plt.gca().invert_yaxis()
+    
+        # Guardar en un buffer en memoria como imagen PNG
+        buf = io.BytesIO()
+        plt.savefig(buf, format="png")
+        plt.close()
+        buf.seek(0)
+        img_base64 = base64.b64encode(buf.getvalue()).decode("utf-8")
+        buf.close()
+    
+        # Mostrar como imagen en la app
+        return ui.img(src=f"data:image/png;base64,{img_base64}", style="width: 100%; height: auto; border: 1px solid #ccc; padding: 10px;")
 
 
 # Crear y ejecutar la aplicación
