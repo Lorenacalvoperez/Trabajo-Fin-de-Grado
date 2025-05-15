@@ -568,9 +568,9 @@ def server(input, output, session):
                     ui.output_ui("plot_contaminacion"),
                     ui.div(
                         ui.input_slider("year", "Selecciona el Año", 
-                                        min=df_parkinson["Año"].min(), 
-                                        max=df_parkinson["Año"].max(), 
-                                        value=df_parkinson["Año"].min(), 
+                                        min=df_contaminacion["Año"].min(), 
+                                        max=df_contaminacion["Año"].max(), 
+                                        value=df_contaminacion["Año"].min(), 
                                         step=1, 
                                         sep=""),
                         style="margin-top: 10px;"
@@ -610,7 +610,9 @@ def server(input, output, session):
                             # Columna derecha: botones
                             ui.div(
                                 ui.download_button("downloadData_contaminacion", "Descargar CSV Filtrado"),
+                                ui.download_button("downloadData_contaminacion_json", "Descargar JSON Filtrado"),
                                 ui.download_button("downloadAll_contaminacion", "Descargar CSV Completo"),
+                                ui.download_button("downloadAll_contaminacion_json", "Descargar JSON Completo"),
                                 style="flex: 1; display: flex; flex-direction: column; gap: 10px; justify-content: flex-start; margin-top: 25px;"
                             ),
         
@@ -653,9 +655,9 @@ def server(input, output, session):
                 ui.div(
                     ui.input_slider(
                         "year", "Selecciona el Año",
-                        min=df_parkinson["Año"].min(),
-                        max=df_parkinson["Año"].max(),
-                        value=df_parkinson["Año"].min(),
+                        min=df_contaminacion["Año"].min(),
+                        max=df_contaminacion["Año"].max(),
+                        value=df_contaminacion["Año"].min(),
                         step=1,
                         sep=""
                     ),
@@ -685,9 +687,9 @@ def server(input, output, session):
                     ui.output_ui("plot_plomo"),
                     ui.div(
                         ui.input_slider("year", "Selecciona el Año", 
-                                        min=df_parkinson["Año"].min(), 
-                                        max=df_parkinson["Año"].max(), 
-                                        value=df_parkinson["Año"].min(), 
+                                        min=df_plomo["Año"].min(), 
+                                        max=df_plomo["Año"].max(), 
+                                        value=df_plomo["Año"].min(), 
                                         step=1, 
                                         sep=""),
                         style="margin-top: 10px;"
@@ -727,7 +729,9 @@ def server(input, output, session):
                             # Columna derecha: botones
                             ui.div(
                                 ui.download_button("downloadData_exposicion_plomo", "Descargar CSV Filtrado"),
+                                ui.download_button("downloadData_exposicion_plomo_json", "Descargar JSON Filtrado"),
                                 ui.download_button("downloadAll_exposicion_plomo", "Descargar CSV Completo"),
+                                ui.download_button("downloadAll_exposicion_plomo_json", "Descargar JSON Completo"),
                                 style="flex: 1; display: flex; flex-direction: column; gap: 10px; justify-content: flex-start; margin-top: 25px;"
                             ),
         
@@ -772,9 +776,9 @@ def server(input, output, session):
                 ui.div(
                     ui.input_slider(
                         "year", "Selecciona el Año",
-                        min=df_parkinson["Año"].min(),
-                        max=df_parkinson["Año"].max(),
-                        value=df_parkinson["Año"].min(),
+                        min=df_plomo["Año"].min(),
+                        max=df_plomo["Año"].max(),
+                        value=df_plomo["Año"].min(),
                         step=1,
                         sep=""
                     ),
@@ -802,9 +806,9 @@ def server(input, output, session):
                     ui.output_ui("plot_agua"),
                     ui.div(
                         ui.input_slider("year", "Selecciona el Año", 
-                                        min=df_parkinson["Año"].min(), 
-                                        max=df_parkinson["Año"].max(), 
-                                        value=df_parkinson["Año"].min(), 
+                                        min=df_agua["Año"].min(), 
+                                        max=df_agua["Año"].max(), 
+                                        value=df_agua["Año"].min(), 
                                         step=1, 
                                         sep=""),
                         style="margin-top: 10px;"
@@ -843,7 +847,9 @@ def server(input, output, session):
                             # Columna derecha: botones
                             ui.div(
                                 ui.download_button("downloadData_muertes_agua", "Descargar CSV Filtrado"),
+                                ui.download_button("downloadData_muertes_agua_json", "Descargar JSON Filtrado"),
                                 ui.download_button("downloadAll_muertes_agua", "Descargar CSV Completo"),
+                                ui.download_button("downloadAll_muertes_agua_json", "Descargar JSON Completo"),
                                 style="flex: 1; display: flex; flex-direction: column; gap: 10px; justify-content: flex-start; margin-top: 25px;"
                             ),
         
@@ -888,9 +894,9 @@ def server(input, output, session):
                 ui.div(
                     ui.input_slider(
                         "year", "Selecciona el Año",
-                        min=df_parkinson["Año"].min(),
-                        max=df_parkinson["Año"].max(),
-                        value=df_parkinson["Año"].min(),
+                        min=df_agua["Año"].min(),
+                        max=df_agua["Año"].max(),
+                        value=df_agua["Año"].min(),
                         step=1,
                         sep=""
                     ),
@@ -918,9 +924,9 @@ def server(input, output, session):
                     ui.output_ui("plot_pepticidas"),
                     ui.div(
                         ui.input_slider("year", "Selecciona el Año", 
-                                        min=df_parkinson["Año"].min(), 
-                                        max=df_parkinson["Año"].max(), 
-                                        value=df_parkinson["Año"].min(), 
+                                        min=df_pepticidas["Año"].min(), 
+                                        max=df_pepticidas["Año"].max(), 
+                                        value=df_pepticidas["Año"].min(), 
                                         step=1, 
                                         sep=""),
                         style="margin-top: 10px;"
@@ -959,7 +965,9 @@ def server(input, output, session):
                             # Columna derecha: botones
                             ui.div(
                                 ui.download_button("downloadData_uso_pesticidas", "Descargar CSV Filtrado"),
+                                ui.download_button("downloadData_uso_pesticidas_json", "Descargar JSON Filtrado "),
                                 ui.download_button("downloadAll_uso_pesticidas", "Descargar CSV Completo"),
+                                ui.download_button("downloadAll_uso_pesticidas_json", "Descargar JSON "),
                                 style="flex: 1; display: flex; flex-direction: column; gap: 10px; justify-content: flex-start; margin-top: 25px;"
                             ),
         
@@ -1004,9 +1012,9 @@ def server(input, output, session):
                 ui.div(
                     ui.input_slider(
                         "year", "Selecciona el Año",
-                        min=df_parkinson["Año"].min(),
-                        max=df_parkinson["Año"].max(),
-                        value=df_parkinson["Año"].min(),
+                        min=df_pepticidas["Año"].min(),
+                        max=df_pepticidas["Año"].max(),
+                        value=df_pepticidas["Año"].min(),
                         step=1,
                         sep=""
                     ),
@@ -1034,9 +1042,9 @@ def server(input, output, session):
                     ui.output_ui("plot_precipitaciones"),
                     ui.div(
                         ui.input_slider("year", "Selecciona el Año", 
-                                        min=df_parkinson["Año"].min(), 
-                                        max=df_parkinson["Año"].max(), 
-                                        value=df_parkinson["Año"].min(), 
+                                        min=df_precipitaciones["Año"].min(), 
+                                        max=df_precipitaciones["Año"].max(), 
+                                        value=df_precipitaciones["Año"].min(), 
                                         step=1, 
                                         sep=""),
                         style="margin-top: 10px;"
@@ -1075,7 +1083,9 @@ def server(input, output, session):
                             # Columna derecha: botones
                             ui.div(
                                 ui.download_button("downloadData_precipitaciones", "Descargar CSV Filtrado"),
+                                ui.download_button("downloadData_precipitaciones_json", "Descargar JSON Filtrado"),
                                 ui.download_button("downloadAll_precipitaciones", "Descargar CSV Completo"),
+                                ui.download_button("downloadAll_precipitaciones_json", "Descargar JSON Completo "),
                                 style="flex: 1; display: flex; flex-direction: column; gap: 10px; justify-content: flex-start; margin-top: 25px;"
                             ),
         
@@ -1120,9 +1130,9 @@ def server(input, output, session):
                 ui.div(
                     ui.input_slider(
                         "year", "Selecciona el Año",
-                        min=df_parkinson["Año"].min(),
-                        max=df_parkinson["Año"].max(),
-                        value=df_parkinson["Año"].min(),
+                        min=df_precipitaciones["Año"].min(),
+                        max=df_precipitaciones["Año"].max(),
+                        value=df_precipitaciones["Año"].min(),
                         step=1,
                         sep=""
                     ),
@@ -1591,7 +1601,7 @@ def server(input, output, session):
                             ui.h3("📧 Correo Electrónico", style="font-size: 20px; color: #8E44AD; text-align: center;"),
                             ui.p("Envíame un correo para cualquier consulta o inquietud.", style="text-align: center; font-size: 16px;"),
                             # Enlace mailto para el correo
-                            ui.p(ui.tags.a("lorenainiciativa@gmail.com", href="mailto:tuemail@gmail.com", target="_blank", style="color: #2980B9; font-size: 18px;")),
+                            ui.p(ui.tags.a("lcp1009@alu.ubu.es", href="mailto:tuemail@gmail.com", target="_blank", style="color: #2980B9; font-size: 18px;")),
                             style="background-color: #F2F3F4; padding: 20px; margin: 10px 0; border-radius: 8px;"
                         ),
                         
@@ -1634,7 +1644,7 @@ def server(input, output, session):
 
     @output
     @render.download(filename="Parkinson_completo.csv")
-    def downloadAll():
+    def downloadAll_contaminacion():
         buffer = io.StringIO()
         df_parkinson.to_csv(buffer, index=False)
         buffer.seek(0)
@@ -1648,6 +1658,37 @@ def server(input, output, session):
         
         # Filtrar los datos por los años y países seleccionados
         if selected_years and selected_countries:
+            filtered_df = df_contaminacion[df_contaminacion['Año'].isin(selected_years) & df_contaminacion['País'].isin(selected_countries)]
+        elif selected_years:
+            filtered_df = df_contaminacion[df_contaminacion['Año'].isin(selected_years)]
+        elif selected_countries:
+            filtered_df = df_contaminacion[df_contaminacion['País'].isin(selected_countries)]
+        else:
+            filtered_df = df_contaminacion  # Si no se selecciona ningún filtro, usar el DataFrame completo
+        
+        buffer = io.StringIO()
+        filtered_df.to_csv(buffer, index=False)
+        buffer.seek(0)
+        return buffer
+    
+
+
+    @output
+    @render.download(filename="Tasa_contaminacion_aire_completo.csv")
+    def downloadAll_contaminacion():
+        buffer = io.StringIO()
+        df_contaminacion.to_csv(buffer, index=False)
+        buffer.seek(0)
+        return buffer
+        
+    @output
+    @render.download(filename="Tasa_contaminacion_aire_filtrado.json")
+    def downloadData_contaminacion_json():
+        selected_years = [int(year) for year in input.years_select()]
+        selected_countries = input.countries_select()  # Obtener los países seleccionados
+    
+        # Filtrar los datos por los años y países seleccionados
+        if selected_years and selected_countries:
             filtered_df = df_parkinson[df_parkinson['Año'].isin(selected_years) & df_parkinson['País'].isin(selected_countries)]
         elif selected_years:
             filtered_df = df_parkinson[df_parkinson['Año'].isin(selected_years)]
@@ -1655,20 +1696,28 @@ def server(input, output, session):
             filtered_df = df_parkinson[df_parkinson['País'].isin(selected_countries)]
         else:
             filtered_df = df_parkinson  # Si no se selecciona ningún filtro, usar el DataFrame completo
-        
+    
+        # Convertir DataFrame a JSON (lista de registros)
+        json_str = filtered_df.to_json(orient="records", indent=2)
+    
         buffer = io.StringIO()
-        filtered_df.to_csv(buffer, index=False)
+        buffer.write(json_str)
         buffer.seek(0)
         return buffer
+
+   
+
 
     @output
-    @render.download(filename="Tasa_contaminacion_aire_completo.csv")
-    def downloadAll_contaminacion():
+    @render.download(filename="Tasa_contaminacion_aire_completo.json")
+    def downloadAll_contaminacion_json():
+        json_str = df_parkinson.to_json(orient="records", indent=2)
+    
         buffer = io.StringIO()
-        df_parkinson.to_csv(buffer, index=False)
+        buffer.write(json_str)
         buffer.seek(0)
         return buffer
-
+        
     @output
     @render.download(filename="Exposicion_plomo_filtrado.csv")
     def downloadData_exposicion_plomo():
@@ -1695,6 +1744,43 @@ def server(input, output, session):
     def downloadAll_exposicion_plomo():
         buffer = io.StringIO()
         df_parkinson.to_csv(buffer, index=False)
+        buffer.seek(0)
+        return buffer
+        
+    @output
+    @render.download(filename="Exposicion_plomo_filtrado.json")
+    def downloadData_exposicion_plomo_json():
+        selected_years = [int(year) for year in input.years_select()]
+        selected_countries = input.countries_select()  # Obtener los países seleccionados
+    
+        # Filtrar los datos por los años y países seleccionados
+        if selected_years and selected_countries:
+            filtered_df = df_plomo[df_plomo['Año'].isin(selected_years) & df_plomo['País'].isin(selected_countries)]
+        elif selected_years:
+            filtered_df = df_plomo[df_plomo['Año'].isin(selected_years)]
+        elif selected_countries:
+            filtered_df = df_plomo[df_plomo['País'].isin(selected_countries)]
+        else:
+            filtered_df = df_plomo  # Si no se selecciona ningún filtro, usar el DataFrame completo
+    
+        # Convertir DataFrame a JSON (lista de registros)
+        json_str = filtered_df.to_json(orient="records", indent=2)
+    
+        buffer = io.StringIO()
+        buffer.write(json_str)
+        buffer.seek(0)
+        return buffer
+
+   
+
+
+    @output
+    @render.download(filename="Exposicion_plomo_completo.json")
+    def downloadAll_exposicion_plomo_json():
+        json_str = df_plomo.to_json(orient="records", indent=2)
+    
+        buffer = io.StringIO()
+        buffer.write(json_str)
         buffer.seek(0)
         return buffer
 
@@ -1726,6 +1812,43 @@ def server(input, output, session):
         df_parkinson.to_csv(buffer, index=False)
         buffer.seek(0)
         return buffer
+
+    @output
+    @render.download(filename="Muertes_agua_filtrado.json")
+    def downloadData_muertes_agua_json():
+        selected_years = [int(year) for year in input.years_select()]
+        selected_countries = input.countries_select()  # Obtener los países seleccionados
+    
+        # Filtrar los datos por los años y países seleccionados
+        if selected_years and selected_countries:
+            filtered_df = df_agua[df_agua['Año'].isin(selected_years) & df_agua['País'].isin(selected_countries)]
+        elif selected_years:
+            filtered_df = df_agua[df_agua['Año'].isin(selected_years)]
+        elif selected_countries:
+            filtered_df = df_agua[df_agua['País'].isin(selected_countries)]
+        else:
+            filtered_df = df_agua # Si no se selecciona ningún filtro, usar el DataFrame completo
+    
+        # Convertir DataFrame a JSON (lista de registros)
+        json_str = filtered_df.to_json(orient="records", indent=2)
+    
+        buffer = io.StringIO()
+        buffer.write(json_str)
+        buffer.seek(0)
+        return buffer
+
+   
+
+
+    @output
+    @render.download(filename="Muertes_agua_completo.json")
+    def downloadAll_muertes_agua_json():
+        json_str = df_agua.to_json(orient="records", indent=2)
+    
+        buffer = io.StringIO()
+        buffer.write(json_str)
+        buffer.seek(0)
+        return buffer
     
     @output
     @render.download(filename="Uso_pesticidas_filtrado.csv")
@@ -1745,6 +1868,51 @@ def server(input, output, session):
         
         buffer = io.StringIO()
         filtered_df.to_csv(buffer, index=False)
+        buffer.seek(0)
+        return buffer
+
+    @output
+    @render.download(filename="Uso_pesticidas_completo.csv")
+    def downloadAll_uso_pesticidas():
+        buffer = io.StringIO()
+        df_parkinson.to_csv(buffer, index=False)
+        buffer.seek(0)
+        return buffer
+
+    @output
+    @render.download(filename="Uso_pesticidas_filtrado.json")
+    def downloadData_uso_pesticidas_json():
+        selected_years = [int(year) for year in input.years_select()]
+        selected_countries = input.countries_select()  # Obtener los países seleccionados
+    
+        # Filtrar los datos por los años y países seleccionados
+        if selected_years and selected_countries:
+            filtered_df = df_pepticidas[df_pepticidas['Año'].isin(selected_years) & df_pepticidas['País'].isin(selected_countries)]
+        elif selected_years:
+            filtered_df = df_pepticidas[df_pepticidas['Año'].isin(selected_years)]
+        elif selected_countries:
+            filtered_df =df_pepticidas[df_pepticidas['País'].isin(selected_countries)]
+        else:
+            filtered_df = df_pepticidas # Si no se selecciona ningún filtro, usar el DataFrame completo
+    
+        # Convertir DataFrame a JSON (lista de registros)
+        json_str = filtered_df.to_json(orient="records", indent=2)
+    
+        buffer = io.StringIO()
+        buffer.write(json_str)
+        buffer.seek(0)
+        return buffer
+
+   
+
+
+    @output
+    @render.download(filename="Uso_pesticidas_completo.json")
+    def downloadAll_uso_pesticidas_json():
+        json_str = df_pepticidas.to_json(orient="records", indent=2)
+    
+        buffer = io.StringIO()
+        buffer.write(json_str)
         buffer.seek(0)
         return buffer
 
@@ -1778,13 +1946,43 @@ def server(input, output, session):
         return buffer
 
     @output
-    @render.download(filename="Uso_pesticidas_completo.csv")
-    def downloadAll_uso_pesticidas():
+    @render.download(filename="Precipitaciones_filtrado.json")
+    def downloadData_precipitaciones_json():
+        selected_years = [int(year) for year in input.years_select()]
+        selected_countries = input.countries_select()  # Obtener los países seleccionados
+    
+        # Filtrar los datos por los años y países seleccionados
+        if selected_years and selected_countries:
+            filtered_df = df_precipitaciones[df_precipitaciones['Año'].isin(selected_years) & df_precipitaciones['País'].isin(selected_countries)]
+        elif selected_years:
+            filtered_df = df_precipitaciones[df_pepticidas['Año'].isin(selected_years)]
+        elif selected_countries:
+            filtered_df =df_precipitaciones[df_precipitaciones['País'].isin(selected_countries)]
+        else:
+            filtered_df = df_precipitaciones # Si no se selecciona ningún filtro, usar el DataFrame completo
+    
+        # Convertir DataFrame a JSON (lista de registros)
+        json_str = filtered_df.to_json(orient="records", indent=2)
+    
         buffer = io.StringIO()
-        df_parkinson.to_csv(buffer, index=False)
+        buffer.write(json_str)
         buffer.seek(0)
         return buffer
 
+   
+
+
+    @output
+    @render.download(filename="Precipitaciones_completo.json")
+    def downloadAll_precipitaciones_json():
+        json_str = df_precipitaciones.to_json(orient="records", indent=2)
+    
+        buffer = io.StringIO()
+        buffer.write(json_str)
+        buffer.seek(0)
+        return buffer
+
+    
     @output
     @render.ui
     def plot_parkinson():
