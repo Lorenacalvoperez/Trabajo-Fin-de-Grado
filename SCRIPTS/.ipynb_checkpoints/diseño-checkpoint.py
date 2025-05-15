@@ -72,7 +72,9 @@ max_std = df_pred_desviacion["Desviacion"].quantile(0.95)
 min_cv = df_pred_CV['CV'].min()
 max_cv = df_pred_CV['CV'].quantile(0.95)
 
-
+# 2. Calcular el error normalizado
+df_realesVSpredichos["Error_Normalizado"] = (df_realesVSpredichos["Parkinson_Predicho_Promedio"] - df_realesVSpredichos["Parkinson_Real"]) / df_realesVSpredichos["Parkinson_Real"]
+df_realesVSpredichos["Error_Normalizado"] = df_realesVSpredichos["Error_Normalizado"].clip(-1, 1)
 # Mínimo y máximo reales (no truncados)
         
 real_min = df_realesVSpredichos['Error_Absoluto'].min()
@@ -553,6 +555,11 @@ def server(input, output, session):
                           style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
                     style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
                 ),
+                ui.p(
+    "Visualiza la tasa estimada de muertes atribuidas a la contaminación del aire, expresadas por cada 100.000 habitantes. "
+    "Incluye contaminantes como el ozono en exteriores y puede reflejar múltiples factores de riesgo.",
+    style="text-align: center; font-size: 16px; color: black; font-family: 'Arial', sans-serif; margin-top: 10px;"
+),
                 ui.div(
                     ui.output_ui("plot_contaminacion"),
                     ui.div(
@@ -662,6 +669,14 @@ def server(input, output, session):
                           style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
                     style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
                 ),
+                ui.p(
+    "Visualiza la tasa de carga de enfermedad atribuida a la exposición al plomo. "
+    "Esta métrica representa el número estimado de años de vida perdidos debido a muerte prematura "
+    "o discapacidad causadas por dicha exposición, por cada 100.000 personas. "
+    "Se expresa en AVAD (Años de Vida Ajustados por Discapacidad) y está ajustada por edad, "
+    "lo que permite comparar países con diferentes estructuras demográficas.",
+    style="text-align: center; font-size: 16px; color: black; font-family: 'Arial', sans-serif; margin-top: 10px;"
+),
                 ui.div(
                     ui.output_ui("plot_plomo"),
                     ui.div(
@@ -772,6 +787,13 @@ def server(input, output, session):
                           style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
                     style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
                 ),
+                ui.p(
+    "Visualiza el número estimado de muertes por cada 100.000 personas atribuibles a fuentes de agua insalubres. "
+    "Esto incluye el consumo de agua contaminada o la falta de acceso a instalaciones seguras de saneamiento e higiene. "
+    "Representa la carga de mortalidad que podría evitarse si toda la población tuviera acceso a agua potable y condiciones adecuadas de saneamiento.",
+    style="text-align: center; font-size: 16px; color: black; font-family: 'Arial', sans-serif; margin-top: 10px;"
+),
+
                 ui.div(
                     ui.output_ui("plot_agua"),
                     ui.div(
@@ -881,6 +903,13 @@ def server(input, output, session):
                           style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
                     style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
                 ),
+                ui.p(
+    "Visualiza el uso total de pesticidas en toneladas por país, entre 1990 y 2022. "
+    "Este valor representa la cantidad total de pesticidas utilizados anualmente, incluyendo insecticidas, herbicidas y fungicidas, "
+    "y refleja la intensidad del uso de productos químicos en la agricultura.",
+    style="text-align: center; font-size: 16px; color: black; font-family: 'Arial', sans-serif; margin-top: 10px;"
+),
+
                 ui.div(
                     ui.output_ui("plot_pepticidas"),
                     ui.div(
@@ -991,6 +1020,12 @@ def server(input, output, session):
                           style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
                     style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
                 ),
+                ui.p(
+    "Visualiza la cantidad total de precipitaciones anuales (lluvia y nieve) en cada país, medida como la profundidad del agua acumulada durante el año. "
+    "Este indicador refleja el volumen total de agua que cae sobre la superficie terrestre, excluyendo fenómenos como la niebla o el rocío.",
+    style="text-align: center; font-size: 16px; color: black; font-family: 'Arial', sans-serif; margin-top: 10px;"
+),
+
                 ui.div(
                     ui.output_ui("plot_precipitaciones"),
                     ui.div(
@@ -1114,24 +1149,20 @@ def server(input, output, session):
                 ),
                 class_="content-box"
             )
-            
+
         elif page =="section5":
             return ui.div(
                 ui.div(
                     ui.h1("🌍 Parkinson Worldview",style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
                     style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"),
                 ui.div(
-                    ui.input_action_button("show_glm", "GLM", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'modelo GLM')"),
-                    ui.input_action_button("show_rf", " Random Forest", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'modelo RF')"),
-                    ui.input_action_button("show_xg", "XGBoost Regressor", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'modelo XGBoost')"),
-                    ui.input_action_button("show_svr", "SVR Regressor", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'modelo SVR')"),
-                    ui.input_action_button("show_knn", " KNN Regressor", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'modelo KNN')"),
-                     ui.input_action_button("show_mlp", "MLP Regressor", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'modelo MLP')"),
+                    ui.input_action_button("show_glm", "Modelo lineal", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'modelo GLM')"),
+                    ui.input_action_button("show_tree_models", "Modelos basados en árboles", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'modelos_arboles')"),
+                    ui.input_action_button("show_learning_models", "Modelos de Aprendizaje Automático", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'modelos_learning')"),
                     style="display: flex; justify-content: space-around; margin: 30px 0 20px 0;"
                 ),
   
             )
-
         elif page == "modelo GLM":
             return ui.div(
                 ui.div(
@@ -1183,7 +1214,22 @@ def server(input, output, session):
                 ui.output_ui("plot_europe_predict_glm"),
                 class_="content-box"
             )
-
+        elif page == "modelos_arboles":
+            return ui.div(
+                ui.div(
+                    ui.h1("🌍 Modelos basados en árboles", style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
+                    style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
+                ),
+                ui.div(
+                    ui.input_action_button("show_rf", "Random Forest", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'modelo RF')"),
+                    ui.input_action_button("show_xg", "XGBoost Regressor", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'modelo XGBoost')"),
+                    style="display: flex; justify-content: space-around; margin: 30px 0 20px 0;"
+                ),
+                ui.div(
+                    ui.input_action_button("go_back", "🔙 Volver", class_="btn btn-secondary", onclick="Shiny.setInputValue('page', 'section5')"),
+                    style="text-align: center; margin-top: 20px;"
+                )
+            )
         elif page == "modelo RF":
             return ui.div(
                 ui.div(
@@ -1207,7 +1253,7 @@ def server(input, output, session):
                             "go_back",
                             "Volver atrás",
                             class_="btn btn-primary",
-                            onclick="Shiny.setInputValue('page', 'section5')"
+                            onclick="Shiny.setInputValue('page', 'modelos_arboles')"
                         ),
                         style="margin-top: 10px;"
                     ),
@@ -1235,8 +1281,6 @@ def server(input, output, session):
                 ui.output_ui("plot_europe_predict_rf"),
                 class_="content-box"
             )
-
-
         elif page == "modelo XGBoost":
             return ui.div(
                 ui.div(
@@ -1288,7 +1332,23 @@ def server(input, output, session):
                 ui.output_ui("plot_europe_predict_xg"),
                 class_="content-box"
             )
-
+        elif page == "modelos_learning":
+            return ui.div(
+                ui.div(
+                    ui.h1("🌍 Modelos basados de aprendizaje automático", style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
+                    style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
+                ),
+                ui.div(
+                    ui.input_action_button("show_svr", "SVR Regressor", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'modelo SVR')"),
+                    ui.input_action_button("show_knn", "KNN Regressor", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'modelo KNN')"),
+                    ui.input_action_button("show_mlp", "MLP Regressor", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'modelo MLP')"),
+                    style="display: flex; justify-content: space-around; margin: 30px 0 20px 0;"
+                ),
+                ui.div(
+                    ui.input_action_button("go_back", "🔙 Volver", class_="btn btn-secondary", onclick="Shiny.setInputValue('page', 'section5')"),
+                    style="text-align: center; margin-top: 20px;"
+                )
+            )
         elif page == "modelo SVR":
             return ui.div(
                 ui.div(
@@ -1312,7 +1372,7 @@ def server(input, output, session):
                             "go_back",
                             "Volver atrás",
                             class_="btn btn-primary",
-                            onclick="Shiny.setInputValue('page', 'section5')"
+                            onclick="Shiny.setInputValue('page', 'modelos_learning')"
                         ),
                         style="margin-top: 10px;"
                     ),
@@ -1364,7 +1424,7 @@ def server(input, output, session):
                             "go_back",
                             "Volver atrás",
                             class_="btn btn-primary",
-                            onclick="Shiny.setInputValue('page', 'section5')"
+                            onclick="Shiny.setInputValue('page', 'modelos_learning')"
                         ),
                         style="margin-top: 10px;"
                     ),
@@ -1416,7 +1476,7 @@ def server(input, output, session):
                             "go_back",
                             "Volver atrás",
                             class_="btn btn-primary",
-                            onclick="Shiny.setInputValue('page', 'section5')"
+                            onclick="Shiny.setInputValue('page', 'modelos_learning')"
                         ),
                         style="margin-top: 10px;"
                     ),
@@ -1443,7 +1503,9 @@ def server(input, output, session):
                 ),
                 ui.output_ui("plot_europe_predict_mlp"),
                 class_="content-box"
-            )
+            )       
+    
+            
         elif page == "section6":
             return ui.div(
                 # Franja de color con el título
@@ -1482,7 +1544,7 @@ def server(input, output, session):
                     style="text-align: center; margin-top: 20px;"
                 )
             )
-
+    
     
 
     @output
@@ -1694,7 +1756,7 @@ def server(input, output, session):
                 len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
                 thickness=15,
                 y=0.5,
-                title="Parkinson"
+                title="Numero estimida de<br>casos de Parkinson"
             )
         )
 
@@ -1752,7 +1814,7 @@ def server(input, output, session):
                 len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
                 thickness=15,
                 y=0.5,
-                title="Parkinson"
+                title="Numero estimida de<br>casos de Parkinson"
             )
         )
     
@@ -1772,7 +1834,7 @@ def server(input, output, session):
             hover_data={"Contaminacion_aire": True,"País":False},
             color_continuous_scale="Viridis",
             range_color=(min_contaminacion, max_contaminacion),
-            labels={"Contaminacion_aire": "Tasa de mortalidad por contaminación del aire"},
+            labels={"Contaminacion_aire": "Tasa de mortalidad por<br>contaminación del aire"},
             title=f"Contaminación del Aire - {año_seleccionado}"
         )
 
@@ -1846,7 +1908,7 @@ def server(input, output, session):
                 len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
                 thickness=15,
                 y=0.5,
-                title="Tasa de mortalidad por contaminación del aire"
+                title="Tasa de mortalidad por<br>contaminación del aire"
             )
         )
 
@@ -1868,7 +1930,7 @@ def server(input, output, session):
             hover_data={"Exp_plomo": True,"País":False},
             color_continuous_scale="Viridis",
             range_color=(min_plomo, max_plomo),
-            labels={"Exp_plomo": "Tasa de carga de enferemdad por exposición al plomo"},
+            labels={"Exp_plomo": "Impacto en la salud <br>por exposición al plomo"},
             title=f"Exposición al Plomo - {año_seleccionado}"
         )
 
@@ -1940,7 +2002,7 @@ def server(input, output, session):
                 len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
                 thickness=15,
                 y=0.5,
-                title="Tasa de carga de enferemdad por exposición al plomo"
+                title="Impacto en la salud <br>por exposición al plomo"
             )
         )
 
@@ -1961,7 +2023,7 @@ def server(input, output, session):
             hover_data={"Muertes_agua": True,"País":False},
             color_continuous_scale="Viridis",
             range_color=(min_agua, max_agua),
-            labels={"Muertes_agua": "Muertes por fuentes de agua inseguras"},
+            labels={"Muertes_agua": "Muertes por fuentes<br>de agua inseguras"},
             title=f"Muertes de agua - {año_seleccionado}"
         )
 
@@ -2033,7 +2095,7 @@ def server(input, output, session):
                 len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
                 thickness=15,
                 y=0.5,
-                title="Muertes por fuentes de agua inseguras"
+                title="Muertes por fuentes<br>de agua inseguras"
             )
         )
 
@@ -2055,7 +2117,7 @@ def server(input, output, session):
             hover_data={"Pesticidas": True,"País":False},
             color_continuous_scale="Viridis",
             range_color=(min_pepticidas, max_pepticidas),
-            labels={"Pesticidas": "Uso de pesticidas (Toneladas)"},
+            labels={"Pesticidas": "Uso de pesticidas<br>(Toneladas)"},
             title=f"Uso de pepticidas - {año_seleccionado}"
         )
 
@@ -2126,7 +2188,7 @@ def server(input, output, session):
                 len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
                 thickness=15,
                 y=0.5,
-                title="Uso de pesticidas (Toneladas)"
+                title="Uso de pesticidas<br>(Toneladas)"
             )
         )
 
@@ -2144,10 +2206,10 @@ def server(input, output, session):
             locationmode="country names",
             color="Precipitaciones",
             hover_name="País",
-            hover_data={"Precipitaciones)": True,"País":False},
+            hover_data={"Precipitaciones": True,"País":False},
             color_continuous_scale="Viridis",
             range_color=(min_precipitaciones, max_precipitaciones),
-            labels={"Precipitaciones": "Cantidad de Precipitacion (mm)"},
+            labels={"Precipitaciones": "Cantidad de<br>Precipitacion (mm)"},
             title=f"Precipitaciones - {año_seleccionado}"
         )
         fig_precipitaciones_filtrado.update_geos(
@@ -2216,7 +2278,7 @@ def server(input, output, session):
                 len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
                 thickness=15,
                 y=0.5,
-                title="Cantidad de Precicpitaciones (mm)"
+                title="Cantidad de<br>Precipitacion (mm)"
             )
         )
 
@@ -2837,7 +2899,7 @@ def server(input, output, session):
             hover_data={"Parkinson_Predicho_Promedio": True,"País":False},
             color_continuous_scale="Viridis",
             range_color=(min_val, max_val),
-            title=f"Prevalencia del Parkinson Promedio predicho por País"
+            title=f"Predicción de prevalencia del Parkinson"
         )
         fig_modelos.update_geos(
         projection_type="equirectangular",  # <- Mapa plano
@@ -2848,9 +2910,9 @@ def server(input, output, session):
 
         fig_modelos.update_layout(
             title={
-                'text': f"<b>Prevalencia de Parkinson Promedio predicho por País </b>",
+                'text': f"<b>Predicción de prevalencia del Parkinson </b>",
                 'font': {'size': 20},
-                'x': 0.78,
+                'x': 0.6,
                 'y' : 0.98,
                 'xanchor': 'right'
             },
@@ -2877,7 +2939,7 @@ def server(input, output, session):
             hover_data={"Desviacion": True,"País":False},
             color_continuous_scale="Reds",
             range_color=(min_std, max_std),
-            title=f"Prevalencia del Parkinson (Desviación Estándar) por País"
+            title=f"Incertidumbre del modelo de predicción"
         )
         fig_modelos_prueba.update_geos(
         projection_type="equirectangular",  # <- Mapa plano
@@ -2887,7 +2949,58 @@ def server(input, output, session):
      )
         fig_modelos_prueba.update_layout(
             title={
-                'text': f"<b>Prevalencia del Parkinson (Desviación Estándar) por País",
+                'text': f"<b>Incertidumbre del modelo de predicción",
+                'font': {'size': 20},
+                'x': 0.6,
+                'y' : 0.98,
+                'xanchor': 'right'
+            },
+            height=400,
+            margin={"r": 10, "t": 10, "l": 0, "b": 0},
+            coloraxis_colorbar=dict(
+                len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
+                thickness=20,
+                y=0.5,
+                title="Desviación estándar del modelo"
+            )
+        )
+        return ui.HTML(fig_modelos_prueba.to_html(full_html=False))
+    
+
+    @output
+    @render.ui
+    def plot_vs():
+        fig_modelos_prueba = px.choropleth(
+        df_realesVSpredichos,
+        locations="País",
+        locationmode="country names",
+        color="Error_Normalizado",
+        color_continuous_scale=[
+            [0.0, "red"],     # Sobreestimación (error negativo)
+            [0.5, "white"],   # Sin error (cero)
+            [1.0, "blue"]     # Subestimación (error positivo)
+        ],
+        range_color=[-1, 1],
+        hover_name="País",
+        hover_data={
+            "Parkinson_Real": True,
+            "Parkinson_Predicho_Promedio": True,
+            "Error_Normalizado": True,
+            "Error_Absoluto": True,
+            "País": False
+        },
+        title="Error Normalizado de Parkinson y Anomalías por País"
+    )
+
+        fig_modelos_prueba.update_geos(
+            projection_type="equirectangular",  # <- Mapa plano
+            showcoastlines=True,
+            showland=True,
+            fitbounds="locations"
+         )
+        fig_modelos_prueba.update_layout(
+            title={
+                'text': f"<b> Error Normalizado de Parkinson: Sobre/Subestimación",
                 'font': {'size': 20},
                 'x': 0.82,
                 'y' : 0.98,
@@ -2899,71 +3012,10 @@ def server(input, output, session):
                 len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
                 thickness=20,
                 y=0.5,
-                title="Prevalencia Parkinson"
+                title="Error_Normalizado"
             )
         )
         return ui.HTML(fig_modelos_prueba.to_html(full_html=False))
-    
-
-    @output
-    @render.ui
-    def plot_vs():
-        # Escala visual centrada en el 95% del valor absol
-        midpoint_relative = (0 - real_min) / (real_max -real_min)
-        # Escala de colores personalizada con 0 real en blanco
-        colorscale = [
-        [0.0, "red"],
-        [midpoint_relative, "white"],
-        [1.0, "blue"]
-    ]
-    
-        fig_vs = px.choropleth(
-            data_frame=df_realesVSpredichos,
-            locations="País",
-            locationmode="country names",
-            color="Error_Absoluto",
-            hover_name="País",
-            hover_data={
-                "Parkinson_Predicho_Promedio": True,
-                "Parkinson_Real": True,
-                "Error_Absoluto": True,
-                "País": False
-            },
-            color_continuous_scale=colorscale,
-            #color_continuous_midpoint=0,
-            range_color=(real_min, real_max),  # Control visual
-            title="Error Absoluto de Predicción de Parkinson por País"
-        )
-    
-        fig_vs.update_geos(
-            projection_type="equirectangular",
-            showcoastlines=True,
-            showland=True,
-            fitbounds="locations"
-        )
-    
-        fig_vs.update_layout(
-            title={
-                'text': "<b>Prevalencia de Parkinson: Real vs. Predicha por país",
-                'font': {'size': 20},
-                'x': 0.75,
-                'y': 0.98,
-                'xanchor': 'right'
-            },
-            height=400,
-            margin={"r": 10, "t": 10, "l": 0, "b": 0},
-            coloraxis_colorbar=dict(
-                len=0.8,
-                thickness=20,
-                tickvals=[real_min, 0, real_max],  # Posiciones de los ticks
-                ticktext=[f"{real_min:.2f}", "0", f"{real_max:.2f}"],  # Etiquetas visibles
-                y=0.5,
-                title="Prevalencia Parkinson",
-
-            )
-        )
-    
-        return ui.HTML(fig_vs.to_html(full_html=False))
 
 
 
