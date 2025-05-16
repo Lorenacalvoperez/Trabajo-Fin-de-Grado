@@ -74,13 +74,12 @@ def crear_dataframe(valores, años, paises, nombre_columna):
     return df
 
 import pandas as pd
-'''
-def crear_dataframe_p(valores, años, paises, nombre_columna):    
+def crear_dataframe_p(valores, años, paises, nombre_columna):
     datos_lista = []
     indice_valor = 0
-
-    for id_pais, nombre_pais in paises.items():
-        for año in años:
+    
+    for año in años:
+        for id_pais, nombre_pais in paises.items():
             if indice_valor < len(valores):
                 fila = {
                     "Año": año,
@@ -95,23 +94,54 @@ def crear_dataframe_p(valores, años, paises, nombre_columna):
                     nombre_columna: None
                 }
             datos_lista.append(fila)
-
-    df = pd.DataFrame(datos_lista)
-     # Formatear con punto separador de miles
-    df[nombre_columna] = df[nombre_columna].apply(lambda x: f"{x:,}".replace(',', '.'))
-    # Convertir la columna a numérico forzando errores a NaN
-    df[nombre_columna] = pd.to_numeric(df[nombre_columna], errors='coerce').astype(float)
-
-    # Eliminar filas donde la columna sea NaN
-    df = df.dropna(subset=[nombre_columna])
     
-    # Redondear y convertir a int
-    df[nombre_columna] = df[nombre_columna].round().astype(int)
-
-   
-
+    df = pd.DataFrame(datos_lista)
     return df
-'''
+
+def construir_dataframe_pesticidas(datos, metadata):
+    # Extraer arrays principales
+    valores = datos["values"]
+    entidades = datos["entities"]
+    anios = datos["years"]
+
+    # Crear diccionario ID -> Nombre de país
+    id_to_country = {
+        ent["id"]: ent["name"]
+        for ent in metadata["dimensions"]["entities"]["values"]
+    }
+
+    # Lista completa de años del metadata
+    lista_anios = [y["id"] for y in metadata["dimensions"]["years"]["values"]]
+
+    # Lista completa de países (nombres)
+    lista_paises = [ent["name"] for ent in metadata["dimensions"]["entities"]["values"]]
+
+    # Crear todos los pares posibles País × Año
+    df_base = pd.DataFrame(
+        [(pais, anio) for pais in lista_paises for anio in lista_anios],
+        columns=["País", "Año"]
+    )
+
+    # Crear DataFrame con datos reales desde el JSON
+    registros = []
+    for i in range(len(valores)):
+        pais_id = entidades[i]
+        anio = anios[i]
+        valor = valores[i]
+        pais = id_to_country.get(pais_id)
+        if pais:
+            registros.append((anio, pais, valor))  # Año primero
+
+    df_valores = pd.DataFrame(registros, columns=["Año", "País", "Pesticidas"])
+
+    # Merge con la tabla base (left join para conservar todos los países y años)
+    df_final = pd.merge(df_base, df_valores, on=["Año", "País"], how="left")
+
+    # Reordenar columnas
+    df_final = df_final[["Año", "País", "Pesticidas"]]
+
+    return df_final
+
   
 # Parkison
 DATA_URL = "https://api.ourworldindata.org/v1/indicators/916408.data.json"
@@ -146,23 +176,22 @@ df_plomo = crear_dataframe(valores, años, paises,"Exp_plomo").round(2)
 DATA_URL = "https://api.ourworldindata.org/v1/indicators/1016584.data.json"
 METADATA_URL = "https://api.ourworldindata.org/v1/indicators/1016584.metadata.json"
 datos, metadata = cargar_datos()  
-valores, años, paises = procesar_datos(datos, metadata) 
-df_pepticidas = crear_dataframe(valores, años, paises,"Pesticidas").round(2)
-'''
+df_pepticidas = construir_dataframe_pesticidas(datos, metadata)
+
 #precitioaciones
 DATA_URL = "https://api.ourworldindata.org/v1/indicators/1005182.data.json"
 METADATA_URL = "https://api.ourworldindata.org/v1/indicators/1005182.metadata.json"
 datos, metadata = cargar_datos()  
 valores, años, paises = procesar_datos(datos, metadata) 
 df_precipitaciones = crear_dataframe_p(valores, años, paises,"Precipitaciones").round(2) 
-'''
+
 # Cargar los archivos CSV en DataFrames
-df_parkinson = pd.read_csv('Datos_Parkinson.csv').round(2)
+#df_parkinson = pd.read_csv('Datos_Parkinson.csv').round(2)
 #df_contaminacion = pd.read_csv('Datos_contaminación_aire.csv').round(2)
 #df_plomo = pd.read_csv("Datos_exp_plomo.csv").round(2)
 #df_agua  = pd.read_csv("Datos_muertes_agua.csv").round(2)
-df_pepticidas = pd.read_csv("Datos_uso_pepticidas.csv").round(2)
-df_precipitaciones =  pd.read_csv("Datos_precipitaciones.csv").round(2)
+#df_pepticidas = pd.read_csv("Datos_uso_pepticidas.csv").round(2)
+#df_precipitaciones =  pd.read_csv("Datos_precipitaciones.csv").round(2)
 df_pred_promedio = pd.read_csv("predicciones_modelos_promedio.csv").round(2)
 df_pred_desviacion = pd.read_csv("predicciones_modelos_desviacion.csv").round(2)
 df_pred_CV = pd.read_csv("predicciones_modelos_CV.csv").round(2)
