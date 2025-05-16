@@ -7,12 +7,160 @@ import io
 import matplotlib.pyplot as plt
 import seaborn as sns
 import base64
+import pandas as pd
+import requests
 
+#Carga datos
+def cargar_datos():
+   
+    datos = requests.get(DATA_URL).json()  # Datos de casos de Parkinson
+    metadata = requests.get(METADATA_URL).json()  # Información adicional (años y países)
+    return datos, metadata
+#Procesar datos
+def procesar_datos(data_response, metadata_response):
+    # Extraer los valores numéricos (dependiendo de la estructura)
+    if "values" in data_response:
+        valores = data_response["values"]
+    else:
+        raise ValueError("No se encontró la clave 'values' en los datos")
+
+    # Extraer la lista de años disponibles (independientemente de la estructura específica)
+    if "dimensions" in metadata_response and "years" in metadata_response["dimensions"]:
+        años = [item["id"] for item in metadata_response["dimensions"]["years"]["values"]]
+    else:
+        raise ValueError("No se encontró la clave 'years' en la metadata")
+
+    # Extraer los países o entidades desde la metadata (independientemente de la estructura específica)
+    if "dimensions" in metadata_response and "entities" in metadata_response["dimensions"]:
+        paises = {item["id"]: item["name"] for item in metadata_response["dimensions"]["entities"]["values"]}
+    else:
+        raise ValueError("No se encontró la clave 'entities' en la metadata")
+    
+    return valores, años, paises
+#Crear el DF
+
+import pandas as pd
+
+def crear_dataframe(valores, años, paises, nombre_columna):    
+    # Crear la lista para almacenar las filas de datos
+    datos_lista = []
+    
+    # Variable para iterar sobre los valores
+    indice_valor = 0
+    
+    # Iterar sobre los países y años
+    for id_pais, nombre_pais in paises.items():  # Iterar sobre los países
+        for año in años:  # Iterar sobre los años disponibles
+            if indice_valor < len(valores):
+                # Si hay un valor disponible, añadirlo a la fila
+                fila = {
+                    "Año": año,
+                    "País": nombre_pais,
+                    nombre_columna: valores[indice_valor]
+                }
+                indice_valor += 1
+            else:
+                # Si no hay más valores, completar con None
+                fila = {
+                    "Año": año,
+                    "País": nombre_pais,
+                    nombre_columna: None
+                }
+            datos_lista.append(fila)  # Añadir la fila a la lista
+    
+    # Convertir la lista a un DataFrame
+    df = pd.DataFrame(datos_lista)
+    
+    return df
+
+import pandas as pd
+'''
+def crear_dataframe_p(valores, años, paises, nombre_columna):    
+    datos_lista = []
+    indice_valor = 0
+
+    for id_pais, nombre_pais in paises.items():
+        for año in años:
+            if indice_valor < len(valores):
+                fila = {
+                    "Año": año,
+                    "País": nombre_pais,
+                    nombre_columna: valores[indice_valor]
+                }
+                indice_valor += 1
+            else:
+                fila = {
+                    "Año": año,
+                    "País": nombre_pais,
+                    nombre_columna: None
+                }
+            datos_lista.append(fila)
+
+    df = pd.DataFrame(datos_lista)
+     # Formatear con punto separador de miles
+    df[nombre_columna] = df[nombre_columna].apply(lambda x: f"{x:,}".replace(',', '.'))
+    # Convertir la columna a numérico forzando errores a NaN
+    df[nombre_columna] = pd.to_numeric(df[nombre_columna], errors='coerce').astype(float)
+
+    # Eliminar filas donde la columna sea NaN
+    df = df.dropna(subset=[nombre_columna])
+    
+    # Redondear y convertir a int
+    df[nombre_columna] = df[nombre_columna].round().astype(int)
+
+   
+
+    return df
+'''
+  
+# Parkison
+DATA_URL = "https://api.ourworldindata.org/v1/indicators/916408.data.json"
+METADATA_URL = "https://api.ourworldindata.org/v1/indicators/916408.metadata.json"
+datos, metadata = cargar_datos()  
+valores, años, paises = procesar_datos(datos, metadata) 
+df_parkinson = crear_dataframe(valores, años, paises,"Parkinson").round(2) 
+
+df_parkinson = df_parkinson[df_parkinson["País"] != "World"]
+
+# Contaminación aire
+
+# URLs de la API
+DATA_URL = "https://api.ourworldindata.org/v1/indicators/939832.data.json"
+METADATA_URL = "https://api.ourworldindata.org/v1/indicators/939832.metadata.json"
+datos, metadata = cargar_datos()  
+valores, años, paises = procesar_datos(datos, metadata) 
+df_contaminacion= crear_dataframe(valores, años, paises,"Contaminacion_aire").round(2) 
+# Agua
+DATA_URL = "https://api.ourworldindata.org/v1/indicators/936533.data.json"
+METADATA_URL = "https://api.ourworldindata.org/v1/indicators/936533.metadata.json"
+datos, metadata = cargar_datos()  
+valores, años, paises = procesar_datos(datos, metadata) 
+df_agua = crear_dataframe(valores, años, paises,"Muertes_agua").round(2) 
+# Plomo
+DATA_URL = "https://api.ourworldindata.org/v1/indicators/941463.data.json"
+METADATA_URL = "https://api.ourworldindata.org/v1/indicators/941463.metadata.json"
+datos, metadata = cargar_datos()  
+valores, años, paises = procesar_datos(datos, metadata) 
+df_plomo = crear_dataframe(valores, años, paises,"Exp_plomo").round(2)
+#pesticidad
+DATA_URL = "https://api.ourworldindata.org/v1/indicators/1016584.data.json"
+METADATA_URL = "https://api.ourworldindata.org/v1/indicators/1016584.metadata.json"
+datos, metadata = cargar_datos()  
+valores, años, paises = procesar_datos(datos, metadata) 
+df_pepticidas = crear_dataframe(valores, años, paises,"Pesticidas").round(2)
+'''
+#precitioaciones
+DATA_URL = "https://api.ourworldindata.org/v1/indicators/1005182.data.json"
+METADATA_URL = "https://api.ourworldindata.org/v1/indicators/1005182.metadata.json"
+datos, metadata = cargar_datos()  
+valores, años, paises = procesar_datos(datos, metadata) 
+df_precipitaciones = crear_dataframe_p(valores, años, paises,"Precipitaciones").round(2) 
+'''
 # Cargar los archivos CSV en DataFrames
 df_parkinson = pd.read_csv('Datos_Parkinson.csv').round(2)
-df_contaminacion = pd.read_csv('Datos_contaminación_aire.csv').round(2)
-df_plomo = pd.read_csv("Datos_exp_plomo.csv").round(2)
-df_agua  = pd.read_csv("Datos_muertes_agua.csv").round(2)
+#df_contaminacion = pd.read_csv('Datos_contaminación_aire.csv').round(2)
+#df_plomo = pd.read_csv("Datos_exp_plomo.csv").round(2)
+#df_agua  = pd.read_csv("Datos_muertes_agua.csv").round(2)
 df_pepticidas = pd.read_csv("Datos_uso_pepticidas.csv").round(2)
 df_precipitaciones =  pd.read_csv("Datos_precipitaciones.csv").round(2)
 df_pred_promedio = pd.read_csv("predicciones_modelos_promedio.csv").round(2)
@@ -432,7 +580,9 @@ def server(input, output, session):
                             # Columna derecha: botones
                             ui.div(
                                 ui.download_button("downloadData", "Descargar CSV Filtrado"),
+                                ui.download_button("downloadData_json", "Descargar JSON Filtrado"),
                                 ui.download_button("downloadAll", "Descargar CSV Completo"),
+                                ui.download_button("downloadAll_json", "Descargar JSON Completo"),
                                 style="flex: 1; display: flex; flex-direction: column; gap: 10px; justify-content: flex-start; margin-top: 25px;"
                             ),
         
@@ -1642,13 +1792,46 @@ def server(input, output, session):
         buffer.seek(0)
         return buffer
 
+
     @output
     @render.download(filename="Parkinson_completo.csv")
-    def downloadAll_contaminacion():
+    def downloadAll():
         buffer = io.StringIO()
         df_parkinson.to_csv(buffer, index=False)
         buffer.seek(0)
         return buffer
+
+    @output
+    @render.download(filename="Tasa_contaminacion_aire_filtrado.csv")
+    def downloadData_json():
+        selected_years = [int(year) for year in input.years_select()]
+        selected_countries = input.countries_select()  # Obtener los países seleccionados
+        
+        # Filtrar los datos por los años y países seleccionados
+        if selected_years and selected_countries:
+            filtered_df = df_contaminacion[df_contaminacion['Año'].isin(selected_years) & df_contaminacion['País'].isin(selected_countries)]
+        elif selected_years:
+            filtered_df = df_contaminacion[df_contaminacion['Año'].isin(selected_years)]
+        elif selected_countries:
+            filtered_df = df_contaminacion[df_contaminacion['País'].isin(selected_countries)]
+        else:
+            filtered_df = df_contaminacion  # Si no se selecciona ningún filtro, usar el DataFrame completo
+        
+        buffer = io.StringIO()
+        filtered_df.to_csv(buffer, index=False)
+        buffer.seek(0)
+        return buffer
+    
+
+
+    @output
+    @render.download(filename="Tasa_contaminacion_aire_completo.csv")
+    def downloadAll_json():
+        buffer = io.StringIO()
+        df_contaminacion.to_csv(buffer, index=False)
+        buffer.seek(0)
+        return buffer
+        
 
     @output
     @render.download(filename="Tasa_contaminacion_aire_filtrado.csv")
