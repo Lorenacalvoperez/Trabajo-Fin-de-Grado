@@ -7,3 +7,6 @@ Diagnostico del parkinson:
 https://www.mayoclinic.org/es/diseases-conditions/parkinsons-disease/diagnosis-treatment/drc-20376062
 
 https://www.fisiohogar.com/fisioterapia-para-el-parkinson/parkinson-las-herramientas-rehabilitacion/
+
+Shiny reponse:
+https://shiny.posit.co/blog/posts/responsive-shiny-layouts/
