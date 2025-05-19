@@ -206,8 +206,11 @@ df_ranking = pd.read_csv("ranking_global_promedio.csv")
 
 #Misma escala de distribicon para todos los mapas
 
-min_parkinson = df_parkinson["Parkinson"].min()
-max_parkinson = df_parkinson["Parkinson"].quantile(0.90)
+min_parkinson = round(df_parkinson["Parkinson"].min(), 2)
+q25_parkinson = round(df_parkinson["Parkinson"].quantile(0.25), 2)
+q50_parkinson = round(df_parkinson["Parkinson"].quantile(0.50), 2)
+q75_parkinson = round(df_parkinson["Parkinson"].quantile(0.75), 2)
+q95_parkinson = round(df_parkinson["Parkinson"].quantile(0.95), 2)
 
 min_contaminacion = df_contaminacion["Contaminacion_aire"].min()
 max_contaminacion = df_contaminacion["Contaminacion_aire"].quantile(0.90)
@@ -395,7 +398,7 @@ app_ui = ui.page_fluid(
         ui.sidebar(
             ui.div(
                 ui.a("🏠 Home", class_="sidebar-link home-link", onclick="Shiny.setInputValue('page', 'home')"),
-                ui.a("🧠 Enfermedad del Parkinson", class_="sidebar-link park-link", onclick="Shiny.setInputValue('page', 'section1')"),
+                ui.a("🧠 Enfermedad de Parkinson", class_="sidebar-link park-link", onclick="Shiny.setInputValue('page', 'section1')"),
                 ui.a("🗺️ Mapa Mundial del Parkinson", class_="sidebar-link map-link", onclick="Shiny.setInputValue('page', 'section2')"),
                 ui.a("🌿 Variables Ambientales", class_="sidebar-link env-link", onclick="Shiny.setInputValue('page', 'section3')"),
                 ui.a("📈 Predicciones", class_="sidebar-link graph-link", onclick="Shiny.setInputValue('page', 'section4')"),
@@ -420,8 +423,9 @@ def server(input, output, session):
             return ui.div(
                 # Franja de color con el título
                 ui.div(
-                    ui.h1("🌍 Parkinson Worldview",
-                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"
+                    ui.h1(
+                        ui.HTML("🌍 Parkinson <em>Worldwide</em>"),
+                        style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"
                     ),
                     style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
                 ),
@@ -457,7 +461,7 @@ def server(input, output, session):
                     ui.a("Visita Our World in Data para más detalles", href="https://ourworldindata.org/", target="_blank", 
                      style="font-size: 18px; color: #3498db; text-decoration: none;"),
                     ui.p(
-                        "Al combinar estos datos con análisis estadísticos y modelos predictivos, se puede obtener una visión más clara de cómo estos factores ambientales pueden afectar la prevalencia del Parkinson. "
+                        "Al combinar estos datos con análisis estadísticos y modelos predictivos, se puede obtener una visión más clara de cómo estos factores ambientales pueden afectar la prevalencia de Parkinson. "
                         "Además, este enfoque también ayuda a identificar posibles áreas geográficas donde el riesgo de Parkinson es más alto, lo que puede llevar a una mejor planificación de políticas públicas y estrategias de salud.",
                         style="font-size: 18px; line-height: 1.6; color: #333333;"
                     ),
@@ -470,12 +474,12 @@ def server(input, output, session):
             return ui.div(
                 # Franja de título
                 ui.div(
-                    ui.h1("🌍 Parkinson Worldview",
-                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"
+                    ui.h1(
+                        ui.HTML("🌍 Parkinson <em>Worldwide</em>"),
+                        style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"
                     ),
                     style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
                 ),
-                
                 # Información sobre la Enfermedad de Parkinson
                 ui.div(
                     # Título de la sección
@@ -490,51 +494,55 @@ def server(input, output, session):
                     ),
             
                     ui.p(
-                        "Aunque se desconoce la causa exacta del Parkinson, se sabe que resulta de la degeneración de las neuronas dopaminérgicas en "
+                        "Aunque se desconoce la causa exacta de la enfermedad de Parkinson, se sabe que resulta de la degeneración de las neuronas dopaminérgicas en "
                         "una región del cerebro llamada sustancia negra. Sin embargo, investigaciones recientes sugieren que factores ambientales pueden "
                         "jugar un papel relevante en el desarrollo de la enfermedad, especialmente en personas con cierta predisposición genética.",
                          style="color: black; font-size: 16px; margin-bottom: 10px; text-align: left; background-color: #ecf0f1; padding: 10px; border-radius: 8px;"
                     ),
             
                     # Título de síntomas comunes
-                    ui.h3("🚶‍♂️ Síntomas Comunes del Parkinson", style="color: black; text-align: center; margin-top: 20px;"),
+                    ui.h3("🚶‍♂️ Síntomas Comunes de la enferemdad de Parkinson", style="color: black; text-align: center; margin-top: 20px;"),
             
                     # Descripción de los síntomas comunes
-                    ui.p(
-                        "Temblores: Los temblores son uno de los síntomas más reconocibles. Aparecen en reposo y afectan típicamente las manos, brazos y piernas.",
+                   
+                    ui.div(
+                        ui.HTML("<strong>Temblores</strong>: Los temblores son uno de los síntomas más reconocibles. Aparecen en reposo y afectan típicamente las manos, brazos y piernas."),
                         style="color: black; font-size: 16px; margin-bottom: 10px; text-align: left; background-color: #ecf0f1; padding: 10px; border-radius: 8px;"
                     ),
-                    ui.p(
-                        "Rigidez muscular: La rigidez en los músculos puede dificultar los movimientos y causar dolor.",
+                    ui.div(
+                        ui.HTML("<strong>Rigidez muscular</strong>: La rigidez en los músculos puede dificultar los movimientos y causar dolor."),
                         style="color: black; font-size: 16px; margin-bottom: 10px; text-align: left; background-color: #ecf0f1; padding: 10px; border-radius: 8px;"
                     ),
-                    ui.p(
-                        "Bradicinesia (lentitud de movimientos): La disminución de la velocidad al realizar movimientos, como caminar o escribir.",
+                    ui.div(
+                        ui.HTML("<strong>Bradicinesia (lentitud de movimientos)</strong>: La disminución de la velocidad al realizar movimientos, como caminar o escribir."),
                         style="color: black; font-size: 16px; margin-bottom: 10px; text-align: left; background-color: #ecf0f1; padding: 10px; border-radius: 8px;"
                     ),
-                    ui.p(
-                        "Inestabilidad postural: Los pacientes pueden tener problemas para mantener el equilibrio, lo que aumenta el riesgo de caídas.",
+                    ui.div(
+                        ui.HTML("<strong>Inestabilidad postural</strong>: Los pacientes pueden tener problemas para mantener el equilibrio, lo que aumenta el riesgo de caídas."),
                         style="color: black; font-size: 16px; margin-bottom: 10px; text-align: left; background-color: #ecf0f1; padding: 10px; border-radius: 8px;"
                     ),
+
+
+
             
                     # Título de factores de riesgo
                     ui.h3("⚠️ Factores de Riesgo", style="color: black; text-align: center; margin-top: 20px;"),
             
                     # Descripción de los factores de riesgo
-                    ui.p(
-                        "Edad: La mayoría de las personas con Parkinson son mayores de 60 años.",
+                    ui.div(
+                        ui.HTML("<strong>Edad</strong>: La mayoría de las personas con Parkinson son mayores de 60 años."),
                         style="color: black; font-size: 16px; margin-bottom: 10px; text-align: left; background-color: #ecf0f1; padding: 10px; border-radius: 8px;"
                     ),
-                    ui.p(
-                        "Genética: Algunos casos tienen una predisposición genética, pero la mayoría de los casos son esporádicos (no hereditarios).",
+                    ui.div(
+                        ui.HTML("<strong>Genética</strong>: Algunos casos tienen una predisposición genética, pero la mayoría de los casos son esporádicos (no hereditarios)."),
                         style="color: black; font-size: 16px; margin-bottom: 10px; text-align: left; background-color: #ecf0f1; padding: 10px; border-radius: 8px;"
                     ),
-                    ui.p(
-                        "Sexo: Los hombres tienen un mayor riesgo de desarrollar Parkinson que las mujeres.",
+                    ui.div(
+                        ui.HTML("<strong>Sexo</strong>: Los hombres tienen un mayor riesgo de desarrollar Parkinson que las mujeres."),
                         style="color: black; font-size: 16px; margin-bottom: 10px; text-align: left; background-color: #ecf0f1; padding: 10px; border-radius: 8px;"
                     ),
-                    ui.p(
-                        "Factores Ambientales: Exposición a sustancias químicas, como pesticidas, y la contaminación del aire pueden aumentar el riesgo.",
+                    ui.div(
+                        ui.HTML("<strong>Factores Ambientales</strong>: Exposición a sustancias químicas, como pesticidas, y la contaminación del aire pueden aumentar el riesgo."),
                         style="color: black; font-size: 16px; margin-bottom: 10px; text-align: left; background-color: #ecf0f1; padding: 10px; border-radius: 8px;"
                     ),
                 )
@@ -552,15 +560,28 @@ def server(input, output, session):
             return ui.div(
                 # Franja de título
                 ui.div(
-                    ui.h1("🌍 Parkinson Worldview",
-                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"
+                    ui.h1(
+                        ui.HTML("🌍 Parkinson <em>Worldwide</em>"),
+                        style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"
                     ),
                     style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
+                ),
+        
+                # Descripción bajo el título
+                ui.p(
+                    ui.HTML(
+                        'Visualiza la prevalencia estimada de la enfermedad de Parkinson: el número de personas afectadas por cada 100,000 habitantes en distintos países y años.'
+                        '<a href="https://ourworldindata.org/grapher/parkinsons-disease-prevalence-ihme?tab=table" '
+                        'target="_blank" style="margin-left: 5px; color: #2980B9; text-decoration: none;">Accede aquí a los datos</a>'
+                    ),
+                    style="text-align: center; font-size: 16px; color: black; font-family: 'Arial', sans-serif; margin-top: 10px;"
                 ),
         
                 # Contenido principal
                 ui.div(
                     ui.output_ui("plot_parkinson"),
+        
+                    # Slider de año
                     ui.div(
                         ui.input_slider("year", "Selecciona el Año", 
                                         min=df_parkinson["Año"].min(), 
@@ -568,19 +589,30 @@ def server(input, output, session):
                                         value=df_parkinson["Año"].min(), 
                                         step=1, 
                                         sep=""),
-                        
                         style="margin-top: 10px;"
                     ),
+        
                     # Botón para ir al mapa europeo
                     ui.div(
                         ui.input_action_button("go_to_europe", "🌍 Ver Mapa Europeo", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'europe_map')"),
                         style="margin-top: 10px;"
                     ),
-                    # Selector de años y países con múltiples selecciones
+        
+                    # Sección de descarga completa
                     ui.div(
-                        # Título antes de los selectores
+                        ui.h3("📥 Descarga completa de datos", 
+                              style="text-align: center; margin-top: 30px; margin-bottom: 10px; font-family: 'Arial', sans-serif;"),
+                        ui.div(
+                            ui.download_button("downloadAll", "Descargar CSV "),
+                            ui.download_button("downloadData_parkinson_json", "Descargar JSON "),
+                            style="display: flex; flex-direction: column; gap: 10px; align-items: center;"
+                        )
+                    ),
+        
+                    # Sección de filtro y descarga filtrada
+                    ui.div(
                         ui.h3("📅 Filtra los datos por año y país", 
-                              style="text-align: center; margin-bottom: 10px; font-family: 'Arial', sans-serif;"),
+                              style="text-align: center; margin-top: 40px; margin-bottom: 10px; font-family: 'Arial', sans-serif;"),
                         ui.div(
                             # Columna izquierda: selectores
                             ui.div(
@@ -606,18 +638,15 @@ def server(input, output, session):
                                 style="flex: 2; padding-right: 20px;"
                             ),
         
-                            # Columna derecha: botones
+                            # Columna derecha: botones de descarga filtrada
                             ui.div(
                                 ui.download_button("downloadData", "Descargar CSV Filtrado"),
-                                ui.download_button("downloadData_json", "Descargar JSON Filtrado"),
-                                ui.download_button("downloadAll", "Descargar CSV Completo"),
-                                ui.download_button("downloadAll_json", "Descargar JSON Completo"),
+                                ui.download_button("downloadAll_parkinson_json", "Descargar JSON Filtrado"),
                                 style="flex: 1; display: flex; flex-direction: column; gap: 10px; justify-content: flex-start; margin-top: 25px;"
                             ),
         
                             style="display: flex; width: 100%;"
                         ),
-        
                         style="width: 90%; margin: auto; margin-top: 20px;"
                     ),
         
@@ -626,6 +655,8 @@ def server(input, output, session):
         
                 class_="content-box"
             )
+
+
         elif page == "europe_map":
             return ui.div(
                 # Franja de título
@@ -733,18 +764,24 @@ def server(input, output, session):
 
         elif page == "contaminacion":
             return ui.div(
+                # Título principal
                 ui.div(
                     ui.h1("🌍 Parkinson Worldview",
                           style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
                     style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
                 ),
+                
+                # Descripción
                 ui.p(
-    "Visualiza la tasa estimada de muertes atribuidas a la contaminación del aire, expresadas por cada 100.000 habitantes. "
-    "Incluye contaminantes como el ozono en exteriores y puede reflejar múltiples factores de riesgo.",
-    style="text-align: center; font-size: 16px; color: black; font-family: 'Arial', sans-serif; margin-top: 10px;"
-),
+                    "Visualiza la tasa estimada de muertes atribuidas a la contaminación del aire, expresadas por cada 100.000 habitantes. "
+                    "Incluye contaminantes como el ozono en exteriores y puede reflejar múltiples factores de riesgo.",
+                    style="text-align: center; font-size: 16px; color: black; font-family: 'Arial', sans-serif; margin-top: 10px;"
+                ),
+        
+                # Contenido principal
                 ui.div(
                     ui.output_ui("plot_contaminacion"),
+        
                     ui.div(
                         ui.input_slider("year", "Selecciona el Año", 
                                         min=df_contaminacion["Año"].min(), 
@@ -754,13 +791,26 @@ def server(input, output, session):
                                         sep=""),
                         style="margin-top: 10px;"
                     ),
+        
                     ui.div(
                         ui.input_action_button("go_to_europe_aire", "🌍 Ver Mapa Europeo", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'plot_europe_aire')")
                     ),
+        
+                    # Sección de descarga completa
                     ui.div(
-                        # Título antes de los selectores
+                        ui.h3("📥 Descarga completa de datos", 
+                              style="text-align: center; margin-top: 30px; margin-bottom: 10px; font-family: 'Arial', sans-serif;"),
+                        ui.div(
+                            ui.download_button("downloadAll_contaminacion", "Descargar CSV "),
+                            ui.download_button("downloadAll_contaminacion_json", "Descargar JSON "),
+                            style="display: flex; flex-direction: column; gap: 10px; align-items: center;"
+                        )
+                    ),
+        
+                    # Sección de filtrado
+                    ui.div(
                         ui.h3("📅 Filtra los datos por año y país", 
-                              style="text-align: center; margin-bottom: 10px; font-family: 'Arial', sans-serif;"),
+                              style="text-align: center; margin-top: 40px; margin-bottom: 10px; font-family: 'Arial', sans-serif;"),
                         ui.div(
                             # Columna izquierda: selectores
                             ui.div(
@@ -786,20 +836,19 @@ def server(input, output, session):
                                 style="flex: 2; padding-right: 20px;"
                             ),
         
-                            # Columna derecha: botones
+                            # Columna derecha: botones de descarga filtrada
                             ui.div(
                                 ui.download_button("downloadData_contaminacion", "Descargar CSV Filtrado"),
                                 ui.download_button("downloadData_contaminacion_json", "Descargar JSON Filtrado"),
-                                ui.download_button("downloadAll_contaminacion", "Descargar CSV Completo"),
-                                ui.download_button("downloadAll_contaminacion_json", "Descargar JSON Completo"),
                                 style="flex: 1; display: flex; flex-direction: column; gap: 10px; justify-content: flex-start; margin-top: 25px;"
                             ),
         
                             style="display: flex; width: 100%;"
                         ),
-        
                         style="width: 90%; margin: auto; margin-top: 20px;"
                     ),
+        
+                    # Botón volver atrás
                     ui.div(
                         ui.input_action_button(
                             "volver_atras_contaminacion",
@@ -815,6 +864,7 @@ def server(input, output, session):
         
                 class_="content-box"
             )
+
         elif page == "plot_europe_aire":
             return ui.div(
                 ui.div(
@@ -849,21 +899,27 @@ def server(input, output, session):
 
         elif page == "plomo":
             return ui.div(
+                # Título principal
                 ui.div(
                     ui.h1("🌍 Parkinson Worldview",
                           style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
                     style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
                 ),
+        
+                # Descripción
                 ui.p(
-    "Visualiza la tasa de carga de enfermedad atribuida a la exposición al plomo. "
-    "Esta métrica representa el número estimado de años de vida perdidos debido a muerte prematura "
-    "o discapacidad causadas por dicha exposición, por cada 100.000 personas. "
-    "Se expresa en AVAD (Años de Vida Ajustados por Discapacidad) y está ajustada por edad, "
-    "lo que permite comparar países con diferentes estructuras demográficas.",
-    style="text-align: center; font-size: 16px; color: black; font-family: 'Arial', sans-serif; margin-top: 10px;"
-),
+                    "Visualiza la tasa de carga de enfermedad atribuida a la exposición al plomo. "
+                    "Esta métrica representa el número estimado de años de vida perdidos debido a muerte prematura "
+                    "o discapacidad causadas por dicha exposición, por cada 100.000 personas. "
+                    "Se expresa en AVAD (Años de Vida Ajustados por Discapacidad) y está ajustada por edad, "
+                    "lo que permite comparar países con diferentes estructuras demográficas.",
+                    style="text-align: center; font-size: 16px; color: black; font-family: 'Arial', sans-serif; margin-top: 10px;"
+                ),
+        
+                # Contenido principal
                 ui.div(
                     ui.output_ui("plot_plomo"),
+        
                     ui.div(
                         ui.input_slider("year", "Selecciona el Año", 
                                         min=df_plomo["Año"].min(), 
@@ -873,13 +929,26 @@ def server(input, output, session):
                                         sep=""),
                         style="margin-top: 10px;"
                     ),
+        
                     ui.div(
-                        ui.input_action_button("go_to_europe_plomo", "🌍 Ver Mapa Europeo", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'plot_europe_plomo')"),
-                    # Selector de años y países con múltiples selecciones
+                        ui.input_action_button("go_to_europe_plomo", "🌍 Ver Mapa Europeo", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'plot_europe_plomo')")
+                    ),
+        
+                    # Sección de descarga completa
                     ui.div(
-                        # Título antes de los selectores
+                        ui.h3("📥 Descarga completa de datos", 
+                              style="text-align: center; margin-top: 30px; margin-bottom: 10px; font-family: 'Arial', sans-serif;"),
+                        ui.div(
+                            ui.download_button("downloadAll_exposicion_plomo", "Descargar CSV "),
+                            ui.download_button("downloadAll_exposicion_plomo_json", "Descargar JSON "),
+                            style="display: flex; flex-direction: column; gap: 10px; align-items: center;"
+                        )
+                    ),
+        
+                    # Sección de filtros y descarga filtrada
+                    ui.div(
                         ui.h3("📅 Filtra los datos por año y país", 
-                              style="text-align: center; margin-bottom: 10px; font-family: 'Arial', sans-serif;"),
+                              style="text-align: center; margin-top: 40px; margin-bottom: 10px; font-family: 'Arial', sans-serif;"),
                         ui.div(
                             # Columna izquierda: selectores
                             ui.div(
@@ -905,20 +974,19 @@ def server(input, output, session):
                                 style="flex: 2; padding-right: 20px;"
                             ),
         
-                            # Columna derecha: botones
+                            # Columna derecha: descarga filtrada
                             ui.div(
                                 ui.download_button("downloadData_exposicion_plomo", "Descargar CSV Filtrado"),
                                 ui.download_button("downloadData_exposicion_plomo_json", "Descargar JSON Filtrado"),
-                                ui.download_button("downloadAll_exposicion_plomo", "Descargar CSV Completo"),
-                                ui.download_button("downloadAll_exposicion_plomo_json", "Descargar JSON Completo"),
                                 style="flex: 1; display: flex; flex-direction: column; gap: 10px; justify-content: flex-start; margin-top: 25px;"
                             ),
         
                             style="display: flex; width: 100%;"
                         ),
-        
                         style="width: 90%; margin: auto; margin-top: 20px;"
                     ),
+        
+                    # Botón de volver
                     ui.div(
                         ui.input_action_button(
                             "volver_atras_plomo",
@@ -934,7 +1002,7 @@ def server(input, output, session):
         
                 class_="content-box"
             )
-            )
+
 
         elif page == "plot_europe_plomo":
             return ui.div(
@@ -969,20 +1037,25 @@ def server(input, output, session):
 
         elif page == "agua":
             return ui.div(
+                # Título principal
                 ui.div(
                     ui.h1("🌍 Parkinson Worldview",
                           style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
                     style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
                 ),
+        
+                # Descripción
                 ui.p(
-    "Visualiza el número estimado de muertes por cada 100.000 personas atribuibles a fuentes de agua insalubres. "
-    "Esto incluye el consumo de agua contaminada o la falta de acceso a instalaciones seguras de saneamiento e higiene. "
-    "Representa la carga de mortalidad que podría evitarse si toda la población tuviera acceso a agua potable y condiciones adecuadas de saneamiento.",
-    style="text-align: center; font-size: 16px; color: black; font-family: 'Arial', sans-serif; margin-top: 10px;"
-),
-
+                    "Visualiza el número estimado de muertes por cada 100.000 personas atribuibles a fuentes de agua insalubres. "
+                    "Esto incluye el consumo de agua contaminada o la falta de acceso a instalaciones seguras de saneamiento e higiene. "
+                    "Representa la carga de mortalidad que podría evitarse si toda la población tuviera acceso a agua potable y condiciones adecuadas de saneamiento.",
+                    style="text-align: center; font-size: 16px; color: black; font-family: 'Arial', sans-serif; margin-top: 10px;"
+                ),
+        
+                # Contenido principal
                 ui.div(
                     ui.output_ui("plot_agua"),
+        
                     ui.div(
                         ui.input_slider("year", "Selecciona el Año", 
                                         min=df_agua["Año"].min(), 
@@ -992,12 +1065,26 @@ def server(input, output, session):
                                         sep=""),
                         style="margin-top: 10px;"
                     ),
+        
                     ui.div(
-                        ui.input_action_button("go_to_europe_agua", "🌍 Ver Mapa Europeo", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'plot_europe_agua')"),
+                        ui.input_action_button("go_to_europe_agua", "🌍 Ver Mapa Europeo", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'plot_europe_agua')")
+                    ),
+        
+                    # Sección de descarga completa
                     ui.div(
-                        # Título antes de los selectores
+                        ui.h3("📥 Descarga completa de datos", 
+                              style="text-align: center; margin-top: 30px; margin-bottom: 10px; font-family: 'Arial', sans-serif;"),
+                        ui.div(
+                            ui.download_button("downloadAll_muertes_agua", "Descargar CSV "),
+                            ui.download_button("downloadAll_muertes_agua_json", "Descargar JSON "),
+                            style="display: flex; flex-direction: column; gap: 10px; align-items: center;"
+                        )
+                    ),
+        
+                    # Sección de filtrado
+                    ui.div(
                         ui.h3("📅 Filtra los datos por año y país", 
-                              style="text-align: center; margin-bottom: 10px; font-family: 'Arial', sans-serif;"),
+                              style="text-align: center; margin-top: 40px; margin-bottom: 10px; font-family: 'Arial', sans-serif;"),
                         ui.div(
                             # Columna izquierda: selectores
                             ui.div(
@@ -1023,20 +1110,19 @@ def server(input, output, session):
                                 style="flex: 2; padding-right: 20px;"
                             ),
         
-                            # Columna derecha: botones
+                            # Columna derecha: descarga filtrada
                             ui.div(
                                 ui.download_button("downloadData_muertes_agua", "Descargar CSV Filtrado"),
                                 ui.download_button("downloadData_muertes_agua_json", "Descargar JSON Filtrado"),
-                                ui.download_button("downloadAll_muertes_agua", "Descargar CSV Completo"),
-                                ui.download_button("downloadAll_muertes_agua_json", "Descargar JSON Completo"),
                                 style="flex: 1; display: flex; flex-direction: column; gap: 10px; justify-content: flex-start; margin-top: 25px;"
                             ),
         
                             style="display: flex; width: 100%;"
                         ),
-        
                         style="width: 90%; margin: auto; margin-top: 20px;"
                     ),
+        
+                    # Botón de volver
                     ui.div(
                         ui.input_action_button(
                             "volver_atras_agua",
@@ -1052,7 +1138,7 @@ def server(input, output, session):
         
                 class_="content-box"
             )
-            )
+
 
         elif page == "plot_europe_agua":
             return ui.div(
@@ -1087,20 +1173,25 @@ def server(input, output, session):
 
         elif page == "pesticidas":
             return ui.div(
+                # Encabezado principal
                 ui.div(
                     ui.h1("🌍 Parkinson Worldview",
                           style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
                     style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
                 ),
+        
+                # Descripción
                 ui.p(
-    "Visualiza el uso total de pesticidas en toneladas por país, entre 1990 y 2022. "
-    "Este valor representa la cantidad total de pesticidas utilizados anualmente, incluyendo insecticidas, herbicidas y fungicidas, "
-    "y refleja la intensidad del uso de productos químicos en la agricultura.",
-    style="text-align: center; font-size: 16px; color: black; font-family: 'Arial', sans-serif; margin-top: 10px;"
-),
-
+                    "Visualiza el uso total de pesticidas en toneladas por país, entre 1990 y 2022. "
+                    "Este valor representa la cantidad total de pesticidas utilizados anualmente, incluyendo insecticidas, herbicidas y fungicidas, "
+                    "y refleja la intensidad del uso de productos químicos en la agricultura.",
+                    style="text-align: center; font-size: 16px; color: black; font-family: 'Arial', sans-serif; margin-top: 10px;"
+                ),
+        
+                # Contenido principal
                 ui.div(
                     ui.output_ui("plot_pepticidas"),
+        
                     ui.div(
                         ui.input_slider("year", "Selecciona el Año", 
                                         min=df_pepticidas["Año"].min(), 
@@ -1110,12 +1201,26 @@ def server(input, output, session):
                                         sep=""),
                         style="margin-top: 10px;"
                     ),
+        
                     ui.div(
-                        ui.input_action_button("go_to_europe_pepticidas", "🌍 Ver Mapa Europeo", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'plot_europe_pepticidas')"),
+                        ui.input_action_button("go_to_europe_pepticidas", "🌍 Ver Mapa Europeo", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'plot_europe_pepticidas')")
+                    ),
+        
+                    # Sección de descarga completa
                     ui.div(
-                        # Título antes de los selectores
+                        ui.h3("📥 Descarga completa de datos", 
+                              style="text-align: center; margin-top: 30px; margin-bottom: 10px; font-family: 'Arial', sans-serif;"),
+                        ui.div(
+                            ui.download_button("downloadAll_uso_pesticidas", "Descargar CSV "),
+                            ui.download_button("downloadAll_uso_pesticidas_json", "Descargar JSON"),
+                            style="display: flex; flex-direction: column; gap: 10px; align-items: center;"
+                        )
+                    ),
+        
+                    # Sección de filtrado por año y país
+                    ui.div(
                         ui.h3("📅 Filtra los datos por año y país", 
-                              style="text-align: center; margin-bottom: 10px; font-family: 'Arial', sans-serif;"),
+                              style="text-align: center; margin-top: 40px; margin-bottom: 10px; font-family: 'Arial', sans-serif;"),
                         ui.div(
                             # Columna izquierda: selectores
                             ui.div(
@@ -1141,20 +1246,19 @@ def server(input, output, session):
                                 style="flex: 2; padding-right: 20px;"
                             ),
         
-                            # Columna derecha: botones
+                            # Columna derecha: botones de descarga filtrada
                             ui.div(
                                 ui.download_button("downloadData_uso_pesticidas", "Descargar CSV Filtrado"),
-                                ui.download_button("downloadData_uso_pesticidas_json", "Descargar JSON Filtrado "),
-                                ui.download_button("downloadAll_uso_pesticidas", "Descargar CSV Completo"),
-                                ui.download_button("downloadAll_uso_pesticidas_json", "Descargar JSON "),
+                                ui.download_button("downloadData_uso_pesticidas_json", "Descargar JSON Filtrado"),
                                 style="flex: 1; display: flex; flex-direction: column; gap: 10px; justify-content: flex-start; margin-top: 25px;"
                             ),
         
                             style="display: flex; width: 100%;"
                         ),
-        
                         style="width: 90%; margin: auto; margin-top: 20px;"
                     ),
+        
+                    # Botón de volver atrás
                     ui.div(
                         ui.input_action_button(
                             "volver_atras_pesticidas",
@@ -1170,7 +1274,7 @@ def server(input, output, session):
         
                 class_="content-box"
             )
-            )
+
 
         elif page == "plot_europe_pepticidas":
             return ui.div(
@@ -1206,19 +1310,25 @@ def server(input, output, session):
 
         elif page == "precipitaciones":
             return ui.div(
+                # Encabezado principal
                 ui.div(
                     ui.h1("🌍 Parkinson Worldview",
                           style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
                     style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
                 ),
+        
+                # Descripción
                 ui.p(
-    "Visualiza la cantidad total de precipitaciones anuales (lluvia y nieve) en cada país, medida como la profundidad del agua acumulada durante el año. "
-    "Este indicador refleja el volumen total de agua que cae sobre la superficie terrestre, excluyendo fenómenos como la niebla o el rocío.",
-    style="text-align: center; font-size: 16px; color: black; font-family: 'Arial', sans-serif; margin-top: 10px;"
-),
-
+                    "Visualiza la cantidad total de precipitaciones anuales (lluvia y nieve) en cada país, medida como la profundidad del agua acumulada durante el año. "
+                    "Este indicador refleja el volumen total de agua que cae sobre la superficie terrestre, excluyendo fenómenos como la niebla o el rocío.",
+                    style="text-align: center; font-size: 16px; color: black; font-family: 'Arial', sans-serif; margin-top: 10px;"
+                ),
+        
+                # Contenido principal
                 ui.div(
                     ui.output_ui("plot_precipitaciones"),
+        
+                    # Slider de año
                     ui.div(
                         ui.input_slider("year", "Selecciona el Año", 
                                         min=df_precipitaciones["Año"].min(), 
@@ -1228,12 +1338,27 @@ def server(input, output, session):
                                         sep=""),
                         style="margin-top: 10px;"
                     ),
+        
+                    # Botón para ir al mapa
                     ui.div(
-                        ui.input_action_button("go_to_europe_precipitaciones", "🌍 Ver Mapa Europeo", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'plot_europe_precipitaciones')"),
+                        ui.input_action_button("go_to_europe_precipitaciones", "🌍 Ver Mapa Europeo", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'plot_europe_precipitaciones')")
+                    ),
+        
+                    # Sección de descarga completa
                     ui.div(
-                        # Título antes de los selectores
+                        ui.h3("📥 Descarga completa de datos", 
+                              style="text-align: center; margin-top: 30px; margin-bottom: 10px; font-family: 'Arial', sans-serif;"),
+                        ui.div(
+                            ui.download_button("downloadAll_precipitaciones", "Descargar CSV "),
+                            ui.download_button("downloadAll_precipitaciones_json", "Descargar JSON "),
+                            style="display: flex; flex-direction: column; gap: 10px; align-items: center;"
+                        )
+                    ),
+        
+                    # Sección de filtrado por año y país
+                    ui.div(
                         ui.h3("📅 Filtra los datos por año y país", 
-                              style="text-align: center; margin-bottom: 10px; font-family: 'Arial', sans-serif;"),
+                              style="text-align: center; margin-top: 40px; margin-bottom: 10px; font-family: 'Arial', sans-serif;"),
                         ui.div(
                             # Columna izquierda: selectores
                             ui.div(
@@ -1259,20 +1384,19 @@ def server(input, output, session):
                                 style="flex: 2; padding-right: 20px;"
                             ),
         
-                            # Columna derecha: botones
+                            # Columna derecha: descarga de datos filtrados
                             ui.div(
                                 ui.download_button("downloadData_precipitaciones", "Descargar CSV Filtrado"),
                                 ui.download_button("downloadData_precipitaciones_json", "Descargar JSON Filtrado"),
-                                ui.download_button("downloadAll_precipitaciones", "Descargar CSV Completo"),
-                                ui.download_button("downloadAll_precipitaciones_json", "Descargar JSON Completo "),
                                 style="flex: 1; display: flex; flex-direction: column; gap: 10px; justify-content: flex-start; margin-top: 25px;"
                             ),
         
                             style="display: flex; width: 100%;"
                         ),
-        
                         style="width: 90%; margin: auto; margin-top: 20px;"
                     ),
+        
+                    # Botón de volver atrás
                     ui.div(
                         ui.input_action_button(
                             "volver_atras_precipitaciones",
@@ -1288,7 +1412,7 @@ def server(input, output, session):
         
                 class_="content-box"
             )
-            )
+
 
         elif page == "plot_europe_precipitaciones":
             return ui.div(
@@ -1831,23 +1955,61 @@ def server(input, output, session):
         return buffer
 
     @output
-    @render.download(filename="Tasa_contaminacion_aire_filtrado.csv")
-    def downloadData_json():
+    @render.download(filename="Parkinson_filtrado.json")
+    def downloadData():
         selected_years = [int(year) for year in input.years_select()]
         selected_countries = input.countries_select()  # Obtener los países seleccionados
         
         # Filtrar los datos por los años y países seleccionados
         if selected_years and selected_countries:
-            filtered_df = df_contaminacion[df_contaminacion['Año'].isin(selected_years) & df_contaminacion['País'].isin(selected_countries)]
+            filtered_df = df_parkinson[df_parkinson['Año'].isin(selected_years) & df_parkinson['País'].isin(selected_countries)]
         elif selected_years:
-            filtered_df = df_contaminacion[df_contaminacion['Año'].isin(selected_years)]
+            filtered_df = df_parkinson[df_parkinson['Año'].isin(selected_years)]
         elif selected_countries:
-            filtered_df = df_contaminacion[df_contaminacion['País'].isin(selected_countries)]
+            filtered_df = df_parkinson[df_parkinson['País'].isin(selected_countries)]
         else:
-            filtered_df = df_contaminacion  # Si no se selecciona ningún filtro, usar el DataFrame completo
+            filtered_df = df_parkinson  # Si no se selecciona ningún filtro, usar el DataFrame completo
         
         buffer = io.StringIO()
         filtered_df.to_csv(buffer, index=False)
+        buffer.seek(0)
+        return buffer
+
+
+    @output
+    @render.download(filename="Parkinson_filtrado.json")
+    def downloadData_parkinson_json():
+        selected_years = [int(year) for year in input.years_select()]
+        selected_countries = input.countries_select()  # Obtener los países seleccionados
+    
+        # Filtrar los datos por los años y países seleccionados
+        if selected_years and selected_countries:
+            filtered_df = df_parkinson[df_parkinson['Año'].isin(selected_years) & df_parkinson['País'].isin(selected_countries)]
+        elif selected_years:
+            filtered_df = df_parkinson[df_parkinson['Año'].isin(selected_years)]
+        elif selected_countries:
+            filtered_df = df_parkinson[df_parkinson['País'].isin(selected_countries)]
+        else:
+            filtered_df = df_parkinson  # Si no se selecciona ningún filtro, usar el DataFrame completo
+    
+        # Convertir DataFrame a JSON (lista de registros)
+        json_str = filtered_df.to_json(orient="records", indent=2)
+    
+        buffer = io.StringIO()
+        buffer.write(json_str)
+        buffer.seek(0)
+        return buffer
+
+   
+
+
+    @output
+    @render.download(filename="Parkinson_filtrado_completo.json")
+    def downloadAll_parkinson_json():
+        json_str = df_parkinson.to_json(orient="records", indent=2)
+    
+        buffer = io.StringIO()
+        buffer.write(json_str)
         buffer.seek(0)
         return buffer
     
@@ -1901,13 +2063,13 @@ def server(input, output, session):
     
         # Filtrar los datos por los años y países seleccionados
         if selected_years and selected_countries:
-            filtered_df = df_parkinson[df_parkinson['Año'].isin(selected_years) & df_parkinson['País'].isin(selected_countries)]
+            filtered_df = df_contaminacion[df_contaminacion['Año'].isin(selected_years) & df_contaminacion['País'].isin(selected_countries)]
         elif selected_years:
-            filtered_df = df_parkinson[df_parkinson['Año'].isin(selected_years)]
+            filtered_df = df_contaminacion[df_contaminacion['Año'].isin(selected_years)]
         elif selected_countries:
-            filtered_df = df_parkinson[df_parkinson['País'].isin(selected_countries)]
+            filtered_df = df_contaminacion[df_contaminacion['País'].isin(selected_countries)]
         else:
-            filtered_df = df_parkinson  # Si no se selecciona ningún filtro, usar el DataFrame completo
+            filtered_df = df_contaminacion  # Si no se selecciona ningún filtro, usar el DataFrame completo
     
         # Convertir DataFrame a JSON (lista de registros)
         json_str = filtered_df.to_json(orient="records", indent=2)
@@ -1923,7 +2085,7 @@ def server(input, output, session):
     @output
     @render.download(filename="Tasa_contaminacion_aire_completo.json")
     def downloadAll_contaminacion_json():
-        json_str = df_parkinson.to_json(orient="records", indent=2)
+        json_str = df_contaminacion.to_json(orient="records", indent=2)
     
         buffer = io.StringIO()
         buffer.write(json_str)
@@ -1938,13 +2100,13 @@ def server(input, output, session):
         
         # Filtrar los datos por los años y países seleccionados
         if selected_years and selected_countries:
-            filtered_df = df_parkinson[df_parkinson['Año'].isin(selected_years) & df_parkinson['País'].isin(selected_countries)]
+            filtered_df = df_plomo[df_plomo['Año'].isin(selected_years) & df_plomo['País'].isin(selected_countries)]
         elif selected_years:
-            filtered_df = df_parkinson[df_parkinson['Año'].isin(selected_years)]
+            filtered_df = df_plomo[df_plomo['Año'].isin(selected_years)]
         elif selected_countries:
-            filtered_df = df_parkinson[df_parkinson['País'].isin(selected_countries)]
+            filtered_df = df_plomo[df_plomo['País'].isin(selected_countries)]
         else:
-            filtered_df = df_parkinson  # Si no se selecciona ningún filtro, usar el DataFrame completo
+            filtered_df = df_plomo  # Si no se selecciona ningún filtro, usar el DataFrame completo
         
         buffer = io.StringIO()
         filtered_df.to_csv(buffer, index=False)
@@ -1955,7 +2117,7 @@ def server(input, output, session):
     @render.download(filename="Exposicion_plomo_completo.csv")
     def downloadAll_exposicion_plomo():
         buffer = io.StringIO()
-        df_parkinson.to_csv(buffer, index=False)
+        df_plomo.to_csv(buffer, index=False)
         buffer.seek(0)
         return buffer
         
@@ -2004,13 +2166,13 @@ def server(input, output, session):
         
         # Filtrar los datos por los años y países seleccionados
         if selected_years and selected_countries:
-            filtered_df = df_parkinson[df_parkinson['Año'].isin(selected_years) & df_parkinson['País'].isin(selected_countries)]
+            filtered_df = df_agua[df_agua['Año'].isin(selected_years) & df_agua['País'].isin(selected_countries)]
         elif selected_years:
-            filtered_df = df_parkinson[df_parkinson['Año'].isin(selected_years)]
+            filtered_df = df_agua[df_agua['Año'].isin(selected_years)]
         elif selected_countries:
-            filtered_df = df_parkinson[df_parkinson['País'].isin(selected_countries)]
+            filtered_df = df_agua[df_agua['País'].isin(selected_countries)]
         else:
-            filtered_df = df_parkinson  # Si no se selecciona ningún filtro, usar el DataFrame completo
+            filtered_df = df_agua  # Si no se selecciona ningún filtro, usar el DataFrame completo
         
         buffer = io.StringIO()
         filtered_df.to_csv(buffer, index=False)
@@ -2021,7 +2183,7 @@ def server(input, output, session):
     @render.download(filename="Muertes_agua_completo.csv")
     def downloadAll_muertes_agua():
         buffer = io.StringIO()
-        df_parkinson.to_csv(buffer, index=False)
+        df_agua.to_csv(buffer, index=False)
         buffer.seek(0)
         return buffer
 
@@ -2070,13 +2232,13 @@ def server(input, output, session):
         
         # Filtrar los datos por los años y países seleccionados
         if selected_years and selected_countries:
-            filtered_df = df_parkinson[df_parkinson['Año'].isin(selected_years) & df_parkinson['País'].isin(selected_countries)]
+            filtered_df = df_pepticidas[df_pepticidas['Año'].isin(selected_years) & df_pepticidas['País'].isin(selected_countries)]
         elif selected_years:
-            filtered_df = df_parkinson[df_parkinson['Año'].isin(selected_years)]
+            filtered_df = df_pepticidas[df_pepticidas['Año'].isin(selected_years)]
         elif selected_countries:
-            filtered_df = df_parkinson[df_parkinson['País'].isin(selected_countries)]
+            filtered_df = df_pepticidas[df_pepticidas['País'].isin(selected_countries)]
         else:
-            filtered_df = df_parkinson  # Si no se selecciona ningún filtro, usar el DataFrame completo
+            filtered_df = df_pepticidas  # Si no se selecciona ningún filtro, usar el DataFrame completo
         
         buffer = io.StringIO()
         filtered_df.to_csv(buffer, index=False)
@@ -2087,7 +2249,7 @@ def server(input, output, session):
     @render.download(filename="Uso_pesticidas_completo.csv")
     def downloadAll_uso_pesticidas():
         buffer = io.StringIO()
-        df_parkinson.to_csv(buffer, index=False)
+        df_pepticidas.to_csv(buffer, index=False)
         buffer.seek(0)
         return buffer
 
@@ -2132,7 +2294,7 @@ def server(input, output, session):
     @render.download(filename="Precipitaciones_completo.csv")
     def downloadAll_precipitaciones():
         buffer = io.StringIO()
-        df_parkinson.to_csv(buffer, index=False)
+        df_precipitaciones.to_csv(buffer, index=False)
         buffer.seek(0)
         return buffer
 
@@ -2144,13 +2306,13 @@ def server(input, output, session):
         
         # Filtrar los datos por los años y países seleccionados
         if selected_years and selected_countries:
-            filtered_df = df_parkinson[df_parkinson['Año'].isin(selected_years) & df_parkinson['País'].isin(selected_countries)]
+            filtered_df = df_precipitaciones[df_precipitaciones['Año'].isin(selected_years) & df_precipitaciones['País'].isin(selected_countries)]
         elif selected_years:
-            filtered_df = df_parkinson[df_parkinson['Año'].isin(selected_years)]
+            filtered_df = df_precipitaciones[df_precipitaciones['Año'].isin(selected_years)]
         elif selected_countries:
-            filtered_df = df_parkinson[df_parkinson['País'].isin(selected_countries)]
+            filtered_df = df_precipitaciones[df_precipitaciones['País'].isin(selected_countries)]
         else:
-            filtered_df = df_parkinson  # Si no se selecciona ningún filtro, usar el DataFrame completo
+            filtered_df = df_precipitaciones  # Si no se selecciona ningún filtro, usar el DataFrame completo
         
         buffer = io.StringIO()
         filtered_df.to_csv(buffer, index=False)
@@ -2199,41 +2361,53 @@ def server(input, output, session):
     @render.ui
     def plot_parkinson():
         año_seleccionado = input.year()  # Capturamos el año seleccionado en el slider
+        df_filtrado = df_parkinson[df_parkinson["Año"] == año_seleccionado]
+    
         fig_parkinson_filtrado = px.choropleth(
-            df_parkinson[df_parkinson["Año"] == año_seleccionado],
+            df_filtrado,
             locations="País",
             locationmode="country names",
             color="Parkinson",
             hover_name="País",
-            hover_data={"Parkinson": True,"País":False},
+            hover_data={"Parkinson": True, "País": False},
             color_continuous_scale="Viridis",
-            range_color=(min_parkinson, max_parkinson),
+            range_color=(min_parkinson, q95_parkinson),
             title=f"Prevalencia del Parkinson por País y Año - {año_seleccionado}"
         )
+    
         fig_parkinson_filtrado.update_geos(
-            projection_type="equirectangular",  # Mapa plano
+            projection_type="equirectangular",
             showcoastlines=True,
             showland=True,
             fitbounds="locations"
         )
+    
         fig_parkinson_filtrado.update_layout(
             title={
                 'text': f"<b>Prevalencia del Parkinson por País y Año - {año_seleccionado}</b>",
                 'font': {'size': 20},
                 'x': 0.7,
-                'y' : 0.98,
+                'y': 0.98,
                 'xanchor': 'right'
             },
             height=400,
             margin={"r": 10, "t": 10, "l": 0, "b": 0},
             coloraxis_colorbar=dict(
-                len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
-                thickness=15,
+                len=0.95,
+                thickness=25,
                 y=0.5,
-                title="Numero estimida de<br>casos de Parkinson"
+                title="Número estimado de<br>casos de Parkinson",
+                tickvals=[min_parkinson, q25_parkinson, q50_parkinson, q75_parkinson, q95_parkinson],
+                ticktext=[
+                    f"Mín: {min_parkinson}",
+                    f"Q25: {q25_parkinson}",
+                    f"Q50: {q50_parkinson}",
+                    f"Q75: {q75_parkinson}",
+                    f"Q95: {q95_parkinson}"
+                ]
             )
         )
-
+    
         return ui.HTML(fig_parkinson_filtrado.to_html(full_html=False))
 
     @output
@@ -2251,18 +2425,26 @@ def server(input, output, session):
             "North Macedonia", "Albania", "Montenegro", "Moldova", "Russia"
         ]
     
-        df_europa = df_parkinson[df_parkinson["País"].isin(paises_europa)]
-        df_europa = df_europa[df_europa["Año"] == año_seleccionado]
+        # Filtrar por Europa y año seleccionado
+        df_europa = df_parkinson[(df_parkinson["País"].isin(paises_europa)) & (df_parkinson["Año"] == año_seleccionado)]
     
+        # Calcular cuantiles para el campo Parkinson
+        min_parkinson = round(df_europa["Parkinson"].min(), 2)
+        q25 = round(df_europa["Parkinson"].quantile(0.25), 2)
+        q50 = round(df_europa["Parkinson"].quantile(0.50), 2)
+        q75 = round(df_europa["Parkinson"].quantile(0.75), 2)
+        q95 = round(df_europa["Parkinson"].quantile(0.95), 2)
+    
+        # Crear el choropleth con rango hasta q95
         fig_europa = px.choropleth(
             df_europa,
             locations="País",
             locationmode="country names",
             color="Parkinson",
             hover_name="País",
-            hover_data={"Parkinson": True,"País":False},
+            hover_data={"Parkinson": True, "País": False},
             color_continuous_scale="Viridis",
-            range_color=(min_parkinson, max_parkinson),
+            range_color=(min_parkinson, q95),
             title=f"Prevalencia del Parkinson en Europa por País y Año - {año_seleccionado}"
         )
     
@@ -2273,22 +2455,31 @@ def server(input, output, session):
             landcolor="white",
             countrycolor="black"
         )
-
+    
+        # Personalizar barra de color con cuantiles
         fig_europa.update_layout(
             title={
                 'text': f"<b>Prevalencia del Parkinson en Europa por País y Año - {año_seleccionado}</b>",
                 'font': {'size': 20},
                 'x': 0.7,
-                'y' : 0.98,
+                'y': 0.98,
                 'xanchor': 'right'
             },
             height=400,
             margin={"r": 10, "t": 10, "l": 0, "b": 0},
             coloraxis_colorbar=dict(
-                len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
-                thickness=15,
+                len=0.95,  # altura de barra de color (0.8 es acorde al mapa)
+                thickness=25,
                 y=0.5,
-                title="Numero estimida de<br>casos de Parkinson"
+                title="Número estimado de<br>casos de Parkinson",
+                tickvals=[min_parkinson, q25, q50, q75, q95],
+                ticktext=[
+                    f"Mín: {min_parkinson}",
+                    f"Q25: {q25}",
+                    f"Q50: {q50}",
+                    f"Q75: {q75}",
+                    f"Q95: {q95}"
+                ],
             )
         )
     
