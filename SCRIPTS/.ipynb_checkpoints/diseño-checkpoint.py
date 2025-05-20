@@ -262,35 +262,89 @@ q95_precipitaciones = round(df_precipitaciones["Precipitaciones"].quantile(0.95)
 #min_precipitaciones = df_precipitaciones["Precipitaciones"].min()
 #max_precipitaciones = df_precipitaciones["Precipitaciones"].quantile(0.90)
 
-min_val_glm = df_predicciones_GLM["Parkinson_Predicho"].min()
-max_val_glm =df_predicciones_GLM["Parkinson_Predicho"].quantile(0.95)
+# Calcula los cuantiles para el mapa de predicción
+min_pred = round(df_pred_promedio["Parkinson_Predicho_Promedio"].min(), 2)
+q25_pred = round(df_pred_promedio["Parkinson_Predicho_Promedio"].quantile(0.25), 2)
+q50_pred = round(df_pred_promedio["Parkinson_Predicho_Promedio"].quantile(0.50), 2)
+q75_pred = round(df_pred_promedio["Parkinson_Predicho_Promedio"].quantile(0.75), 2)
+q95_pred = round(df_pred_promedio["Parkinson_Predicho_Promedio"].quantile(0.95), 2)
 
-min_val_rf = df_predicciones_RF["Parkinson_Predicho"].min()
-max_val_rf =df_predicciones_RF["Parkinson_Predicho"].quantile(0.95)
+#min_val_glm = df_predicciones_GLM["Parkinson_Predicho"].min()
+#max_val_glm =df_predicciones_GLM["Parkinson_Predicho"].quantile(0.95)
 
-min_val_xg = df_predicciones_XG["Parkinson_Predicho"].min()
-max_val_xg = df_predicciones_XG["Parkinson_Predicho"].quantile(0.95)
+min_glm = round(df_predicciones_GLM["Parkinson_Predicho"].min(), 2)
+q25_glm = round(df_predicciones_GLM["Parkinson_Predicho"].quantile(0.25), 2)
+q50_glm = round(df_predicciones_GLM["Parkinson_Predicho"].quantile(0.50), 2)
+q75_glm = round(df_predicciones_GLM["Parkinson_Predicho"].quantile(0.75), 2)
+q95_glm = round(df_predicciones_GLM["Parkinson_Predicho"].quantile(0.95), 2)
 
-min_val_svr = df_predicciones_SVR["Parkinson_Predicho"].min()
-max_val_svr = df_predicciones_SVR["Parkinson_Predicho"].quantile(0.95)
 
-min_val_knn = df_predicciones_KNN ["Parkinson_Predicho"].min()
-max_val_knn = df_predicciones_KNN ["Parkinson_Predicho"].quantile(0.95)
+#min_val_rf = df_predicciones_RF["Parkinson_Predicho"].min()
+#max_val_rf =df_predicciones_RF["Parkinson_Predicho"].quantile(0.95)
 
-min_val_mlp = df_predicciones_MLP  ["Parkinson_Predicho"].min()
-max_val_mlp = df_predicciones_MLP  ["Parkinson_Predicho"].quantile(0.95)
+min_rf = round(df_predicciones_RF["Parkinson_Predicho"].min(), 2)
+q25_rf = round(df_predicciones_RF["Parkinson_Predicho"].quantile(0.25), 2)
+q50_rf = round(df_predicciones_RF["Parkinson_Predicho"].quantile(0.50), 2)
+q75_rf = round(df_predicciones_RF["Parkinson_Predicho"].quantile(0.75), 2)
+q95_rf = round(df_predicciones_RF["Parkinson_Predicho"].quantile(0.95), 2)
 
-min_val = df_pred_promedio["Parkinson_Predicho_Promedio"].min()
-max_val = df_pred_promedio["Parkinson_Predicho_Promedio"].quantile(0.95)
 
-min_std = df_pred_desviacion["Desviacion"].min()
-max_std = df_pred_desviacion["Desviacion"].quantile(0.95)
+#min_val_xg = df_predicciones_XG["Parkinson_Predicho"].min()
+#max_val_xg = df_predicciones_XG["Parkinson_Predicho"].quantile(0.95)
 
-min_cv = df_pred_CV['CV'].min()
-max_cv = df_pred_CV['CV'].quantile(0.95)
+min_xg = round(df_predicciones_XG["Parkinson_Predicho"].min(), 2)
+q25_xg = round(df_predicciones_XG["Parkinson_Predicho"].quantile(0.25), 2)
+q50_xg = round(df_predicciones_XG["Parkinson_Predicho"].quantile(0.50), 2)
+q75_xg = round(df_predicciones_XG["Parkinson_Predicho"].quantile(0.75), 2)
+q95_xg = round(df_predicciones_XG["Parkinson_Predicho"].quantile(0.95), 2)
+
+
+#min_val_svr = df_predicciones_SVR["Parkinson_Predicho"].min()
+#max_val_svr = df_predicciones_SVR["Parkinson_Predicho"].quantile(0.95)
+
+min_svr = round(df_predicciones_SVR["Parkinson_Predicho"].min(), 2)
+q25_svr = round(df_predicciones_SVR["Parkinson_Predicho"].quantile(0.25), 2)
+q50_svr = round(df_predicciones_SVR["Parkinson_Predicho"].quantile(0.50), 2)
+q75_svr = round(df_predicciones_SVR["Parkinson_Predicho"].quantile(0.75), 2)
+q95_svr = round(df_predicciones_SVR["Parkinson_Predicho"].quantile(0.95), 2)
+
+
+#min_val_knn = df_predicciones_KNN ["Parkinson_Predicho"].min()
+#max_val_knn = df_predicciones_KNN ["Parkinson_Predicho"].quantile(0.95)
+
+min_knn = round(df_predicciones_KNN["Parkinson_Predicho"].min(), 2)
+q25_knn = round(df_predicciones_KNN["Parkinson_Predicho"].quantile(0.25), 2)
+q50_knn = round(df_predicciones_KNN["Parkinson_Predicho"].quantile(0.50), 2)
+q75_knn = round(df_predicciones_KNN["Parkinson_Predicho"].quantile(0.75), 2)
+q95_knn = round(df_predicciones_KNN["Parkinson_Predicho"].quantile(0.95), 2)
+
+
+#min_val_mlp = df_predicciones_MLP  ["Parkinson_Predicho"].min()
+#max_val_mlp = df_predicciones_MLP  ["Parkinson_Predicho"].quantile(0.95)
+
+min_mlp = round(df_predicciones_MLP["Parkinson_Predicho"].min(), 2)
+q25_mlp = round(df_predicciones_MLP["Parkinson_Predicho"].quantile(0.25), 2)
+q50_mlp = round(df_predicciones_MLP["Parkinson_Predicho"].quantile(0.50), 2)
+q75_mlp = round(df_predicciones_MLP["Parkinson_Predicho"].quantile(0.75), 2)
+q95_mlp = round(df_predicciones_MLP["Parkinson_Predicho"].quantile(0.95), 2)
+
+
+#min_val = df_pred_promedio["Parkinson_Predicho_Promedio"].min()
+#max_val = df_pred_promedio["Parkinson_Predicho_Promedio"].quantile(0.95)
+
+min_std = round(df_pred_desviacion["Desviacion"].min(), 2)
+q25_std = round(df_pred_desviacion["Desviacion"].quantile(0.25), 2)
+q50_std = round(df_pred_desviacion["Desviacion"].quantile(0.50), 2)
+q75_std = round(df_pred_desviacion["Desviacion"].quantile(0.75), 2)
+q95_std = round(df_pred_desviacion["Desviacion"].quantile(0.95), 2)
+
+
+#min_std = df_pred_desviacion["Desviacion"].min()
+#max_std = df_pred_desviacion["Desviacion"].quantile(0.95)
+
 
 # 2. Calcular el error normalizado
-df_realesVSpredichos["Error_Normalizado"] = (df_realesVSpredichos["Parkinson_Predicho_Promedio"] - df_realesVSpredichos["Parkinson_Real"]) / df_realesVSpredichos["Parkinson_Real"]
+df_realesVSpredichos["Error_Normalizado"] = (df_realesVSpredichos["Parkinson_Predicho_Promedio"] - df_realesVSpredichos["Parkinson_Real"]) 
 df_realesVSpredichos["Error_Normalizado"] = df_realesVSpredichos["Error_Normalizado"].clip(-1, 1)
 # Mínimo y máximo reales (no truncados)
         
@@ -435,8 +489,8 @@ app_ui = ui.page_fluid(
                 ui.a("🗺️ Mapa Mundial del Parkinson", class_="sidebar-link map-link", onclick="Shiny.setInputValue('page', 'section2')"),
                 ui.a("🌿 Variables Ambientales", class_="sidebar-link env-link", onclick="Shiny.setInputValue('page', 'section3')"),
                 ui.a("📈 Predicciones", class_="sidebar-link graph-link", onclick="Shiny.setInputValue('page', 'section4')"),
-                ui.a("🔍 Análisis de datos", class_="sidebar-link analisis-link", onclick="Shiny.setInputValue('page', 'section5')"),
-                ui.a("📞 Contacto", class_="sidebar-link contact-link", onclick="Shiny.setInputValue('page', 'section6')"),
+                ui.a("🔍 Importancia de variables", class_="sidebar-link analisis-link", onclick="Shiny.setInputValue('page', 'section5')"),
+                ui.a("📞 Más Información", class_="sidebar-link contact-link", onclick="Shiny.setInputValue('page', 'section6')"),
 
                 class_="sidebar"
             )
@@ -448,11 +502,16 @@ app_ui = ui.page_fluid(
 
 # Definir la lógica del servidor
 def server(input, output, session):
-
+    current_page = reactive.Value("home")
+    @reactive.Effect
+    def _():
+        if input.page() is not None:
+            current_page.set(input.page())
     @output
     @render.ui
     def content_display():
-        if input.page() == "home":
+        page = current_page()
+        if page == "home":
             return ui.div(
                 # Franja de color con el título
                 ui.div(
@@ -856,8 +915,10 @@ def server(input, output, session):
             return ui.div(
                 # Título principal
                 ui.div(
-                    ui.h1("🌍 Parkinson Worldview",
-                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
+                    ui.h1(
+                        ui.HTML("🌍 Parkinson <em>Worldwide</em>"),
+                        style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"
+                    ),
                     style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
                 ),
                 
@@ -958,8 +1019,10 @@ def server(input, output, session):
         elif page == "plot_europe_aire":
             return ui.div(
                 ui.div(
-                    ui.h1("🌍 Parkinson Worldview",
-                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
+                    ui.h1(
+                        ui.HTML("🌍 Parkinson <em>Worldwide</em>"),
+                        style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"
+                    ),
                     style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
                 ),
                 ui.div(
@@ -991,8 +1054,10 @@ def server(input, output, session):
             return ui.div(
                 # Título principal
                 ui.div(
-                    ui.h1("🌍 Parkinson Worldview",
-                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
+                    ui.h1(
+                        ui.HTML("🌍 Parkinson <em>Worldwide</em>"),
+                        style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"
+                    ),
                     style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
                 ),
         
@@ -1097,8 +1162,10 @@ def server(input, output, session):
         elif page == "plot_europe_plomo":
             return ui.div(
                 ui.div(
-                    ui.h1("🌍 Parkinson Worldview",
-                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
+                    ui.h1(
+                        ui.HTML("🌍 Parkinson <em>Worldwide</em>"),
+                        style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"
+                    ),
                     style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
                 ),
                 ui.div(
@@ -1129,8 +1196,10 @@ def server(input, output, session):
             return ui.div(
                 # Título principal
                 ui.div(
-                    ui.h1("🌍 Parkinson Worldview",
-                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
+                    ui.h1(
+                        ui.HTML("🌍 Parkinson <em>Worldwide</em>"),
+                        style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"
+                    ),
                     style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
                 ),
         
@@ -1233,8 +1302,10 @@ def server(input, output, session):
         elif page == "plot_europe_agua":
             return ui.div(
                 ui.div(
-                    ui.h1("🌍 Parkinson Worldview",
-                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
+                    ui.h1(
+                        ui.HTML("🌍 Parkinson <em>Worldwide</em>"),
+                        style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"
+                    ),
                     style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
                 ),
                 ui.div(
@@ -1265,8 +1336,10 @@ def server(input, output, session):
             return ui.div(
                 # Encabezado principal
                 ui.div(
-                    ui.h1("🌍 Parkinson Worldview",
-                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
+                    ui.h1(
+                        ui.HTML("🌍 Parkinson <em>Worldwide</em>"),
+                        style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"
+                    ),
                     style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
                 ),
         
@@ -1293,7 +1366,7 @@ def server(input, output, session):
                     ),
         
                     ui.div(
-                        ui.input_action_button("go_to_europe_pepticidas", "🌍 Ver Mapa Europeo", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'plot_europe_pepticidas')")
+                        ui.input_action_button("go_to_europe_pesticidas", "🌍 Ver Mapa Europeo", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'plot_europe_pesticidas')")
                     ),
         
                     # Sección de descarga completa
@@ -1366,11 +1439,13 @@ def server(input, output, session):
             )
 
 
-        elif page == "plot_europe_pepticidas":
+        elif page == "plot_europe_pesticidas":
             return ui.div(
                 ui.div(
-                    ui.h1("🌍 Parkinson Worldview",
-                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
+                    ui.h1(
+                        ui.HTML("🌍 Parkinson <em>Worldwide</em>"),
+                        style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"
+                    ),
                     style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
                 ),
                 ui.div(
@@ -1393,7 +1468,7 @@ def server(input, output, session):
                     ),
                     class_="slider-box"
                 ),
-                ui.output_ui("plot_europe_pepticidas"),
+                ui.output_ui("plot_europe_pesticidas"),
                 class_="content-box"
             )
             
@@ -1402,8 +1477,10 @@ def server(input, output, session):
             return ui.div(
                 # Encabezado principal
                 ui.div(
-                    ui.h1("🌍 Parkinson Worldview",
-                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
+                    ui.h1(
+                        ui.HTML("🌍 Parkinson <em>Worldwide</em>"),
+                        style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"
+                    ),
                     style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
                 ),
         
@@ -1507,8 +1584,10 @@ def server(input, output, session):
         elif page == "plot_europe_precipitaciones":
             return ui.div(
                 ui.div(
-                    ui.h1("🌍 Parkinson Worldview",
-                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
+                    ui.h1(
+                        ui.HTML("🌍 Parkinson <em>Worldwide</em>"),
+                        style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"
+                    ),
                     style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
                 ),
                 ui.div(
@@ -1541,11 +1620,22 @@ def server(input, output, session):
             return ui.div(
                 # Franja de color con el título
                 ui.div(
-                    ui.h1("🌍 Parkinson Worldview",
-                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"
+                    ui.h1(
+                        ui.HTML("🌍 Parkinson <em>Worldwide</em>"),
+                        style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"
                     ),
                     style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
                 ),
+
+                ui.p(
+    "Esta sección presenta visualizaciones geográficas relacionadas con la enfermedad de Parkinson. "
+    "En primer lugar, se muestra un mapa con la prevalencia estimada por país según el modelo de predicción. "
+    "A continuación, se visualiza la incertidumbre asociada a estas estimaciones, representada por la desviación estándar del modelo. "
+    "Finalmente, se incluye un mapa de anomalías que refleja la diferencia entre los valores predichos y los reales, "
+    "indicando posibles casos de sobreestimación o subestimación por parte del modelo.",
+    style="max-width: 900px; text-align: justify; font-size: 16px; font-family: 'Arial', sans-serif; margin-bottom: 20px;"
+),
+
         
                 # Contenido principal
                 ui.div(
@@ -1560,17 +1650,22 @@ def server(input, output, session):
         elif page == "section5":
             return ui.div(
                 ui.div(
-                    ui.h1("🌍 Parkinson Worldview", style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
+                    ui.h1(
+                        ui.HTML("🌍 Parkinson <em>Worldwide</em>"),
+                        style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"
+                    ),
                     style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
                 ),
                 ui.div(
                     ui.p(
-                        "En esta sección se presenta un análisis global de la importancia de las variables utilizadas en los modelos de predicción de Parkinson. "
-                        "El gráfico que verás a continuación resume la influencia promedio de cada variable, calculada a partir de todos los modelos entrenados. "
-                        "Esto proporciona una visión integral sobre qué factores tienen mayor peso en la predicción a nivel mundial. "
-                        "Cuanto más bajo es el valor del ranking, mayor es la importancia de esa variable en los modelos. "
-                        "Por ejemplo, la exposicion al plomo muestra el ranking promedio más bajo, lo que indica que es una de las variables más influyentes y consistentes en la predicción de la enfermedad. "
-                        "Este tipo de visualización permite identificar patrones comunes en los modelos y orientar futuras investigaciones o estrategias de intervención.",
+                        ui.HTML(
+                            "En esta sección se presenta un análisis global de la <strong>importancia de las variables</strong> utilizadas en los modelos de predicción de Parkinson. "
+                            "El gráfico que verás a continuación resume la influencia promedio de cada variable, calculada a partir de todos los modelos entrenados. "
+                            "Esto proporciona una visión integral sobre qué factores tienen mayor peso en la predicción a nivel mundial. "
+                            "Cuanto más bajo es el valor del ranking, mayor es la importancia de esa variable en los modelos. "
+                            "Por ejemplo, la exposición al plomo muestra el ranking promedio más bajo, lo que indica que es una de las variables más influyentes y consistentes en la predicción de la enfermedad. "
+                            "Este tipo de visualización permite identificar patrones comunes en los modelos y orientar futuras investigaciones o estrategias de intervención."
+                        ),
                         style="font-size: 16px; font-family: 'Arial', sans-serif; text-align: justify; margin-bottom: 20px;"
                     ),
                     ui.output_ui("plot_ranking_global"),  # Aquí se renderiza el gráfico
@@ -1585,7 +1680,7 @@ def server(input, output, session):
                 ui.div(
                     ui.input_action_button("show_glm", "Modelo lineal", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'modelo GLM')"),
                     ui.input_action_button("show_tree_models", "Modelos basados en árboles", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'modelos_arboles')"),
-                    ui.input_action_button("show_learning_models", "Modelos de Aprendizaje Automático", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'modelos_learning')"),
+                    ui.input_action_button("show_learning_models", "Otros modelos de Regression", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'modelos_learning')"),
                     style="display: flex; justify-content: space-around; margin: 30px 0 20px 0;"
                 )
             )
@@ -1595,10 +1690,13 @@ def server(input, output, session):
         elif page == "modelo GLM":
             return ui.div(
                 ui.div(
-                    ui.h1("🌍 Parkinson Worldview",
-                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
+                    ui.h1(
+                        ui.HTML("🌍 Parkinson <em>Worldwide</em>"),
+                        style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"
+                    ),
                     style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
                 ),
+
                 ui.div(
                     ui.output_ui("plot_predict_glm"),
                     ui.div(
@@ -1627,10 +1725,14 @@ def server(input, output, session):
         elif page == "plot_europe_predict_glm":
             return ui.div(
                 ui.div(
-                    ui.h1("🌍 Parkinson Worldview",
-                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
+                    ui.h1(
+                        ui.HTML("🌍 Parkinson <em>Worldwide</em>"),
+                        style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"
+                    ),
                     style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
                 ),
+
+
                 
                 ui.div(
                     ui.input_action_button(
@@ -1647,10 +1749,13 @@ def server(input, output, session):
         elif page == "modelos_arboles":
             return ui.div(
                 ui.div(
-                    ui.h1("🌍 Modelos basados en árboles", 
-                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
+                    ui.h1(
+                        ui.HTML("🌍 Parkinson <em>Worldwide</em>"),
+                        style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"
+                    ),
                     style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
                 ),
+
         
                 ui.div(  # Bloque explicativo justo debajo del título
                     ui.p(
@@ -1677,10 +1782,13 @@ def server(input, output, session):
         elif page == "modelo RF":
             return ui.div(
                 ui.div(
-                    ui.h1("🌍 Parkinson Worldview",
-                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
+                    ui.h1(
+                        ui.HTML("🌍 Parkinson <em>Worldwide</em>"),
+                        style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"
+                    ),
                     style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
                 ),
+
                 ui.div(
                     ui.output_ui("plot_predict_rf"),
                     ui.div(
@@ -1709,10 +1817,13 @@ def server(input, output, session):
         elif page == "plot_europe_predict_rf":
             return ui.div(
                 ui.div(
-                    ui.h1("🌍 Parkinson Worldview",
-                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
+                    ui.h1(
+                        ui.HTML("🌍 Parkinson <em>Worldwide</em>"),
+                        style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"
+                    ),
                     style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
                 ),
+
                 ui.div(
                     ui.input_action_button(
                         "go_back", 
@@ -1728,10 +1839,13 @@ def server(input, output, session):
         elif page == "modelo XGBoost":
             return ui.div(
                 ui.div(
-                    ui.h1("🌍 Parkinson Worldview",
-                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
+                    ui.h1(
+                        ui.HTML("🌍 Parkinson <em>Worldwide</em>"),
+                        style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"
+                    ),
                     style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
                 ),
+
                 ui.div(
                     ui.output_ui("plot_predict_xg"),
                     ui.div(
@@ -1748,7 +1862,7 @@ def server(input, output, session):
                             "go_back",
                             "Volver atrás",
                             class_="btn btn-primary",
-                            onclick="Shiny.setInputValue('page', 'section5')"
+                            onclick="Shiny.setInputValue('page', 'modelos_arboles')"
                         ),
                         style="margin-top: 10px;"
                     ),
@@ -1760,10 +1874,13 @@ def server(input, output, session):
         elif page == "plot_europe_predict_xg":
             return ui.div(
                 ui.div(
-                    ui.h1("🌍 Parkinson Worldview",
-                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
+                    ui.h1(
+                        ui.HTML("🌍 Parkinson <em>Worldwide</em>"),
+                        style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"
+                    ),
                     style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
                 ),
+
                 ui.div(
                     ui.input_action_button(
                         "go_back", 
@@ -1780,19 +1897,23 @@ def server(input, output, session):
         elif page == "modelos_learning":
             return ui.div(
                 ui.div(
-                    ui.h1("🌍 Modelos basados de aprendizaje automático", style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
+                    ui.h1(
+                        ui.HTML("🌍 Parkinson <em>Worldwide</em>"),
+                        style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"
+                    ),
                     style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
                 ),
+
                 ui.div(  # Descripción general
                     ui.p(
-                        "En esta sección puedes explorar distintos modelos de aprendizaje automático aplicados a la predicción de Parkinson. "
-                        "Al hacer clic en los botones que aparecen a continuación, podrás visualizar cómo se comporta cada modelo (SVR, KNN y MLP) y comparar sus resultados. "
-                        "Esta exploración te permitirá identificar patrones de rendimiento y entender mejor cómo cada algoritmo procesa la información.",
+                        "En esta sección puedes explorar distintos modelos de regresión aplicados a la predicción de Parkinson, distintos de los enfoques basados en árboles. "
+                        "Al hacer clic en los botones que aparecen a continuación, podrás visualizar cómo se comportan modelos como SVR, KNN y MLP, y comparar sus resultados. "
+                        "Estos modelos capturan patrones en los datos mediante aproximaciones basadas en distancia, funciones kernel y redes neuronales, respectivamente, lo que te permitirá analizar su rendimiento desde diferentes perspectivas.",
                         style="font-size: 16px; font-family: 'Arial', sans-serif; text-align: justify; margin: 0;"
                     ),
                     style="background-color: #f2f2f2; padding: 15px; border-radius: 8px; margin-bottom: 20px;"
                 ),
-        
+                        
                 ui.div(  # Descripciones de cada modelo
                     ui.p(
                         "• SVR (Support Vector Regressor): utiliza los principios de las máquinas de soporte vectorial para realizar regresiones precisas, "
@@ -1819,10 +1940,13 @@ def server(input, output, session):
         elif page == "modelo SVR":
             return ui.div(
                 ui.div(
-                    ui.h1("🌍 Parkinson Worldview",
-                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
+                    ui.h1(
+                        ui.HTML("🌍 Parkinson <em>Worldwide</em>"),
+                        style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"
+                    ),
                     style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
                 ),
+
                 ui.div(
                     ui.output_ui("plot_predict_svr"),
                     ui.div(
@@ -1851,10 +1975,13 @@ def server(input, output, session):
         elif page == "plot_europe_predict_svr":
             return ui.div(
                 ui.div(
-                    ui.h1("🌍 Parkinson Worldview",
-                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
+                    ui.h1(
+                        ui.HTML("🌍 Parkinson <em>Worldwide</em>"),
+                        style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"
+                    ),
                     style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
                 ),
+
                 ui.div(
                     ui.input_action_button(
                         "go_back", 
@@ -1871,10 +1998,13 @@ def server(input, output, session):
         elif page == "modelo KNN":
             return ui.div(
                 ui.div(
-                    ui.h1("🌍 Parkinson Worldview",
-                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
+                    ui.h1(
+                        ui.HTML("🌍 Parkinson <em>Worldwide</em>"),
+                        style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"
+                    ),
                     style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
                 ),
+
                 ui.div(
                     ui.output_ui("plot_predict_knn"),
                     ui.div(
@@ -1903,10 +2033,13 @@ def server(input, output, session):
         elif page == "plot_europe_predict_knn":
             return ui.div(
                 ui.div(
-                    ui.h1("🌍 Parkinson Worldview",
-                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
+                    ui.h1(
+                        ui.HTML("🌍 Parkinson <em>Worldwide</em>"),
+                        style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"
+                    ),
                     style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
                 ),
+
                 ui.div(
                     ui.input_action_button(
                         "go_back", 
@@ -1923,10 +2056,13 @@ def server(input, output, session):
         elif page == "modelo MLP":
             return ui.div(
                 ui.div(
-                    ui.h1("🌍 Parkinson Worldview",
-                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
+                    ui.h1(
+                        ui.HTML("🌍 Parkinson <em>Worldwide</em>"),
+                        style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"
+                    ),
                     style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
                 ),
+
                 ui.div(
                     ui.output_ui("plot_predict_mlp"),
                     ui.div(
@@ -1955,10 +2091,13 @@ def server(input, output, session):
         elif page == "plot_europe_predict_mlp":
             return ui.div(
                 ui.div(
-                    ui.h1("🌍 Parkinson Worldview",
-                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"),
+                    ui.h1(
+                        ui.HTML("🌍 Parkinson <em>Worldwide</em>"),
+                        style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"
+                    ),
                     style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
                 ),
+
                 ui.div(
                     ui.input_action_button(
                         "go_back", 
@@ -1977,11 +2116,13 @@ def server(input, output, session):
             return ui.div(
                 # Franja de color con el título
                 ui.div(
-                    ui.h1("🌍 Parkinson Worldview",
-                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"
+                    ui.h1(
+                        ui.HTML("🌍 Parkinson <em>Worldwide</em>"),
+                        style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"
                     ),
                     style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
                 ),
+
                 
                 # Cuerpo con información de contacto (Estilo atractivo)
                 ui.div(
@@ -2002,7 +2143,7 @@ def server(input, output, session):
                         ui.div(
                             ui.h3("💻 GitHub", style="font-size: 20px; color: #8E44AD; text-align: center;"),
                             ui.p("Visita mi perfil de GitHub para ver otros proyectos y colaboraciones.", style="text-align: center; font-size: 16px;"),
-                            ui.p(ui.tags.a("github.com/Lorenacalvoperez", href="https://github.com/Lorenacalvoperez", target="_blank", style="color: #2980B9; font-size: 18px;")),
+                            ui.p(ui.tags.a("github.com/Lorenacalvoperez", href="https://github.com/Lorenacalvoperez/Trabajo-Fin-de-Grado", target="_blank", style="color: #2980B9; font-size: 18px;")),
                             style="background-color: #F2F3F4; padding: 20px; margin: 10px 0; border-radius: 8px;"
                         ),
                         
@@ -2643,7 +2784,7 @@ def server(input, output, session):
     @render.ui
     def plot_europe_aire():
         año_seleccionado = input.year()
-
+    
         # Lista de países de Europa
         paises_europa = [
             "Spain", "France", "Germany", "Italy", "United Kingdom", "Netherlands", 
@@ -2653,10 +2794,16 @@ def server(input, output, session):
             "Luxembourg", "Malta", "Lithuania", "Ukraine", "Bosnia and Herzegovina", 
             "North Macedonia", "Albania", "Montenegro", "Moldova", "Russia"
         ]
-
-        df_europa = df_contaminacion[df_contaminacion["País"].isin(paises_europa)]
-        df_europa = df_europa[df_europa["Año"] == año_seleccionado]
     
+        # Filtrar datos por países y año seleccionado
+        df_europa = df_contaminacion[(df_contaminacion["País"].isin(paises_europa)) & (df_contaminacion["Año"] == año_seleccionado)]
+    
+        # Calcular rango para el color basado en cuantiles, igual que con Parkinson
+        min_contaminacion = round(df_europa["Contaminacion_aire"].min(), 2)
+        q25 = round(df_europa["Contaminacion_aire"].quantile(0.25), 2)
+        q50 = round(df_europa["Contaminacion_aire"].quantile(0.50), 2)
+        q75 = round(df_europa["Contaminacion_aire"].quantile(0.75), 2)
+        q95 = round(df_europa["Contaminacion_aire"].quantile(0.95), 2)
     
         fig_europa_Aire = px.choropleth(
             df_europa,
@@ -2664,13 +2811,12 @@ def server(input, output, session):
             locationmode="country names",
             color="Contaminacion_aire",
             hover_name="País",
-            hover_data={"Contaminacion_aire": True,"País":False},
+            hover_data={"Contaminacion_aire": True, "País": False},
             color_continuous_scale="Viridis",
-            range_color=(min_contaminacion, max_contaminacion),
+            range_color=(min_contaminacion, q95),
             title=f"Contaminación del Aire en Europa - {año_seleccionado}"
         )
     
-        # Usamos 'scope=europe' para centrar solo en Europa
         fig_europa_Aire.update_geos(
             projection_type="equirectangular",
             scope="europe",
@@ -2678,28 +2824,35 @@ def server(input, output, session):
             landcolor="white",
             countrycolor="black"
         )
-
+    
         fig_europa_Aire.update_layout(
             title={
                 'text': f"<b>Contaminación de aire en Europa - {año_seleccionado}</b>",
                 'font': {'size': 20},
                 'x': 0.7,
-                'y' : 0.98,
+                'y': 0.98,
                 'xanchor': 'right'
             },
             height=400,
             margin={"r": 10, "t": 10, "l": 0, "b": 0},
             coloraxis_colorbar=dict(
-                len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
-                thickness=15,
+                len=0.95,
+                thickness=25,
                 y=0.5,
-                title="Tasa de mortalidad por<br>contaminación del aire"
+                title="Tasa de mortalidad por<br>contaminación del aire",
+                tickvals=[min_contaminacion, q25, q50, q75, q95],
+                ticktext=[
+                    f"Mín: {min_contaminacion}",
+                    f"Q25: {q25}",
+                    f"Q50: {q50}",
+                    f"Q75: {q75}",
+                    f"Q95: {q95}"
+                ],
             )
         )
-
-
     
         return ui.HTML(fig_europa_Aire.to_html(full_html=False))
+
 
 
     @output
@@ -2761,7 +2914,7 @@ def server(input, output, session):
     @render.ui
     def plot_europe_plomo():
         año_seleccionado = input.year()
-
+    
         # Lista de países de Europa
         paises_europa = [
             "Spain", "France", "Germany", "Italy", "United Kingdom", "Netherlands", 
@@ -2771,10 +2924,16 @@ def server(input, output, session):
             "Luxembourg", "Malta", "Lithuania", "Ukraine", "Bosnia and Herzegovina", 
             "North Macedonia", "Albania", "Montenegro", "Moldova", "Russia"
         ]
-
-        df_europa = df_plomo[df_plomo["País"].isin(paises_europa)]
-        df_europa = df_europa[df_europa["Año"] == año_seleccionado]
     
+        # Filtrar datos por países y año
+        df_europa = df_plomo[(df_plomo["País"].isin(paises_europa)) & (df_plomo["Año"] == año_seleccionado)]
+    
+        # Calcular cuantiles para Exp_plomo
+        min_plomo = round(df_europa["Exp_plomo"].min(), 2)
+        q25 = round(df_europa["Exp_plomo"].quantile(0.25), 2)
+        q50 = round(df_europa["Exp_plomo"].quantile(0.50), 2)
+        q75 = round(df_europa["Exp_plomo"].quantile(0.75), 2)
+        q95 = round(df_europa["Exp_plomo"].quantile(0.95), 2)
     
         fig_europa_plomo = px.choropleth(
             df_europa,
@@ -2782,13 +2941,12 @@ def server(input, output, session):
             locationmode="country names",
             color="Exp_plomo",
             hover_name="País",
-            hover_data={"Exp_plomo": True,"País":False},
+            hover_data={"Exp_plomo": True, "País": False},
             color_continuous_scale="Viridis",
-            range_color=(min_plomo, max_plomo),
+            range_color=(min_plomo, q95),
             title=f"Exposición al Plomo - {año_seleccionado}"
         )
     
-        # Usamos 'scope=europe' para centrar solo en Europa
         fig_europa_plomo.update_geos(
             projection_type="equirectangular",
             scope="europe",
@@ -2796,28 +2954,35 @@ def server(input, output, session):
             landcolor="white",
             countrycolor="black"
         )
-
+    
         fig_europa_plomo.update_layout(
             title={
                 'text': f"<b>Exposición al Plomo - {año_seleccionado}</b>",
                 'font': {'size': 20},
                 'x': 0.7,
-                'y' : 0.98,
+                'y': 0.98,
                 'xanchor': 'right'
             },
             height=400,
             margin={"r": 10, "t": 10, "l": 0, "b": 0},
             coloraxis_colorbar=dict(
-                len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
-                thickness=15,
+                len=0.95,
+                thickness=25,
                 y=0.5,
-                title="Impacto en la salud <br>por exposición al plomo"
+                title="Impacto en la salud <br>por exposición al plomo",
+                tickvals=[min_plomo, q25, q50, q75, q95],
+                ticktext=[
+                    f"Mín: {min_plomo}",
+                    f"Q25: {q25}",
+                    f"Q50: {q50}",
+                    f"Q75: {q75}",
+                    f"Q95: {q95}"
+                ],
             )
         )
-
-
     
         return ui.HTML(fig_europa_plomo.to_html(full_html=False))
+
 
     @output
     @render.ui
@@ -2866,7 +3031,7 @@ def server(input, output, session):
     @render.ui
     def plot_europe_agua():
         año_seleccionado = input.year()
-
+    
         # Lista de países de Europa
         paises_europa = [
             "Spain", "France", "Germany", "Italy", "United Kingdom", "Netherlands", 
@@ -2876,10 +3041,16 @@ def server(input, output, session):
             "Luxembourg", "Malta", "Lithuania", "Ukraine", "Bosnia and Herzegovina", 
             "North Macedonia", "Albania", "Montenegro", "Moldova", "Russia"
         ]
-
-        df_europa = df_agua[df_agua["País"].isin(paises_europa)]
-        df_europa = df_europa[df_europa["Año"] == año_seleccionado]
     
+        # Filtrar datos
+        df_europa = df_agua[(df_agua["País"].isin(paises_europa)) & (df_agua["Año"] == año_seleccionado)]
+    
+        # Calcular cuantiles para Muertes_agua
+        min_agua = round(df_europa["Muertes_agua"].min(), 2)
+        q25 = round(df_europa["Muertes_agua"].quantile(0.25), 2)
+        q50 = round(df_europa["Muertes_agua"].quantile(0.50), 2)
+        q75 = round(df_europa["Muertes_agua"].quantile(0.75), 2)
+        q95 = round(df_europa["Muertes_agua"].quantile(0.95), 2)
     
         fig_europa_agua = px.choropleth(
             df_europa,
@@ -2887,13 +3058,12 @@ def server(input, output, session):
             locationmode="country names",
             color="Muertes_agua",
             hover_name="País",
-            hover_data={"Muertes_agua": True,"País":False},
+            hover_data={"Muertes_agua": True, "País": False},
             color_continuous_scale="Viridis",
-            range_color=(min_agua, max_agua),
+            range_color=(min_agua, q95),
             title=f"Muertes de agua - {año_seleccionado}"
         )
     
-        # Usamos 'scope=europe' para centrar solo en Europa
         fig_europa_agua.update_geos(
             projection_type="equirectangular",
             scope="europe",
@@ -2901,28 +3071,34 @@ def server(input, output, session):
             landcolor="white",
             countrycolor="black"
         )
-
+    
         fig_europa_agua.update_layout(
             title={
                 'text': f"<b>Muertes de agua - {año_seleccionado}</b>",
                 'font': {'size': 20},
                 'x': 0.7,
-                'y' : 0.98,
+                'y': 0.98,
                 'xanchor': 'right'
             },
             height=400,
             margin={"r": 10, "t": 10, "l": 0, "b": 0},
             coloraxis_colorbar=dict(
-                len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
-                thickness=15,
+                len=0.95,
+                thickness=25,
                 y=0.5,
-                title="Muertes por fuentes<br>de agua inseguras"
+                title="Muertes por fuentes<br>de agua inseguras",
+                tickvals=[min_agua,q50, q75, q95],
+                ticktext=[
+                    f"Mín: {min_agua}",
+                    f"Q50: {q50}",
+                    f"Q75: {q75}",
+                    f"Q95: {q95}"
+                ],
             )
         )
-
-
     
         return ui.HTML(fig_europa_agua.to_html(full_html=False))
+
     
     
     @output
@@ -2980,9 +3156,9 @@ def server(input, output, session):
 
     @output
     @render.ui
-    def plot_europe_pepticidas():
+    def plot_europe_pesticidas():
         año_seleccionado = input.year()
-
+    
         # Lista de países de Europa
         paises_europa = [
             "Spain", "France", "Germany", "Italy", "United Kingdom", "Netherlands", 
@@ -2992,53 +3168,63 @@ def server(input, output, session):
             "Luxembourg", "Malta", "Lithuania", "Ukraine", "Bosnia and Herzegovina", 
             "North Macedonia", "Albania", "Montenegro", "Moldova", "Russia"
         ]
-
-        df_europa = df_pepticidas[df_pepticidas["País"].isin(paises_europa)]
-        df_europa = df_europa[df_europa["Año"] == año_seleccionado]
     
+        df_europa = df_pepticidas[(df_pepticidas["País"].isin(paises_europa)) & (df_pepticidas["Año"] == año_seleccionado)]
     
-        fig_europa_pepticidas= px.choropleth(
+        # Calcular cuantiles para el campo Pesticidas
+        min_pest = round(df_europa["Pesticidas"].min(), 2)
+        q25 = round(df_europa["Pesticidas"].quantile(0.25), 2)
+        q50 = round(df_europa["Pesticidas"].quantile(0.50), 2)
+        q75 = round(df_europa["Pesticidas"].quantile(0.75), 2)
+        q95 = round(df_europa["Pesticidas"].quantile(0.95), 2)
+    
+        fig_europa_pesticidas = px.choropleth(
             df_europa,
             locations="País",
             locationmode="country names",
             color="Pesticidas",
             hover_name="País",
-            hover_data={"Pesticidas": True,"País":False},
+            hover_data={"Pesticidas": True, "País": False},
             color_continuous_scale="Viridis",
-            range_color=(min_pepticidas, max_pepticidas),
-            title=f"Exposición al Plomo - {año_seleccionado}"
+            range_color=(min_pest, q95),
+            title=f"Exposición a pesticidas - {año_seleccionado}"
         )
     
-        # Usamos 'scope=europe' para centrar solo en Europa
-        fig_europa_pepticidas.update_geos(
+        fig_europa_pesticidas.update_geos(
             projection_type="equirectangular",
             scope="europe",
             showland=True,
             landcolor="white",
             countrycolor="black"
         )
-
-        fig_europa_pepticidas.update_layout(
+    
+        fig_europa_pesticidas.update_layout(
             title={
-                'text': f"<b>Uso de pepticidas - {año_seleccionado}</b>",
+                'text': f"<b>Uso de pesticidas - {año_seleccionado}</b>",
                 'font': {'size': 20},
                 'x': 0.7,
-                'y' : 0.98,
+                'y': 0.98,
                 'xanchor': 'right'
             },
             height=400,
             margin={"r": 10, "t": 10, "l": 0, "b": 0},
             coloraxis_colorbar=dict(
-                len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
-                thickness=15,
+                len=0.95,
+                thickness=25,
                 y=0.5,
-                title="Uso de pesticidas<br>(Toneladas)"
+                title="Uso de pesticidas<br>(Toneladas)",
+                tickvals=[min_pest,q50, q75, q95],
+                ticktext=[
+                    f"Mín: {min_pest}",
+                    f"Q50: {q50}",
+                    f"Q75: {q75}",
+                    f"Q95: {q95}"
+                ],
             )
         )
-
-
     
-        return ui.HTML(fig_europa_pepticidas.to_html(full_html=False))
+        return ui.HTML(fig_europa_pesticidas.to_html(full_html=False))
+
     
     @output
     @render.ui
@@ -3105,8 +3291,7 @@ def server(input, output, session):
     @render.ui
     def plot_europe_precipitaciones():
         año_seleccionado = input.year()
-
-        # Lista de países de Europa
+    
         paises_europa = [
             "Spain", "France", "Germany", "Italy", "United Kingdom", "Netherlands", 
             "Belgium", "Switzerland", "Portugal", "Sweden", "Norway", "Finland", "Denmark", 
@@ -3115,24 +3300,28 @@ def server(input, output, session):
             "Luxembourg", "Malta", "Lithuania", "Ukraine", "Bosnia and Herzegovina", 
             "North Macedonia", "Albania", "Montenegro", "Moldova", "Russia"
         ]
-
-        df_europa = df_precipitaciones[df_precipitaciones["País"].isin(paises_europa)]
-        df_europa = df_europa[df_europa["Año"] == año_seleccionado]
     
+        df_europa = df_precipitaciones[(df_precipitaciones["País"].isin(paises_europa)) & (df_precipitaciones["Año"] == año_seleccionado)]
     
-        fig_europa_precipitaciones= px.choropleth(
+        # Calcular cuantiles para el campo Precipitaciones
+        min_prec = round(df_europa["Precipitaciones"].min(), 2)
+        q25 = round(df_europa["Precipitaciones"].quantile(0.25), 2)
+        q50 = round(df_europa["Precipitaciones"].quantile(0.50), 2)
+        q75 = round(df_europa["Precipitaciones"].quantile(0.75), 2)
+        q95 = round(df_europa["Precipitaciones"].quantile(0.95), 2)
+    
+        fig_europa_precipitaciones = px.choropleth(
             df_europa,
             locations="País",
             locationmode="country names",
             color="Precipitaciones",
             hover_name="País",
-            hover_data={"Precipitaciones": True,"País":False},
+            hover_data={"Precipitaciones": True, "País": False},
             color_continuous_scale="Viridis",
-            range_color=(min_precipitaciones, max_precipitaciones),
+            range_color=(min_prec, q95),
             title=f"Precipitaciones - {año_seleccionado}"
         )
     
-        # Usamos 'scope=europe' para centrar solo en Europa
         fig_europa_precipitaciones.update_geos(
             projection_type="equirectangular",
             scope="europe",
@@ -3140,28 +3329,35 @@ def server(input, output, session):
             landcolor="white",
             countrycolor="black"
         )
-
+    
         fig_europa_precipitaciones.update_layout(
             title={
                 'text': f"<b>Precipitaciones - {año_seleccionado}</b>",
                 'font': {'size': 20},
                 'x': 0.7,
-                'y' : 0.98,
+                'y': 0.98,
                 'xanchor': 'right'
             },
             height=400,
             margin={"r": 10, "t": 10, "l": 0, "b": 0},
             coloraxis_colorbar=dict(
-                len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
-                thickness=15,
+                len=0.95,
+                thickness=25,
                 y=0.5,
-                title="Cantidad de<br>Precipitacion (mm)"
+                title="Cantidad de<br>Precipitación (mm)",
+                tickvals=[min_prec, q25, q50, q75, q95],
+                ticktext=[
+                    f"Mín: {min_prec}",
+                    f"Q25: {q25}",
+                    f"Q50: {q50}",
+                    f"Q75: {q75}",
+                    f"Q95: {q95}"
+                ],
             )
         )
-
-
     
         return ui.HTML(fig_europa_precipitaciones.to_html(full_html=False))
+
 
 
     @output
@@ -3173,41 +3369,51 @@ def server(input, output, session):
             locationmode="country names",
             color="Parkinson_Predicho",
             hover_name="País",
-            hover_data={"Parkinson_Predicho": True,"País":False},
+            hover_data={"Parkinson_Predicho": True, "País": False},
             color_continuous_scale="Viridis",
-            range_color=(min_val_glm, max_val_glm),
+            range_color=(min_glm, q95_glm),  # 🔽 Recorte en Q95 como hiciste en el otro
             title=f"Predicción Prevalencia del Parkinson GLM"
         )
+    
         fig_glm.update_geos(
-        projection_type="equirectangular",  # <- Mapa plano
-        showcoastlines=True,
-        showland=True,
-        fitbounds="locations"
-     )
-
+            projection_type="equirectangular",
+            showcoastlines=True,
+            showland=True,
+            fitbounds="locations"
+        )
+    
         fig_glm.update_layout(
             title={
-                'text': f"<b>Predicción Prevalencia del Parkinson GLM </b>",
+                'text': f"<b>Predicción Prevalencia del Parkinson GLM</b>",
                 'font': {'size': 20},
-                'x': 0.78,
-                'y' : 0.98,
+                'x': 0.6,
+                'y': 0.98,
                 'xanchor': 'right'
             },
             height=400,
             margin={"r": 10, "t": 10, "l": 0, "b": 0},
             coloraxis_colorbar=dict(
-                len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
+                len=0.99,
                 thickness=20,
                 y=0.5,
-                title="Prevalencia Parkinson"
+                title="Prevalencia<br>Parkinson",
+                tickvals=[min_glm, q25_glm, q50_glm, q75_glm, q95_glm],
+                ticktext=[
+                    f"Mín: {min_glm}",
+                    f"Q25: {q25_glm}",
+                    f"Q50: {q50_glm}",
+                    f"Q75: {q75_glm}",
+                    f"Q95: {q95_glm}"
+                ]
             )
         )
+    
         return ui.HTML(fig_glm.to_html(full_html=False))
+
 
     @output
     @render.ui
     def plot_europe_predict_glm():
-
         # Lista de países de Europa
         paises_europa = [
             "Spain", "France", "Germany", "Italy", "United Kingdom", "Netherlands", 
@@ -3217,23 +3423,30 @@ def server(input, output, session):
             "Luxembourg", "Malta", "Lithuania", "Ukraine", "Bosnia and Herzegovina", 
             "North Macedonia", "Albania", "Montenegro", "Moldova", "Russia"
         ]
-
+    
+        # Filtrar países europeos
         df_europa = df_predicciones_GLM[df_predicciones_GLM["País"].isin(paises_europa)]
     
+        # Calcular cuantiles
+        min_val = round(df_europa["Parkinson_Predicho"].min(), 2)
+        q25 = round(df_europa["Parkinson_Predicho"].quantile(0.25), 2)
+        q50 = round(df_europa["Parkinson_Predicho"].quantile(0.50), 2)
+        q75 = round(df_europa["Parkinson_Predicho"].quantile(0.75), 2)
+        q95 = round(df_europa["Parkinson_Predicho"].quantile(0.95), 2)
     
-        fig_europa_glm= px.choropleth(
+        # Crear mapa
+        fig_europa_glm = px.choropleth(
             df_europa,
             locations="País",
             locationmode="country names",
             color="Parkinson_Predicho",
             hover_name="País",
-            hover_data={"Parkinson_Predicho": True,"País":False},
+            hover_data={"Parkinson_Predicho": True, "País": False},
             color_continuous_scale="Viridis",
-            range_color=(min_val_glm, max_val_glm),
-            title=f"Predicción Prevalencia del Parkinson GLM"
+            range_color=(min_val, q95),
+            title="Predicción Prevalencia del Parkinson GLM"
         )
     
-        # Usamos 'scope=europe' para centrar solo en Europa
         fig_europa_glm.update_geos(
             projection_type="equirectangular",
             scope="europe",
@@ -3241,28 +3454,35 @@ def server(input, output, session):
             landcolor="white",
             countrycolor="black"
         )
-
+    
         fig_europa_glm.update_layout(
             title={
-                'text': f"<b>Predicción Prevalencia del Parkinson GLM </b>",
+                'text': "<b>Predicción Prevalencia del Parkinson GLM</b>",
                 'font': {'size': 20},
                 'x': 0.7,
-                'y' : 0.98,
+                'y': 0.98,
                 'xanchor': 'right'
             },
             height=400,
             margin={"r": 10, "t": 10, "l": 0, "b": 0},
             coloraxis_colorbar=dict(
-                len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
-                thickness=15,
+                len=0.95,
+                thickness=25,
                 y=0.5,
-                title="Prevalencia Parkinson"
+                title="Prevalencia<br>Parkinson",
+                tickvals=[min_val, q25, q50, q75, q95],
+                ticktext=[
+                    f"Mín: {min_val}",
+                    f"Q25: {q25}",
+                    f"Q50: {q50}",
+                    f"Q75: {q75}",
+                    f"Q95: {q95}"
+                ],
             )
         )
-
-
     
         return ui.HTML(fig_europa_glm.to_html(full_html=False))
+
 
     @output
     @render.ui
@@ -3273,41 +3493,51 @@ def server(input, output, session):
             locationmode="country names",
             color="Parkinson_Predicho",
             hover_name="País",
-            hover_data={"Parkinson_Predicho": True,"País":False},
+            hover_data={"Parkinson_Predicho": True, "País": False},
             color_continuous_scale="Viridis",
-            range_color=(min_val_rf, max_val_rf),
-            title=f"Predicción Prevalencia del Parkinson RF"
+            range_color=(min_rf, q95_rf),  # Limita la escala hasta Q95
+            title="Predicción Prevalencia del Parkinson RF"
         )
+    
         fig_rf.update_geos(
-        projection_type="equirectangular",  # <- Mapa plano
-        showcoastlines=True,
-        showland=True,
-        fitbounds="locations"
-     )
-
+            projection_type="equirectangular",
+            showcoastlines=True,
+            showland=True,
+            fitbounds="locations"
+        )
+    
         fig_rf.update_layout(
             title={
-                'text': f"<b>Predicción Prevalencia del Parkinson RF </b>",
+                'text': "<b>Predicción Prevalencia del Parkinson RF</b>",
                 'font': {'size': 20},
-                'x': 0.78,
-                'y' : 0.98,
+                'x': 0.6,
+                'y': 0.98,
                 'xanchor': 'right'
             },
             height=400,
             margin={"r": 10, "t": 10, "l": 0, "b": 0},
             coloraxis_colorbar=dict(
-                len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
+                len=0.99,
                 thickness=20,
                 y=0.5,
-                title="Prevalencia Parkinson"
+                title="Prevalencia<br>Parkinson",
+                tickvals=[min_rf, q25_rf, q50_rf, q75_rf, q95_rf],
+                ticktext=[
+                    f"Mín: {min_rf}",
+                    f"Q25: {q25_rf}",
+                    f"Q50: {q50_rf}",
+                    f"Q75: {q75_rf}",
+                    f"Q95: {q95_rf}"
+                ]
             )
         )
+    
         return ui.HTML(fig_rf.to_html(full_html=False))
+
 
     @output
     @render.ui
     def plot_europe_predict_rf():
-
         # Lista de países de Europa
         paises_europa = [
             "Spain", "France", "Germany", "Italy", "United Kingdom", "Netherlands", 
@@ -3317,23 +3547,30 @@ def server(input, output, session):
             "Luxembourg", "Malta", "Lithuania", "Ukraine", "Bosnia and Herzegovina", 
             "North Macedonia", "Albania", "Montenegro", "Moldova", "Russia"
         ]
-
+    
+        # Filtrar países europeos
         df_europa = df_predicciones_RF[df_predicciones_RF["País"].isin(paises_europa)]
     
+        # Calcular cuantiles para escala
+        min_val = round(df_europa["Parkinson_Predicho"].min(), 4)
+        q25 = round(df_europa["Parkinson_Predicho"].quantile(0.25), 4)
+        q50 = round(df_europa["Parkinson_Predicho"].quantile(0.50), 4)
+        q75 = round(df_europa["Parkinson_Predicho"].quantile(0.75), 4)
+        q95 = round(df_europa["Parkinson_Predicho"].quantile(0.95), 4)
     
-        fig_europa_rf= px.choropleth(
+        # Crear choropleth
+        fig_europa_rf = px.choropleth(
             df_europa,
             locations="País",
             locationmode="country names",
             color="Parkinson_Predicho",
             hover_name="País",
-            hover_data={"Parkinson_Predicho": True,"País":False},
+            hover_data={"Parkinson_Predicho": True, "País": False},
             color_continuous_scale="Viridis",
-            range_color=(min_val_rf, max_val_rf),
-            title=f"Predicción Prevalencia del Parkinson RF"
+            range_color=(min_val, q95),
+            title="Predicción Prevalencia del Parkinson RF"
         )
     
-        # Usamos 'scope=europe' para centrar solo en Europa
         fig_europa_rf.update_geos(
             projection_type="equirectangular",
             scope="europe",
@@ -3341,28 +3578,35 @@ def server(input, output, session):
             landcolor="white",
             countrycolor="black"
         )
-
+    
         fig_europa_rf.update_layout(
             title={
-                'text': f"<b>Predicción Prevalencia del Parkinson RF </b>",
+                'text': "<b>Predicción Prevalencia del Parkinson RF</b>",
                 'font': {'size': 20},
                 'x': 0.7,
-                'y' : 0.98,
+                'y': 0.98,
                 'xanchor': 'right'
             },
             height=400,
             margin={"r": 10, "t": 10, "l": 0, "b": 0},
             coloraxis_colorbar=dict(
-                len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
-                thickness=15,
+                len=0.95,
+                thickness=25,
                 y=0.5,
-                title="Prevalencia Parkinson"
+                title="Prevalencia<br>Parkinson",
+                tickvals=[min_val, q25, q50, q75, q95],
+                ticktext=[
+                    f"Mín: {min_val}",
+                    f"Q25: {q25}",
+                    f"Q50: {q50}",
+                    f"Q75: {q75}",
+                    f"Q95: {q95}"
+                ],
             )
         )
-
-
     
         return ui.HTML(fig_europa_rf.to_html(full_html=False))
+
 
     @output
     @render.ui
@@ -3373,41 +3617,51 @@ def server(input, output, session):
             locationmode="country names",
             color="Parkinson_Predicho",
             hover_name="País",
-            hover_data={"Parkinson_Predicho": True,"País":False},
+            hover_data={"Parkinson_Predicho": True, "País": False},
             color_continuous_scale="Viridis",
-            range_color=(min_val_xg, max_val_xg),
-            title=f"Predicción Prevalencia del Parkinson XGBoost Regressor"
+            range_color=(min_xg, q95_xg),
+            title="Predicción Prevalencia del Parkinson XGBoost Regressor"
         )
+    
         fig_xg.update_geos(
-        projection_type="equirectangular",  # <- Mapa plano
-        showcoastlines=True,
-        showland=True,
-        fitbounds="locations"
-     )
-
+            projection_type="equirectangular",
+            showcoastlines=True,
+            showland=True,
+            fitbounds="locations"
+        )
+    
         fig_xg.update_layout(
             title={
-                'text': f"<b>Predicción Prevalencia del Parkinson XGBoost Regressor </b>",
+                'text': "<b>Predicción Prevalencia del Parkinson XGBoost Regressor</b>",
                 'font': {'size': 20},
-                'x': 0.78,
-                'y' : 0.98,
+                'x': 0.65,
+                'y': 0.98,
                 'xanchor': 'right'
             },
             height=400,
             margin={"r": 10, "t": 10, "l": 0, "b": 0},
             coloraxis_colorbar=dict(
-                len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
+                len=0.99,
                 thickness=20,
                 y=0.5,
-                title="Prevalencia Parkinson"
+                title="Prevalencia<br>Parkinson",
+                tickvals=[min_xg, q25_xg, q50_xg, q75_xg, q95_xg],
+                ticktext=[
+                    f"Mín: {min_xg}",
+                    f"Q25: {q25_xg}",
+                    f"Q50: {q50_xg}",
+                    f"Q75: {q75_xg}",
+                    f"Q95: {q95_xg}"
+                ]
             )
         )
+    
         return ui.HTML(fig_xg.to_html(full_html=False))
+
 
     @output
     @render.ui
     def plot_europe_predict_xg():
-
         # Lista de países de Europa
         paises_europa = [
             "Spain", "France", "Germany", "Italy", "United Kingdom", "Netherlands", 
@@ -3417,23 +3671,30 @@ def server(input, output, session):
             "Luxembourg", "Malta", "Lithuania", "Ukraine", "Bosnia and Herzegovina", 
             "North Macedonia", "Albania", "Montenegro", "Moldova", "Russia"
         ]
-
+    
+        # Filtrar solo países europeos
         df_europa = df_predicciones_XG[df_predicciones_XG["País"].isin(paises_europa)]
     
+        # Calcular cuantiles
+        min_val = round(df_europa["Parkinson_Predicho"].min(), 4)
+        q25 = round(df_europa["Parkinson_Predicho"].quantile(0.25), 4)
+        q50 = round(df_europa["Parkinson_Predicho"].quantile(0.50), 4)
+        q75 = round(df_europa["Parkinson_Predicho"].quantile(0.75), 4)
+        q95 = round(df_europa["Parkinson_Predicho"].quantile(0.95), 4)
     
-        fig_europa_xg= px.choropleth(
+        # Crear choropleth
+        fig_europa_xg = px.choropleth(
             df_europa,
             locations="País",
             locationmode="country names",
             color="Parkinson_Predicho",
             hover_name="País",
-            hover_data={"Parkinson_Predicho": True,"País":False},
+            hover_data={"Parkinson_Predicho": True, "País": False},
             color_continuous_scale="Viridis",
-            range_color=(min_val_xg, max_val_xg),
-            title=f"Predicción Prevalencia del Parkinson XGBoost Regressor"
+            range_color=(min_val, q95),
+            title="Predicción Prevalencia del Parkinson XGBoost Regressor"
         )
     
-        # Usamos 'scope=europe' para centrar solo en Europa
         fig_europa_xg.update_geos(
             projection_type="equirectangular",
             scope="europe",
@@ -3441,28 +3702,35 @@ def server(input, output, session):
             landcolor="white",
             countrycolor="black"
         )
-
+    
         fig_europa_xg.update_layout(
             title={
-                'text': f"<b>Predicción Prevalencia del Parkinson XGBoost Regressor </b>",
+                'text': "<b>Predicción Prevalencia del Parkinson XGBoost Regressor</b>",
                 'font': {'size': 20},
                 'x': 0.7,
-                'y' : 0.98,
+                'y': 0.98,
                 'xanchor': 'right'
             },
             height=400,
             margin={"r": 10, "t": 10, "l": 0, "b": 0},
             coloraxis_colorbar=dict(
-                len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
-                thickness=15,
+                len=0.95,
+                thickness=25,
                 y=0.5,
-                title="Prevalencia Parkinson"
+                title="Prevalencia<br>Parkinson",
+                tickvals=[min_val, q25, q50, q75, q95],
+                ticktext=[
+                    f"Mín: {min_val}",
+                    f"Q25: {q25}",
+                    f"Q50: {q50}",
+                    f"Q75: {q75}",
+                    f"Q95: {q95}"
+                ],
             )
         )
-
-
     
         return ui.HTML(fig_europa_xg.to_html(full_html=False))
+
         
     @output
     @render.ui
@@ -3473,41 +3741,51 @@ def server(input, output, session):
             locationmode="country names",
             color="Parkinson_Predicho",
             hover_name="País",
-            hover_data={"Parkinson_Predicho": True,"País":False},
+            hover_data={"Parkinson_Predicho": True, "País": False},
             color_continuous_scale="Viridis",
-            range_color=(min_val_svr, max_val_svr),
-            title=f"Predicción Prevalencia del Parkinson SVR Regressor"
+            range_color=(min_svr, q95_svr),
+            title="Predicción Prevalencia del Parkinson SVR Regressor"
         )
+    
         fig_svr.update_geos(
-        projection_type="equirectangular",  # <- Mapa plano
-        showcoastlines=True,
-        showland=True,
-        fitbounds="locations"
-     )
-
+            projection_type="equirectangular",
+            showcoastlines=True,
+            showland=True,
+            fitbounds="locations"
+        )
+    
         fig_svr.update_layout(
             title={
-                'text': f"<b>Predicción Prevalencia del Parkinson SVR Regressor </b>",
+                'text': "<b>Predicción Prevalencia del Parkinson SVR Regressor</b>",
                 'font': {'size': 20},
-                'x': 0.78,
-                'y' : 0.98,
+                'x': 0.6,
+                'y': 0.98,
                 'xanchor': 'right'
             },
             height=400,
             margin={"r": 10, "t": 10, "l": 0, "b": 0},
             coloraxis_colorbar=dict(
-                len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
+                len=0.99,
                 thickness=20,
                 y=0.5,
-                title="Prevalencia Parkinson"
+                title="Prevalencia<br>Parkinson",
+                tickvals=[min_svr, q25_svr, q50_svr, q75_svr, q95_svr],
+                ticktext=[
+                    f"Mín: {min_svr}",
+                    f"Q25: {q25_svr}",
+                    f"Q50: {q50_svr}",
+                    f"Q75: {q75_svr}",
+                    f"Q95: {q95_svr}"
+                ]
             )
         )
+    
         return ui.HTML(fig_svr.to_html(full_html=False))
+
 
     @output
     @render.ui
     def plot_europe_predict_svr():
-
         # Lista de países de Europa
         paises_europa = [
             "Spain", "France", "Germany", "Italy", "United Kingdom", "Netherlands", 
@@ -3517,23 +3795,28 @@ def server(input, output, session):
             "Luxembourg", "Malta", "Lithuania", "Ukraine", "Bosnia and Herzegovina", 
             "North Macedonia", "Albania", "Montenegro", "Moldova", "Russia"
         ]
-
+    
         df_europa = df_predicciones_SVR[df_predicciones_SVR["País"].isin(paises_europa)]
     
+        # Calcular cuantiles
+        min_val = round(df_europa["Parkinson_Predicho"].min(), 4)
+        q25 = round(df_europa["Parkinson_Predicho"].quantile(0.25), 4)
+        q50 = round(df_europa["Parkinson_Predicho"].quantile(0.50), 4)
+        q75 = round(df_europa["Parkinson_Predicho"].quantile(0.75), 4)
+        q95 = round(df_europa["Parkinson_Predicho"].quantile(0.95), 4)
     
-        fig_europa_svr= px.choropleth(
+        fig_europa_svr = px.choropleth(
             df_europa,
             locations="País",
             locationmode="country names",
             color="Parkinson_Predicho",
             hover_name="País",
-            hover_data={"Parkinson_Predicho": True,"País":False},
+            hover_data={"Parkinson_Predicho": True, "País": False},
             color_continuous_scale="Viridis",
-            range_color=(min_val_svr, max_val_svr),
-            title=f"Predicción Prevalencia del Parkinson SVR Regressor"
+            range_color=(min_val, q95),
+            title="Predicción Prevalencia del Parkinson SVR Regressor"
         )
     
-        # Usamos 'scope=europe' para centrar solo en Europa
         fig_europa_svr.update_geos(
             projection_type="equirectangular",
             scope="europe",
@@ -3541,28 +3824,35 @@ def server(input, output, session):
             landcolor="white",
             countrycolor="black"
         )
-
+    
         fig_europa_svr.update_layout(
             title={
-                'text': f"<b>Predicción Prevalencia del Parkinson SVR Regressor </b>",
+                'text': "<b>Predicción Prevalencia del Parkinson SVR Regressor</b>",
                 'font': {'size': 20},
                 'x': 0.7,
-                'y' : 0.98,
+                'y': 0.98,
                 'xanchor': 'right'
             },
             height=400,
             margin={"r": 10, "t": 10, "l": 0, "b": 0},
             coloraxis_colorbar=dict(
-                len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
-                thickness=15,
+                len=0.95,
+                thickness=25,
                 y=0.5,
-                title="Prevalencia Parkinson"
+                title="Prevalencia Parkinson",
+                tickvals=[min_val, q25, q50, q75, q95],
+                ticktext=[
+                    f"Mín: {min_val}",
+                    f"Q25: {q25}",
+                    f"Q50: {q50}",
+                    f"Q75: {q75}",
+                    f"Q95: {q95}"
+                ],
             )
         )
-
-
     
         return ui.HTML(fig_europa_svr.to_html(full_html=False))
+
 
     @output
     @render.ui
@@ -3573,41 +3863,52 @@ def server(input, output, session):
             locationmode="country names",
             color="Parkinson_Predicho",
             hover_name="País",
-            hover_data={"Parkinson_Predicho": True,"País":False},
+            hover_data={"Parkinson_Predicho": True, "País": False},
             color_continuous_scale="Viridis",
-            range_color=(min_val_svr, max_val_svr),
-            title=f"Predicción Prevalencia del Parkinson KNN Regressor"
+            range_color=(min_knn, q95_knn),
+            title="Predicción Prevalencia del Parkinson KNN Regressor"
         )
+    
         fig_knn.update_geos(
-        projection_type="equirectangular",  # <- Mapa plano
-        showcoastlines=True,
-        showland=True,
-        fitbounds="locations"
-     )
-
+            projection_type="equirectangular",
+            showcoastlines=True,
+            showland=True,
+            fitbounds="locations"
+        )
+    
         fig_knn.update_layout(
             title={
-                'text': f"<b>Predicción Prevalencia del Parkinson KNN Regressor </b>",
+                'text': "<b>Predicción Prevalencia del Parkinson KNN Regressor</b>",
                 'font': {'size': 20},
-                'x': 0.78,
-                'y' : 0.98,
+                'x': 0.5,
+                'y': 0.98,
                 'xanchor': 'right'
             },
             height=400,
             margin={"r": 10, "t": 10, "l": 0, "b": 0},
             coloraxis_colorbar=dict(
-                len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
+                len=0.99,
                 thickness=20,
                 y=0.5,
-                title="Prevalencia Parkinson"
+                title="Prevalencia<br>Parkinson",
+                tickvals=[min_knn, q25_knn, q50_knn, q75_knn, q95_knn],
+                ticktext=[
+                    f"Mín: {min_knn}",
+                    f"Q25: {q25_knn}",
+                    f"Q50: {q50_knn}",
+                    f"Q75: {q75_knn}",
+                    f"Q95: {q95_knn}"
+                ]
             )
         )
+    
         return ui.HTML(fig_knn.to_html(full_html=False))
+
 
     @output
     @render.ui
     def plot_europe_predict_knn():
-
+    
         # Lista de países de Europa
         paises_europa = [
             "Spain", "France", "Germany", "Italy", "United Kingdom", "Netherlands", 
@@ -3617,23 +3918,28 @@ def server(input, output, session):
             "Luxembourg", "Malta", "Lithuania", "Ukraine", "Bosnia and Herzegovina", 
             "North Macedonia", "Albania", "Montenegro", "Moldova", "Russia"
         ]
-
+    
         df_europa = df_predicciones_KNN[df_predicciones_KNN["País"].isin(paises_europa)]
     
+        # Calcular cuantiles
+        min_val = round(df_europa["Parkinson_Predicho"].min(), 4)
+        q25 = round(df_europa["Parkinson_Predicho"].quantile(0.25), 4)
+        q50 = round(df_europa["Parkinson_Predicho"].quantile(0.50), 4)
+        q75 = round(df_europa["Parkinson_Predicho"].quantile(0.75), 4)
+        q95 = round(df_europa["Parkinson_Predicho"].quantile(0.95), 4)
     
-        fig_europa_knn= px.choropleth(
+        fig_europa_knn = px.choropleth(
             df_europa,
             locations="País",
             locationmode="country names",
             color="Parkinson_Predicho",
             hover_name="País",
-            hover_data={"Parkinson_Predicho": True,"País":False},
+            hover_data={"Parkinson_Predicho": True, "País": False},
             color_continuous_scale="Viridis",
-            range_color=(min_val_knn, max_val_knn),
-            title=f"Predicción Prevalencia del Parkinson SVR Regressor"
+            range_color=(min_val, q95),
+            title="Predicción Prevalencia del Parkinson KNN Regressor"
         )
     
-        # Usamos 'scope=europe' para centrar solo en Europa
         fig_europa_knn.update_geos(
             projection_type="equirectangular",
             scope="europe",
@@ -3641,28 +3947,35 @@ def server(input, output, session):
             landcolor="white",
             countrycolor="black"
         )
-
+    
         fig_europa_knn.update_layout(
             title={
-                'text': f"<b>Predicción Prevalencia del Parkinson KNN Regressor </b>",
+                'text': "<b>Predicción Prevalencia del Parkinson KNN Regressor</b>",
                 'font': {'size': 20},
                 'x': 0.7,
-                'y' : 0.98,
+                'y': 0.98,
                 'xanchor': 'right'
             },
             height=400,
             margin={"r": 10, "t": 10, "l": 0, "b": 0},
             coloraxis_colorbar=dict(
-                len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
-                thickness=15,
+                len=0.95,
+                thickness=25,
                 y=0.5,
-                title="Prevalencia Parkinson"
+                title="Prevalencia Parkinson",
+                tickvals=[min_val, q25, q50, q75, q95],
+                ticktext=[
+                    f"Mín: {min_val}",
+                    f"Q25: {q25}",
+                    f"Q50: {q50}",
+                    f"Q75: {q75}",
+                    f"Q95: {q95}"
+                ],
             )
         )
-
-
     
         return ui.HTML(fig_europa_knn.to_html(full_html=False))
+
 
     @output
     @render.ui
@@ -3673,41 +3986,52 @@ def server(input, output, session):
             locationmode="country names",
             color="Parkinson_Predicho",
             hover_name="País",
-            hover_data={"Parkinson_Predicho": True,"País":False},
+            hover_data={"Parkinson_Predicho": True, "País": False},
             color_continuous_scale="Viridis",
-            range_color=(min_val_mlp, max_val_mlp),
-            title=f"Predicción Prevalencia del Parkinson MLP Regressor"
+            range_color=(min_mlp, q95_mlp),
+            title="Predicción Prevalencia del Parkinson MLP Regressor"
         )
+    
         fig_mlp.update_geos(
-        projection_type="equirectangular",  # <- Mapa plano
-        showcoastlines=True,
-        showland=True,
-        fitbounds="locations"
-     )
-
+            projection_type="equirectangular",
+            showcoastlines=True,
+            showland=True,
+            fitbounds="locations"
+        )
+    
         fig_mlp.update_layout(
             title={
-                'text': f"<b>Predicción Prevalencia del Parkinson MLP Regressor </b>",
+                'text': "<b>Predicción Prevalencia del Parkinson MLP Regressor</b>",
                 'font': {'size': 20},
-                'x': 0.78,
-                'y' : 0.98,
+                'x': 0.7,
+                'y': 0.98,
                 'xanchor': 'right'
             },
             height=400,
             margin={"r": 10, "t": 10, "l": 0, "b": 0},
             coloraxis_colorbar=dict(
-                len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
+                len=0.99,
                 thickness=20,
                 y=0.5,
-                title="Prevalencia Parkinson"
+                title="Prevalencia<br>Parkinson",
+                tickvals=[min_mlp, q25_mlp, q50_mlp, q75_mlp, q95_mlp],
+                ticktext=[
+                    f"Mín: {min_mlp}",
+                    f"Q25: {q25_mlp}",
+                    f"Q50: {q50_mlp}",
+                    f"Q75: {q75_mlp}",
+                    f"Q95: {q95_mlp}"
+                ]
             )
         )
+    
         return ui.HTML(fig_mlp.to_html(full_html=False))
+
 
     @output
     @render.ui
     def plot_europe_predict_mlp():
-
+    
         # Lista de países de Europa
         paises_europa = [
             "Spain", "France", "Germany", "Italy", "United Kingdom", "Netherlands", 
@@ -3717,23 +4041,28 @@ def server(input, output, session):
             "Luxembourg", "Malta", "Lithuania", "Ukraine", "Bosnia and Herzegovina", 
             "North Macedonia", "Albania", "Montenegro", "Moldova", "Russia"
         ]
-
+    
         df_europa = df_predicciones_MLP[df_predicciones_MLP["País"].isin(paises_europa)]
     
+        # Calcular cuantiles
+        min_val = round(df_europa["Parkinson_Predicho"].min(), 4)
+        q25 = round(df_europa["Parkinson_Predicho"].quantile(0.25), 4)
+        q50 = round(df_europa["Parkinson_Predicho"].quantile(0.50), 4)
+        q75 = round(df_europa["Parkinson_Predicho"].quantile(0.75), 4)
+        q95 = round(df_europa["Parkinson_Predicho"].quantile(0.95), 4)
     
-        fig_europa_mlp= px.choropleth(
+        fig_europa_mlp = px.choropleth(
             df_europa,
             locations="País",
             locationmode="country names",
             color="Parkinson_Predicho",
             hover_name="País",
-            hover_data={"Parkinson_Predicho": True,"País":False},
+            hover_data={"Parkinson_Predicho": True, "País": False},
             color_continuous_scale="Viridis",
-            range_color=(min_val_mlp, max_val_mlp),
-            title=f"Predicción Prevalencia del Parkinson MLP Regressor"
+            range_color=(min_val, q95),
+            title="Predicción Prevalencia del Parkinson MLP Regressor"
         )
     
-        # Usamos 'scope=europe' para centrar solo en Europa
         fig_europa_mlp.update_geos(
             projection_type="equirectangular",
             scope="europe",
@@ -3741,67 +4070,84 @@ def server(input, output, session):
             landcolor="white",
             countrycolor="black"
         )
-
+    
         fig_europa_mlp.update_layout(
             title={
-                'text': f"<b>Predicción Prevalencia del Parkinson MLP Regressor </b>",
+                'text': "<b>Predicción Prevalencia del Parkinson MLP Regressor</b>",
                 'font': {'size': 20},
-                'x': 0.7,
-                'y' : 0.98,
+                'x': 0.65,
+                'y': 0.98,
                 'xanchor': 'right'
             },
             height=400,
             margin={"r": 10, "t": 10, "l": 0, "b": 0},
             coloraxis_colorbar=dict(
-                len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
-                thickness=15,
+                len=0.95,
+                thickness=25,
                 y=0.5,
-                title="Prevalencia Parkinson"
+                title="Prevalencia Parkinson",
+                tickvals=[min_val, q25, q50, q75, q95],
+                ticktext=[
+                    f"Mín: {min_val}",
+                    f"Q25: {q25}",
+                    f"Q50: {q50}",
+                    f"Q75: {q75}",
+                    f"Q95: {q95}"
+                ],
             )
         )
-
-
     
         return ui.HTML(fig_europa_mlp.to_html(full_html=False))
+
 
     @output
     @render.ui
     def plot_modelos_mapa():
         fig_modelos = px.choropleth(
-            data_frame=df_pred_promedio,
+            df_pred_promedio,
             locations="País",
             locationmode="country names",
             color="Parkinson_Predicho_Promedio",
             hover_name="País",
-            hover_data={"Parkinson_Predicho_Promedio": True,"País":False},
+            hover_data={"Parkinson_Predicho_Promedio": True, "País": False},
             color_continuous_scale="Viridis",
-            range_color=(min_val, max_val),
-            title=f"Predicción de prevalencia del Parkinson"
+            range_color=(min_pred, q95_pred),
+            title="Predicción de prevalencia de la enfermedad de Parkinson"
         )
         fig_modelos.update_geos(
-        projection_type="equirectangular",  # <- Mapa plano
-        showcoastlines=True,
-        showland=True,
-        fitbounds="locations"
-     )
-
+            projection_type="equirectangular",
+            showcoastlines=True,
+            showland=True,
+            fitbounds="locations"
+        )
+    
         fig_modelos.update_layout(
             title={
-                'text': f"<b>Predicción de prevalencia del Parkinson </b>",
+                'text': "<b>Predicción de prevalencia de la enfermedad de Parkinson</b>",
                 'font': {'size': 20},
-                'x': 0.6,
-                'y' : 0.98,
+                'x': 0.7,
+                'y': 0.98,
                 'xanchor': 'right'
             },
             height=400,
+            width=950,
             margin={"r": 10, "t": 10, "l": 0, "b": 0},
             coloraxis_colorbar=dict(
-                len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
+                len=0.9,
                 thickness=20,
                 y=0.5,
-                title="Prevalencia Parkinson"
+                title="Prevalencia Parkinson",
+                tickvals=[min_pred, q25_pred, q50_pred, q75_pred, q95_pred],
+                ticktext=[
+                    f"Mín: {min_pred}",
+                    f"Q25: {q25_pred}",
+                    f"Q50: {q50_pred}",
+                    f"Q75: {q75_pred}",
+                    f"Q95: {q95_pred}"
+                ]
             )
         )
+    
         return ui.HTML(fig_modelos.to_html(full_html=False))
         
     @output
@@ -3813,34 +4159,46 @@ def server(input, output, session):
             locationmode="country names",
             color="Desviacion",
             hover_name="País",
-            hover_data={"Desviacion": True,"País":False},
+            hover_data={"Desviacion": True, "País": False},
             color_continuous_scale="Reds",
-            range_color=(min_std, max_std),
+            range_color=(min_std, q95_std),  # Limita la escala hasta Q95
             title=f"Incertidumbre del modelo de predicción"
         )
+    
         fig_modelos_prueba.update_geos(
-        projection_type="equirectangular",  # <- Mapa plano
-        showcoastlines=True,
-        showland=True,
-        fitbounds="locations"
-     )
+            projection_type="equirectangular",
+            showcoastlines=True,
+            showland=True,
+            fitbounds="locations"
+        )
+    
         fig_modelos_prueba.update_layout(
             title={
-                'text': f"<b>Incertidumbre del modelo de predicción",
+                'text': f"<b>Incertidumbre del modelo de predicción</b>",
                 'font': {'size': 20},
-                'x': 0.6,
-                'y' : 0.98,
+                'x': 0.5,
+                'y': 0.98,
                 'xanchor': 'right'
             },
-            height=400,
-            margin={"r": 10, "t": 10, "l": 0, "b": 0},
+            height=400,  # Más grande el mapa
+            width=950,
+            margin={"r": 0, "t": 50, "l": 0, "b": 0},
             coloraxis_colorbar=dict(
-                len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
+                len=0.99,
                 thickness=20,
                 y=0.5,
-                title="Desviación estándar del modelo"
+                title="Desviación estándar<br>del modelo",
+                tickvals=[min_std, q25_std, q50_std, q75_std, q95_std],
+                ticktext=[
+                    f"Mín: {min_std}",
+                    f"Q25: {q25_std}",
+                    f"Q50: {q50_std}",
+                    f"Q75: {q75_std}",
+                    f"Q95: {q95_std}"
+                ]
             )
         )
+    
         return ui.HTML(fig_modelos_prueba.to_html(full_html=False))
     
 
@@ -3866,7 +4224,7 @@ def server(input, output, session):
             "Error_Absoluto": True,
             "País": False
         },
-        title="Error Normalizado de Parkinson y Anomalías por País"
+        title="Mapa de Anomalías de Parkinson"
     )
 
         fig_modelos_prueba.update_geos(
@@ -3877,53 +4235,78 @@ def server(input, output, session):
          )
         fig_modelos_prueba.update_layout(
             title={
-                'text': f"<b> Error Normalizado de Parkinson: Sobre/Subestimación",
+                'text': f"<b> Mapa de Anomalías de Parkinson",
                 'font': {'size': 20},
-                'x': 0.82,
+                'x': 0.4,
                 'y' : 0.98,
                 'xanchor': 'right'
             },
             height=400,
+            width=950,
             margin={"r": 10, "t": 10, "l": 0, "b": 0},
             coloraxis_colorbar=dict(
-                len=0.8,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
+                len=0.9,  # 🔽 Altura visual de la barra de colores (0.3 es más pequeña)
                 thickness=20,
                 y=0.5,
-                title="Error_Normalizado"
+                title="Anomalía Normalizada"
             )
         )
         return ui.HTML(fig_modelos_prueba.to_html(full_html=False))
 
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    import io
+    import base64
+    import numpy as np
+    import matplotlib.colors as mcolors
+    
     @output
     @render.ui
     def plot_ranking_global():
-        # Crear el gráfico
-        plt.figure(figsize=(10, max(4, len(df_ranking) * 0.5)))
-        sns.barplot(
-            data=df_ranking,
-            y='Variable',
-            x='Ranking_Promedio',
-            hue='Variable',
-            palette='viridis',
-            dodge=False,
-            order=df_ranking.sort_values('Ranking_Promedio')['Variable']
+        # Mantener el orden original del DataFrame
+        df_plot = df_ranking.copy()
+    
+        # Número de variables
+        n = len(df_plot)
+    
+        # Crear gradiente desde azul oscuro a azul claro con menor opacidad
+        base_color = np.array(mcolors.to_rgb("navy"))  # Azul oscuro
+        colors = []
+    
+        for i in range(n):
+            alpha = np.linspace(1.0, 0.2, n)[i]  # Transparencia de más opaco a más transparente
+            mix = 0.3 + 0.7 * (i / (n - 1))      # Mezcla para hacerlo más claro
+            color_rgb = base_color * (1 - mix) + np.array([1, 1, 1]) * mix  # Interpolación con blanco
+            colors.append((*color_rgb, alpha))  # RGBA
+    
+        # Crear gráfico
+        plt.figure(figsize=(10, max(4, n * 0.5)))
+        bars = plt.barh(
+            y=df_plot['Variable'],
+            width=df_plot['Ranking_Promedio'],
+            color=colors,
+            edgecolor='black'
         )
+    
         plt.xlabel("Ranking Promedio (menor = más importante)")
-        plt.ylabel("Variable")
+        plt.ylabel("")  # 🔇 Sin título del eje Y
         plt.title("Ranking Global Promedio de Variables")
         plt.tight_layout()
-        plt.gca().invert_yaxis()
+        plt.gca().invert_yaxis() 
     
-        # Guardar en un buffer en memoria como imagen PNG
+        # Guardar en buffer PNG
         buf = io.BytesIO()
-        plt.savefig(buf, format="png")
+        plt.savefig(buf, format="png", transparent=True)
         plt.close()
         buf.seek(0)
         img_base64 = base64.b64encode(buf.getvalue()).decode("utf-8")
         buf.close()
     
-        # Mostrar como imagen en la app
-        return ui.img(src=f"data:image/png;base64,{img_base64}", style="width: 100%; height: auto; border: 1px solid #ccc; padding: 10px;")
+        return ui.img(
+            src=f"data:image/png;base64,{img_base64}",
+            style="width: 100%; height: auto; border: 1px solid #ccc; padding: 10px;"
+        )
+
 
 
 # Crear y ejecutar la aplicación
