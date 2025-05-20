@@ -212,22 +212,55 @@ q50_parkinson = round(df_parkinson["Parkinson"].quantile(0.50), 2)
 q75_parkinson = round(df_parkinson["Parkinson"].quantile(0.75), 2)
 q95_parkinson = round(df_parkinson["Parkinson"].quantile(0.95), 2)
 
-min_contaminacion = df_contaminacion["Contaminacion_aire"].min()
-max_contaminacion = df_contaminacion["Contaminacion_aire"].quantile(0.90)
+min_contaminacion = round(df_contaminacion["Contaminacion_aire"].min(), 2)
+q25_contaminacion = round(df_contaminacion["Contaminacion_aire"].quantile(0.25), 2)
+q50_contaminacion = round(df_contaminacion["Contaminacion_aire"].quantile(0.50), 2)
+q75_contaminacion = round(df_contaminacion["Contaminacion_aire"].quantile(0.75), 2)
+q95_contaminacion = round(df_contaminacion["Contaminacion_aire"].quantile(0.95), 2)
 
-min_plomo = df_plomo["Exp_plomo"].min()
-max_plomo = df_plomo["Exp_plomo"].quantile(0.90)
+#min_contaminacion = df_contaminacion["Contaminacion_aire"].min()
+#max_contaminacion = df_contaminacion["Contaminacion_aire"].quantile(0.90)
+
+# Percentiles para Exposición al Plomo
+min_plomo = round(df_plomo["Exp_plomo"].min(), 2)
+q25_plomo = round(df_plomo["Exp_plomo"].quantile(0.25), 2)
+q50_plomo = round(df_plomo["Exp_plomo"].quantile(0.50), 2)
+q75_plomo = round(df_plomo["Exp_plomo"].quantile(0.75), 2)
+q95_plomo = round(df_plomo["Exp_plomo"].quantile(0.95), 2)
 
 
+#min_plomo = df_plomo["Exp_plomo"].min()
+#max_plomo = df_plomo["Exp_plomo"].quantile(0.90)
 
-min_agua = df_agua["Muertes_agua"].min()
-max_agua = df_agua["Muertes_agua"].quantile(0.75)
+min_agua = round(df_agua["Muertes_agua"].min(), 2)
+q25_agua = round(df_agua["Muertes_agua"].quantile(0.25), 2)
+q50_agua = round(df_agua["Muertes_agua"].quantile(0.50), 2)
+q75_agua = round(df_agua["Muertes_agua"].quantile(0.75), 2)
+q95_agua = round(df_agua["Muertes_agua"].quantile(0.95), 2)
 
-min_pepticidas = df_pepticidas["Pesticidas"].min()
-max_pepticidas = df_pepticidas["Pesticidas"].quantile(0.90)
 
-min_precipitaciones = df_precipitaciones["Precipitaciones"].min()
-max_precipitaciones = df_precipitaciones["Precipitaciones"].quantile(0.90)
+#min_agua = df_agua["Muertes_agua"].min()
+#max_agua = df_agua["Muertes_agua"].quantile(0.75)
+
+min_pesticidas = round(df_pepticidas["Pesticidas"].min(), 2)
+q25_pesticidas = round(df_pepticidas["Pesticidas"].quantile(0.25), 2)
+q50_pesticidas = round(df_pepticidas["Pesticidas"].quantile(0.50), 2)
+q75_pesticidas = round(df_pepticidas["Pesticidas"].quantile(0.75), 2)
+q95_pesticidas = round(df_pepticidas["Pesticidas"].quantile(0.95), 2)
+
+
+#min_pepticidas = df_pepticidas["Pesticidas"].min()
+#max_pepticidas = df_pepticidas["Pesticidas"].quantile(0.90)
+
+min_precipitaciones = round(df_precipitaciones["Precipitaciones"].min(), 2)
+q25_precipitaciones = round(df_precipitaciones["Precipitaciones"].quantile(0.25), 2)
+q50_precipitaciones = round(df_precipitaciones["Precipitaciones"].quantile(0.50), 2)
+q75_precipitaciones = round(df_precipitaciones["Precipitaciones"].quantile(0.75), 2)
+q95_precipitaciones = round(df_precipitaciones["Precipitaciones"].quantile(0.95), 2)
+
+
+#min_precipitaciones = df_precipitaciones["Precipitaciones"].min()
+#max_precipitaciones = df_precipitaciones["Precipitaciones"].quantile(0.90)
 
 min_val_glm = df_predicciones_GLM["Parkinson_Predicho"].min()
 max_val_glm =df_predicciones_GLM["Parkinson_Predicho"].quantile(0.95)
@@ -661,8 +694,9 @@ def server(input, output, session):
             return ui.div(
                 # Franja de título
                 ui.div(
-                    ui.h1("🌍 Parkinson Worldview",
-                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"
+                    ui.h1(
+                        ui.HTML("🌍 Parkinson <em>Worldwide</em>"),
+                        style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"
                     ),
                     style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
                 ),
@@ -695,71 +729,127 @@ def server(input, output, session):
 
         elif page == "section3":
             return ui.div(
-                # Título de la aplicación
+                # Título
                 ui.div(
-                    ui.h1("🌍 Parkinson Worldview",
-                          style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"
+                    ui.h1(
+                        ui.HTML("🌍 Parkinson <em>Worldwide</em>"),
+                        style="margin: 0; padding: 10px; color: white; text-align: center; font-size: 40px; font-family: 'Arial', sans-serif;"
                     ),
                     style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
                 ),
-            
-                # Instrucciones y resumen de variables
+        
                 ui.div(
+                    ui.h3("📊 Factores ambientales", style="color: #2C3E50; margin-top: 30px; text-align: center;"),
                     ui.p(
-                        "Explora cómo distintas variables ambientales están relacionadas con la prevalencia de la enfermedad de Parkinson en diferentes partes del mundo.",
-                        style="font-size: 17px; margin: 10px 20px; color: #333;"
+                        "En esta sección exploraremos distintos factores ambientales que podrían estar relacionados con la enfermedad de Parkinson. "
+                        "Cada botón te llevará a una sección donde podrás ver datos específicos y visualizaciones que muestran cómo estos factores varían en diferentes regiones del mundo.",
+                        style="font-size: 17px; margin: 10px 20px; text-align: justify; color: #333;"
                     ),
+                    style="margin-bottom: 20px;"
+                ),
 
-                     #Factores Ambientales
-                    ui.h3("🌍 Factores Ambientales que Pueden Influir", style="color: #2C3E50; text-align: left; margin-top: 30px; font-size: 24px;"),
         
-                    ui.p(
-                        "Diversos factores ambientales pueden influir en el riesgo de desarrollar la enfermedad de Parkinson, incluyendo:",
-                        style="font-size: 16px; text-align: justify; margin: 10px 20px; color: #333;"
+                # Botones y enlaces separados
+                ui.div(
+                    # Contaminación
+                    ui.div(
+                        [
+                            ui.input_action_button(
+                                "show_contaminacion",
+                                ui.HTML(
+                                    "<strong>🌫️ Contaminación del Aire</strong><br><small>La exposición a PM2.5 y NO₂ se ha relacionado con un aumento del riesgo de Parkinson.</small>"
+                                ),
+                                class_="btn btn-primary",
+                                onclick="Shiny.setInputValue('page', 'contaminacion')",
+                                style="text-align: left; white-space: normal; padding: 15px; width: 100%;"
+                            ),
+                            ui.a("🔗 Accede aquí a los datos", href="https://ourworldindata.org/grapher/death-rates-from-air-pollution?tab=table", target="_blank", style="display: block; margin-top: 5px; color: #2980B9;")
+                        ],
+                        style="width: 18%;"
                     ),
-                    ui.tags.ul(
-                         ui.tags.li([
-                        "🌫️ Contaminación del Aire: La exposición crónica a partículas finas (PM2.5) y dióxido de nitrógeno (NO₂) ha sido relacionada con un aumento en el riesgo de padecer Parkinson. ",
-                        ui.tags.a("Accede aqui a los datos", href="https://ourworldindata.org/grapher/death-rates-from-air-pollution?tab=table", target="_blank", style="margin-left: 5px; color: #2980B9;")
-                    ]),
-                     ui.tags.li([
-                        "🔩 Exposición al Plomo: La exposición prolongada a metales pesados, como el plomo, puede afectar el sistema nervioso central y se ha vinculado con el Parkinson. ",
-                        ui.tags.a("Accede aqui a los datos", href="https://ourworldindata.org/grapher/rate-disease-burden-lead?tab=table", target="_blank", style="margin-left: 5px; color: #2980B9;")
-                    ]),
-                    ui.tags.li([
-                        "🚰 Aguas Inseguras:  El consumo de agua contaminada por metales pesados o sustancias tóxicas también se ha relacionado con un posible mayor riesgo de Parkinson.  ",
-                        ui.tags.a("Accede aqui a los datos", href="https://ourworldindata.org/grapher/deaths-due-to-unsafe-water-sources?tab=table", target="_blank", style="margin-left: 5px; color: #2980B9;")
-                    ]),
-                    ui.tags.li([
-                        "🌿 Uso de Pesticidas: Sustancias como el paraquat y maneb, utilizados en la agricultura, han sido asociados con un mayor riesgo de Parkinson. ",
-                        ui.tags.a("Accede aqui a los datos", href="https://ourworldindata.org/grapher/pesticide-use-tonnes?tab=table", target="_blank", style="margin-left: 5px; color: #2980B9;")
-                    ]),
-                    ui.tags.li([
-                        "🌧️ Precipitaciones: Cambios en los patrones de lluvia pueden afectar la exposición a pesticidas o contaminantes ambientales. ",
-                        ui.tags.a("Accede aqui a los datos", href="https://ourworldindata.org/grapher/average-precipitation-per-year?tab=table", target="_blank", style="margin-left: 5px; color: #2980B9;")
-                    ]),
-                    )
-                ),
-            
-                # Botones de navegación
-                ui.div(
-                    ui.input_action_button("show_contaminacion", "🌫️Contaminación del Aire", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'contaminacion')"),
-                    ui.input_action_button("show_plomo", "🔩 Exposición al Plomo", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'plomo')"),
-                    ui.input_action_button("show_agua", "🚰 Muertes por aguas inseguras", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'agua')"),
-                    ui.input_action_button("show_pesticidas", "🌿 Uso de pesticidas", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'pesticidas')"),
-                    ui.input_action_button("show_precipitaciones", " 🌧️ Precipitaciones", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'precipitaciones')"),
-                    style="display: flex; justify-content: space-around; margin: 30px 0 20px 0;"
+                    
+                    # Plomo
+                    ui.div(
+                        [
+                            ui.input_action_button(
+                                "show_plomo",
+                                ui.HTML(
+                                    "<strong>🔩 Exposición al Plomo</strong><br><small>La exposición prolongada a metales pesados como el plomo puede afectar el sistema nervioso central.</small>"
+                                ),
+                                class_="btn btn-primary",
+                                onclick="Shiny.setInputValue('page', 'plomo')",
+                                style="text-align: left; white-space: normal; padding: 15px; width: 100%;"
+                            ),
+                            ui.a("🔗 Accede aquí a los datos", href="https://ourworldindata.org/grapher/rate-disease-burden-lead?tab=table", target="_blank", style="display: block; margin-top: 5px; color: #2980B9;")
+                        ],
+                        style="width: 18%;"
+                    ),
+        
+                    # Agua
+                    ui.div(
+                        [
+                            ui.input_action_button(
+                                "show_agua",
+                                ui.HTML(
+                                    "<strong>🚰 Aguas Inseguras</strong><br><small>El consumo de agua contaminada por metales pesados o tóxicos se ha vinculado con riesgo de Parkinson.</small>"
+                                ),
+                                class_="btn btn-primary",
+                                onclick="Shiny.setInputValue('page', 'agua')",
+                                style="text-align: left; white-space: normal; padding: 15px; width: 100%;"
+                            ),
+                            ui.a("🔗 Accede aquí a los datos", href="https://ourworldindata.org/grapher/deaths-due-to-unsafe-water-sources?tab=table", target="_blank", style="display: block; margin-top: 5px; color: #2980B9;")
+                        ],
+                        style="width: 18%;"
+                    ),
+        
+                    # Pesticidas
+                    ui.div(
+                        [
+                            ui.input_action_button(
+                                "show_pesticidas",
+                                ui.HTML(
+                                    "<strong>🌿 Uso de Pesticidas</strong><br><small>Sustancias como paraquat y maneb están asociadas con mayor riesgo de Parkinson.</small>"
+                                ),
+                                class_="btn btn-primary",
+                                onclick="Shiny.setInputValue('page', 'pesticidas')",
+                                style="text-align: left; white-space: normal; padding: 15px; width: 100%;"
+                            ),
+                            ui.a("🔗 Accede aquí a los datos", href="https://ourworldindata.org/grapher/pesticide-use-tonnes?tab=table", target="_blank", style="display: block; margin-top: 5px; color: #2980B9;")
+                        ],
+                        style="width: 18%;"
+                    ),
+        
+                    # Precipitaciones
+                    ui.div(
+                        [
+                            ui.input_action_button(
+                                "show_precipitaciones",
+                                ui.HTML(
+                                    "<strong>🌧️ Precipitaciones</strong><br><small>Cambios en la lluvia pueden afectar la exposición a contaminantes o pesticidas.</small>"
+                                ),
+                                class_="btn btn-primary",
+                                onclick="Shiny.setInputValue('page', 'precipitaciones')",
+                                style="text-align: left; white-space: normal; padding: 15px; width: 100%;"
+                            ),
+                            ui.a("🔗 Accede aquí a los datos", href="https://ourworldindata.org/grapher/average-precipitation-per-year?tab=table", target="_blank", style="display: block; margin-top: 5px; color: #2980B9;")
+                        ],
+                        style="width: 18%;"
+                    ),
+        
+                    style="display: flex; flex-wrap: wrap; justify-content: space-around; gap: 15px; margin: 30px 0 20px 0;"
                 ),
         
-                # Texto informativo (Tooltip o Texto destacando la acción)
+                # Texto final
                 ui.div(
                     ui.p(
-                        "💡 Para explorar cada variable en diferentes países, haz clic en los botones de arriba. Esto te llevará a ver los datos específicos de cada variable. ¡Explora y conoce más cada una de ellas!",
+                        "💡 Haz clic en los botones para ver más información. Usa los enlaces para acceder a los datos de cada variable.",
                         style="font-size: 16px; color: #555; text-align: center; margin-top: 20px; background-color: #ecf0f1; padding: 10px; border-radius: 8px;"
-                    ),
-                    style="margin-top: 20px;"
+                    )
                 )
             )
+
+
+
 
 
         elif page == "contaminacion":
@@ -1190,7 +1280,7 @@ def server(input, output, session):
         
                 # Contenido principal
                 ui.div(
-                    ui.output_ui("plot_pepticidas"),
+                    ui.output_ui("plot_pesticidas"),
         
                     ui.div(
                         ui.input_slider("year", "Selecciona el Año", 
@@ -2490,25 +2580,55 @@ def server(input, output, session):
     @render.ui
     def plot_contaminacion():
         año_seleccionado = input.year()
+        df_filtrado = df_contaminacion[df_contaminacion["Año"] == año_seleccionado]
+    
         fig_contaminacion_filtrado = px.choropleth(
-            df_contaminacion[df_contaminacion["Año"] == año_seleccionado],
+            df_filtrado,
             locations="País",
             locationmode="country names",
             color="Contaminacion_aire",
             hover_name="País",
-            hover_data={"Contaminacion_aire": True,"País":False},
+            hover_data={"Contaminacion_aire": True, "País": False},
             color_continuous_scale="Viridis",
-            range_color=(min_contaminacion, max_contaminacion),
+            range_color=(min_contaminacion, q95_contaminacion),
             labels={"Contaminacion_aire": "Tasa de mortalidad por<br>contaminación del aire"},
             title=f"Contaminación del Aire - {año_seleccionado}"
         )
-
+    
         fig_contaminacion_filtrado.update_geos(
-        projection_type="equirectangular",  # <- Mapa plano
-        showcoastlines=True,
-        showland=True,
-        fitbounds="locations"
-     )
+            projection_type="equirectangular",
+            showcoastlines=True,
+            showland=True,
+            fitbounds="locations"
+        )
+    
+        fig_contaminacion_filtrado.update_layout(
+            title={
+                'text': f"<b>Contaminación del Aire - {año_seleccionado}</b>",
+                'font': {'size': 20},
+                'x': 0.7,
+                'y': 0.98,
+                'xanchor': 'right'
+            },
+            height=400,
+            margin={"r": 10, "t": 10, "l": 0, "b": 0},
+            coloraxis_colorbar=dict(
+                len=0.95,
+                thickness=25,
+                y=0.5,
+                title="Tasa de mortalidad<br>por contaminación",
+                tickvals=[min_contaminacion, q25_contaminacion, q50_contaminacion, q75_contaminacion, q95_contaminacion],
+                ticktext=[
+                    f"Mín: {min_contaminacion}",
+                    f"Q25: {q25_contaminacion}",
+                    f"Q50: {q50_contaminacion}",
+                    f"Q75: {q75_contaminacion}",
+                    f"Q95: {q95_contaminacion}"
+                ]
+            )
+        )
+    
+        return ui.HTML(fig_contaminacion_filtrado.to_html(full_html=False))
         
 
         fig_contaminacion_filtrado.update_layout(
@@ -2586,32 +2706,56 @@ def server(input, output, session):
     @render.ui
     def plot_plomo():
         año_seleccionado = input.year()
+        df_filtrado = df_plomo[df_plomo["Año"] == año_seleccionado]
+    
         fig_plomo_filtrado = px.choropleth(
-            df_plomo[df_plomo["Año"] == año_seleccionado],
+            df_filtrado,
             locations="País",
             locationmode="country names",
             color="Exp_plomo",
             hover_name="País",
-            hover_data={"Exp_plomo": True,"País":False},
+            hover_data={"Exp_plomo": True, "País": False},
             color_continuous_scale="Viridis",
-            range_color=(min_plomo, max_plomo),
-            labels={"Exp_plomo": "Impacto en la salud <br>por exposición al plomo"},
+            range_color=(min_plomo, q95_plomo),
+            labels={"Exp_plomo": "Impacto en la salud<br>por exposición al plomo"},
             title=f"Exposición al Plomo - {año_seleccionado}"
         )
-
+    
         fig_plomo_filtrado.update_geos(
-        projection_type="equirectangular",  # <- Mapa plano
-        showcoastlines=True,
-        showland=True,
-        fitbounds="locations"
-     )
-
+            projection_type="equirectangular",
+            showcoastlines=True,
+            showland=True,
+            fitbounds="locations"
+        )
+    
         fig_plomo_filtrado.update_layout(
-        height=400,  # Hacerlo más grande
-        margin={"r":0,"t":50,"l":0,"b":0}
-    )
-
+            title={
+                'text': f"<b>Exposición al Plomo - {año_seleccionado}</b>",
+                'font': {'size': 20},
+                'x': 0.7,
+                'y': 0.98,
+                'xanchor': 'right'
+            },
+            height=400,
+            margin={"r": 10, "t": 10, "l": 0, "b": 0},
+            coloraxis_colorbar=dict(
+                len=0.95,
+                thickness=25,
+                y=0.5,
+                title="Carga de enfermedad<br>por plomo",
+                tickvals=[min_plomo, q25_plomo, q50_plomo, q75_plomo, q95_plomo],
+                ticktext=[
+                    f"Mín: {min_plomo}",
+                    f"Q25: {q25_plomo}",
+                    f"Q50: {q50_plomo}",
+                    f"Q75: {q75_plomo}",
+                    f"Q95: {q95_plomo}"
+                ]
+            )
+        )
+    
         return ui.HTML(fig_plomo_filtrado.to_html(full_html=False))
+
 
     @output
     @render.ui
@@ -2679,31 +2823,43 @@ def server(input, output, session):
     @render.ui
     def plot_agua():
         año_seleccionado = input.year()
+    
         fig_agua_filtrado = px.choropleth(
             df_agua[df_agua["Año"] == año_seleccionado],
             locations="País",
             locationmode="country names",
             color="Muertes_agua",
             hover_name="País",
-            hover_data={"Muertes_agua": True,"País":False},
+            hover_data={"Muertes_agua": True, "País": False},
             color_continuous_scale="Viridis",
-            range_color=(min_agua, max_agua),
+            range_color=(min_agua, q95_agua),
             labels={"Muertes_agua": "Muertes por fuentes<br>de agua inseguras"},
-            title=f"Muertes de agua - {año_seleccionado}"
+            title=f"Muertes por Agua Insalubre - {año_seleccionado}"
         )
-
+    
         fig_agua_filtrado.update_geos(
-        projection_type="equirectangular",  # <- Mapa plano
-        showcoastlines=True,
-        showland=True,
-        fitbounds="locations"
-     )
-
+            projection_type="equirectangular",
+            showcoastlines=True,
+            showland=True,
+            fitbounds="locations"
+        )
+    
         fig_agua_filtrado.update_layout(
-        height=400,  # Hacerlo más grande
-        margin={"r":0,"t":50,"l":0,"b":0}
-    )
+            height=400,
+            margin={"r": 0, "t": 50, "l": 0, "b": 0},
+            coloraxis_colorbar=dict(
+                len=0.97,
+                thickness=25,
+                y=0.5,
+                title="Muertes por agua<br>insalubre",
+                tickvals=[min_agua, q75_agua,q95_agua],
+                ticktext=[f"Mín: {min_agua}", f"Q75: {q75_agua}",f"Q95: {q95_agua}"]
+                
+            )
+        )
+    
         return ui.HTML(fig_agua_filtrado.to_html(full_html=False))
+
 
 
     @output
@@ -2771,33 +2927,56 @@ def server(input, output, session):
     
     @output
     @render.ui
-    def plot_pepticidas():
+    def plot_pesticidas():
         año_seleccionado = input.year()
-        fig_pepticidas_filtrado = px.choropleth(
-            df_pepticidas[df_pepticidas["Año"] == año_seleccionado],
+        df_filtrado = df_pepticidas[df_pepticidas["Año"] == año_seleccionado]
+    
+        fig_pesticidas = px.choropleth(
+            df_filtrado,
             locations="País",
             locationmode="country names",
             color="Pesticidas",
             hover_name="País",
-            hover_data={"Pesticidas": True,"País":False},
+            hover_data={"Pesticidas": True, "País": False},
             color_continuous_scale="Viridis",
-            range_color=(min_pepticidas, max_pepticidas),
+            range_color=(min_pesticidas, q95_pesticidas),
             labels={"Pesticidas": "Uso de pesticidas<br>(Toneladas)"},
-            title=f"Uso de pepticidas - {año_seleccionado}"
+            title=f"Uso de Pesticidas - {año_seleccionado}"
         )
+    
+        fig_pesticidas.update_geos(
+            projection_type="equirectangular",
+            showcoastlines=True,
+            showland=True,
+            fitbounds="locations"
+        )
+    
+        fig_pesticidas.update_layout(
+            title={
+                'text': f"<b>Uso de Pesticidas por País - {año_seleccionado}</b>",
+                'font': {'size': 20},
+                'x': 0.7,
+                'y': 0.98,
+                'xanchor': 'right'
+            },
+            height=400,
+            margin={"r": 10, "t": 10, "l": 0, "b": 0},
+            coloraxis_colorbar=dict(
+                len=0.95,
+                thickness=25,
+                y=0.5,
+                title="Toneladas<br>de pesticidas",
+                tickvals=[min_pesticidas,q75_pesticidas, q95_pesticidas],
+                ticktext=[
+                    f"Mín: {min_pesticidas}",
+                    f"Q75: {q75_pesticidas}",
+                    f"Q95: {q95_pesticidas}"
+                ]
+            )
+        )
+    
+        return ui.HTML(fig_pesticidas.to_html(full_html=False))
 
-        fig_pepticidas_filtrado.update_geos(
-        projection_type="equirectangular",  # <- Mapa plano
-        showcoastlines=True,
-        showland=True,
-        fitbounds="locations"
-     )
-
-        fig_pepticidas_filtrado.update_layout(
-        height=400,  # Hacerlo más grande
-        margin={"r":0,"t":50,"l":0,"b":0}
-    )
-        return ui.HTML(fig_pepticidas_filtrado.to_html(full_html=False))
 
     @output
     @render.ui
@@ -2865,29 +3044,62 @@ def server(input, output, session):
     @render.ui
     def plot_precipitaciones():
         año_seleccionado = input.year()
-        fig_precipitaciones_filtrado = px.choropleth(
-            df_precipitaciones[df_precipitaciones["Año"] == año_seleccionado],
+        df_filtrado = df_precipitaciones[df_precipitaciones["Año"] == año_seleccionado]
+    
+        fig_precipitaciones = px.choropleth(
+            df_filtrado,
             locations="País",
             locationmode="country names",
             color="Precipitaciones",
             hover_name="País",
-            hover_data={"Precipitaciones": True,"País":False},
+            hover_data={"Precipitaciones": True, "País": False},
             color_continuous_scale="Viridis",
-            range_color=(min_precipitaciones, max_precipitaciones),
-            labels={"Precipitaciones": "Cantidad de<br>Precipitacion (mm)"},
+            range_color=(min_precipitaciones, q95_precipitaciones),
+            labels={"Precipitaciones": "Precipitación<br>(mm)"},
             title=f"Precipitaciones - {año_seleccionado}"
         )
-        fig_precipitaciones_filtrado.update_geos(
-        projection_type="equirectangular",  # <- Mapa plano
-        showcoastlines=True,
-        showland=True,
-        fitbounds="locations"
-     )
-        fig_precipitaciones_filtrado.update_layout(
-        height=400,  # Hacerlo más grande
-        margin={"r":0,"t":50,"l":0,"b":0}
-    )
-        return ui.HTML(fig_precipitaciones_filtrado.to_html(full_html=False))
+    
+        fig_precipitaciones.update_geos(
+            projection_type="equirectangular",
+            showcoastlines=True,
+            showland=True,
+            fitbounds="locations"
+        )
+    
+        fig_precipitaciones.update_layout(
+            title={
+                'text': f"<b>Precipitaciones por País - {año_seleccionado}</b>",
+                'font': {'size': 20},
+                'x': 0.7,
+                'y': 0.98,
+                'xanchor': 'right'
+            },
+            height=400,
+            margin={"r": 10, "t": 10, "l": 0, "b": 0},
+            coloraxis_colorbar=dict(
+                len=0.90,
+                thickness=25,
+                y=0.5,
+                title="Precipitación<br>(mm)",
+                tickvals=[
+                    min_precipitaciones,
+                    q25_precipitaciones,
+                    q50_precipitaciones,
+                    q75_precipitaciones,
+                    q95_precipitaciones
+                ],
+                ticktext=[
+                    f"Mín: {min_precipitaciones}",
+                    f"Q25: {q25_precipitaciones}",
+                    f"Q50: {q50_precipitaciones}",
+                    f"Q75: {q75_precipitaciones}",
+                    f"Q95: {q95_precipitaciones}"
+                ]
+            )
+        )
+    
+        return ui.HTML(fig_precipitaciones.to_html(full_html=False))
+
 
     @output
     @render.ui
