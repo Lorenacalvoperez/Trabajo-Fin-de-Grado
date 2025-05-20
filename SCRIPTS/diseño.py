@@ -545,18 +545,25 @@ def server(input, output, session):
                     ui.h3("¿De dónde provienen los datos?",
                           style="font-size: 24px; font-weight: bold; color: #2C3E50; clear: both;"),
                     ui.p(
-                        "Los datos utilizados provienen de Our World in Data (OWID), una plataforma global que recopila y presenta datos de salud pública, sociales y ambientales de todo el mundo. "
-                    "La misión de OWID es hacer que los datos sean accesibles para cualquier persona, con el fin de fomentar una mayor comprensión y toma de decisiones informadas. En nuestro caso, hemos utilizado información sobre la Tasa de mortalidad por contaminación del aire, "
-                    "la Tasa de carga de enfermedad por exposición al plomo, muertes atribuidas a fuentes de agua inseguras, el uso de pesticidas y precipitaciones anuales. ",
+                        ui.HTML(
+                            "Los datos utilizados provienen de <b><em>Our World in Data (OWID)</em></b>, una plataforma global que recopila y presenta datos de salud pública, sociales y ambientales de todo el mundo. "
+                            "La misión de <b><em>OWID</em></b> es hacer que los datos sean accesibles para cualquier persona, con el fin de fomentar una mayor comprensión y toma de decisiones informadas. En nuestro caso, hemos utilizado información sobre la Tasa de mortalidad por contaminación del aire, "
+                            "la Tasa de carga de enfermedad por exposición al plomo, muertes atribuidas a fuentes de agua inseguras, el uso de pesticidas y precipitaciones anuales."
+                        ),
                         style="font-size: 18px; line-height: 1.6; color: #333333;"
                     ),
-                    ui.a("Visita Our World in Data para más detalles", href="https://ourworldindata.org/", target="_blank", 
-                     style="font-size: 18px; color: #3498db; text-decoration: none;"),
+
+                    ui.HTML(
+                        '<a href="https://ourworldindata.org/" target="_blank" '
+                        'style="font-size: 18px; color: #3498db; text-decoration: none;">'
+                        'Visita <b><em>Our World in Data</em></b> para más detalles</a>'
+                    ),
                     ui.p(
                         "Al combinar estos datos con análisis estadísticos y modelos predictivos, se puede obtener una visión más clara de cómo estos factores ambientales pueden afectar la prevalencia de Parkinson. "
                         "Además, este enfoque también ayuda a identificar posibles áreas geográficas donde el riesgo de Parkinson es más alto, lo que puede llevar a una mejor planificación de políticas públicas y estrategias de salud.",
                         style="font-size: 18px; line-height: 1.6; color: #333333;"
                     ),
+
                 ),
             )
         
