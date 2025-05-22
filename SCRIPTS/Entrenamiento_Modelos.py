@@ -345,7 +345,7 @@ def entrenar_modelo_knn(df, variables_independientes, variable_dependiente, test
     X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=test_size, random_state=42)
 
     # 4. Definir y entrenar el modelo KNN
-    modelo = KNeighborsRegressor(n_neighbors=11, weights='distance', metric='manhattan')
+    modelo = KNeighborsRegressor(n_neighbors=15, weights='distance', metric='manhattan')
     modelo.fit(X_train, y_train)
 
     # 5. Evaluación
