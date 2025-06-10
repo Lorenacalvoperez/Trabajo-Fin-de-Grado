@@ -507,6 +507,8 @@ def server(input, output, session):
     def _():
         if input.page() is not None:
             current_page.set(input.page())
+
+
     @output
     @render.ui
     def content_display():
@@ -669,9 +671,8 @@ def server(input, output, session):
                 # Descripción bajo el título
                 ui.p(
                     ui.HTML(
-                        'Visualiza la prevalencia estimada de la enfermedad de Parkinson: el número de personas afectadas por cada 100,000 habitantes en distintos países y años.'
-                        '<a href="https://ourworldindata.org/grapher/parkinsons-disease-prevalence-ihme?tab=table" '
-                        'target="_blank" style="margin-left: 5px; color: #2980B9; text-decoration: none;">Accede aquí a los datos</a>'
+                        'Visualiza la prevalencia estimada de la enfermedad de Parkinson: el número de personas afectadas por cada 100,000 habitantes en distintos países y años. '
+                        '<a href="https://ourworldindata.org/grapher/parkinsons-disease-prevalence-ihme" target="_blank" style="color: #2980B9; text-decoration: underline;">Accede aquí</a>.'
                     ),
                     style="text-align: center; font-size: 16px; color: black; font-family: 'Arial', sans-serif; margin-top: 10px;"
                 ),
@@ -682,11 +683,11 @@ def server(input, output, session):
         
                     # Slider de año
                     ui.div(
-                        ui.input_slider("year", "Selecciona el Año", 
-                                        min=df_parkinson["Año"].min(), 
-                                        max=df_parkinson["Año"].max(), 
-                                        value=df_parkinson["Año"].min(), 
-                                        step=1, 
+                        ui.input_slider("year", "Selecciona el Año",
+                                        min=df_parkinson["Año"].min(),
+                                        max=df_parkinson["Año"].max(),
+                                        value=df_parkinson["Año"].min(),
+                                        step=1,
                                         sep=""),
                         style="margin-top: 10px;"
                     ),
@@ -697,63 +698,64 @@ def server(input, output, session):
                         style="margin-top: 10px;"
                     ),
         
-                    # Sección de descarga completa
+                    # Sección de descarga de datos (sin botones)
                     ui.div(
-                        ui.h3("📥 Descarga completa de datos", 
-                              style="text-align: center; margin-top: 30px; margin-bottom: 10px; font-family: 'Arial', sans-serif;"),
+                        ui.h3(
+                            "📥 Descarga de datos",
+                            style="text-align: center; margin-top: 30px; margin-bottom: 10px; font-family: 'Arial'"
+                        ),
+        
+                        # Mensaje de restricción de licencia
                         ui.div(
-                            ui.download_button("downloadAll", "Descargar CSV "),
-                            ui.download_button("downloadData_parkinson_json", "Descargar JSON "),
-                            style="display: flex; flex-direction: column; gap: 10px; align-items: center;"
+                            ui.HTML(
+                                '⚠️ La descarga de estos datos no está disponible debido a restricciones de licencia que no permiten su redistribución. '
+                                'Para más información, visita este <a href="https://vizhub.healthdata.org/gbd-results/" '
+                                'target="_blank" style="color: black; text-decoration: underline;">enlace</a>.'
+                            ),
+                            style="background-color: #AED6F1; color: black; padding: 15px; border-radius: 8px; text-align: center; font-family: \'Arial\', sans-serif; margin-top: 10px;"
                         )
                     ),
         
-                    # Sección de filtro y descarga filtrada
+                    # Sección de citas añadida
                     ui.div(
-                        ui.h3("📅 Filtra los datos por año y país", 
-                              style="text-align: center; margin-top: 40px; margin-bottom: 10px; font-family: 'Arial', sans-serif;"),
-                        ui.div(
-                            # Columna izquierda: selectores
-                            ui.div(
-                                ui.div(
-                                    ui.input_select(
-                                        "years_select",
-                                        "Selecciona los años",
-                                        choices=years,
-                                        selected=[],
-                                        multiple=True,
-                                        selectize=True
-                                    ),
-                                    style="margin-bottom: 15px;"
-                                ),
-                                ui.input_select(
-                                    "countries_select",
-                                    "Selecciona los países",
-                                    choices=countries,
-                                    selected=[],
-                                    multiple=True,
-                                    selectize=True
-                                ),
-                                style="flex: 2; padding-right: 20px;"
+                        ui.h3("📚 Citas", style="text-align: center; margin-top: 40px; font-family: 'Arial', sans-serif;"),
+                    
+                        # Cita original de IHME
+                        ui.p(
+                            ui.HTML(
+                                'Global Burden of Disease Collaborative Network. Global Burden of Disease Study 2021 (GBD 2021). '
+                                'Seattle, United States: Institute for Health Metrics and Evaluation (IHME), 2024. '
+                                'Available from <a href="https://vizhub.healthdata.org/gbd-results/" target="_blank" '
+                                'style="color: black; text-decoration: underline;">https://vizhub.healthdata.org/gbd-results/</a>. '
+                                '<br><strong>Attribution short:</strong> "IHME-GBD".'
                             ),
-        
-                            # Columna derecha: botones de descarga filtrada
-                            ui.div(
-                                ui.download_button("downloadData", "Descargar CSV Filtrado"),
-                                ui.download_button("downloadAll_parkinson_json", "Descargar JSON Filtrado"),
-                                style="flex: 1; display: flex; flex-direction: column; gap: 10px; justify-content: flex-start; margin-top: 25px;"
-                            ),
-        
-                            style="display: flex; width: 100%;"
+                            style="font-size: 14px; color: black; font-family: 'Arial', sans-serif; margin-top: 10px; text-align: justify; max-width: 800px; margin-left: auto; margin-right: auto;"
                         ),
-                        style="width: 90%; margin: auto; margin-top: 20px;"
-                    ),
-        
-                    class_="map-container"
-                ),
-        
-                class_="content-box"
+                    
+                        # Cita OWID extendida
+                        ui.p(
+                            ui.HTML(
+                                '“Data Page: Rate of disease burden from lead exposure”, part of the following publication: '
+                                'Esteban Ortiz-Ospina and Max Roser (2016) – “Global Health”. Data adapted from IHME, Global Burden of Disease. '
+                                'Retrieved from <a href="https://ourworldindata.org/grapher/rate-disease-burden-lead" target="_blank" '
+                                'style="color: black; text-decoration: underline;">https://ourworldindata.org/grapher/parkinsons-disease-prevalence-ihme</a> [online resource].'
+                            ),
+                            style="font-size: 14px; color: black; font-family: 'Arial', sans-serif; margin-top: 20px; text-align: justify; max-width: 800px; margin-left: auto; margin-right: auto;"
+                        ),
+                    
+                        # Cita OWID abreviada
+                        ui.p(
+                            "IHME, Global Burden of Disease (2024) – with minor processing by Our World in Data",
+                            style="font-size: 14px; color: black; font-family: 'Arial', sans-serif; margin-top: 10px; text-align: left; max-width: 800px; margin-left: auto; margin-right: auto;"
+                        )
+                    )
+                )
             )
+
+
+
+
+
 
 
         elif page == "europe_map":
@@ -954,58 +956,54 @@ def server(input, output, session):
                         ui.input_action_button("go_to_europe_aire", "🌍 Ver Mapa Europeo", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'plot_europe_aire')")
                     ),
         
-                    # Sección de descarga completa
+                    # Sección de descarga de datos (sin botones)
                     ui.div(
-                        ui.h3("📥 Descarga completa de datos", 
-                              style="text-align: center; margin-top: 30px; margin-bottom: 10px; font-family: 'Arial', sans-serif;"),
+                        ui.h3(
+                            "📥 Descarga de datos",
+                            style="text-align: center; margin-top: 30px; margin-bottom: 10px; font-family: 'Arial', sans-serif;"
+                        ),
+                    
+                        # Mensaje de restricción de licencia
                         ui.div(
-                            ui.download_button("downloadAll_contaminacion", "Descargar CSV "),
-                            ui.download_button("downloadAll_contaminacion_json", "Descargar JSON "),
-                            style="display: flex; flex-direction: column; gap: 10px; align-items: center;"
+                            ui.HTML(
+                                '⚠️ La descarga de estos datos no está disponible debido a restricciones de licencia que no permiten su redistribución. '
+                                'Para más información, visita este <a href="https://vizhub.healthdata.org/gbd-results/" '
+                                'target="_blank" style="color: black; text-decoration: underline;">enlace</a>.'
+                            ),
+                            style="background-color: #AED6F1; color: black; padding: 15px; border-radius: 8px; text-align: center; font-family: \'Arial\', sans-serif; margin-top: 10px;"
                         )
                     ),
-        
-                    # Sección de filtrado
+                    
+                    # Sección de citas añadida
                     ui.div(
-                        ui.h3("📅 Filtra los datos por año y país", 
-                              style="text-align: center; margin-top: 40px; margin-bottom: 10px; font-family: 'Arial', sans-serif;"),
-                        ui.div(
-                            # Columna izquierda: selectores
-                            ui.div(
-                                ui.div(
-                                    ui.input_select(
-                                        "years_select",
-                                        "Selecciona los años",
-                                        choices=years,
-                                        selected=[],
-                                        multiple=True,
-                                        selectize=True
-                                    ),
-                                    style="margin-bottom: 15px;"
-                                ),
-                                ui.input_select(
-                                    "countries_select",
-                                    "Selecciona los países",
-                                    choices=countries,
-                                    selected=[],
-                                    multiple=True,
-                                    selectize=True
-                                ),
-                                style="flex: 2; padding-right: 20px;"
+                        ui.h3("📚 Citas", style="text-align: center; margin-top: 40px; font-family: 'Arial', sans-serif;"),
+                        ui.p(
+                            ui.HTML(
+                                'Global Burden of Disease Collaborative Network. Global Burden of Disease Study 2021 (GBD 2021). '
+                                'Seattle, United States: Institute for Health Metrics and Evaluation (IHME), 2024. '
+                                'Available from <a href="https://vizhub.healthdata.org/gbd-results/" target="_blank" '
+                                'style="color: black; text-decoration: underline;">https://vizhub.healthdata.org/gbd-results/</a>. '
+                                '<br><strong>Attribution short:</strong> "IHME-GBD".'
                             ),
-        
-                            # Columna derecha: botones de descarga filtrada
-                            ui.div(
-                                ui.download_button("downloadData_contaminacion", "Descargar CSV Filtrado"),
-                                ui.download_button("downloadData_contaminacion_json", "Descargar JSON Filtrado"),
-                                style="flex: 1; display: flex; flex-direction: column; gap: 10px; justify-content: flex-start; margin-top: 25px;"
-                            ),
-        
-                            style="display: flex; width: 100%;"
+                            style="font-size: 14px; color: black; font-family: 'Arial', sans-serif; margin-top: 10px; text-align: justify; max-width: 800px; margin-left: auto; margin-right: auto;"
                         ),
-                        style="width: 90%; margin: auto; margin-top: 20px;"
+                        # Cita OWID extendida
+                        ui.p(
+                            ui.HTML(
+                                '“Data Page: Rate of disease burden from lead exposure”, part of the following publication: '
+                                'Esteban Ortiz-Ospina and Max Roser (2016) – “Global Health”. Data adapted from IHME, Global Burden of Disease. '
+                                'Retrieved from <a href="https://ourworldindata.org/grapher/rate-disease-burden-lead" target="_blank" '
+                                'style="color: black; text-decoration: underline;">https://ourworldindata.org/grapher/death-rates-from-air-pollution</a> [online resource].'
+                            ),
+                            style="font-size: 14px; color: black; font-family: 'Arial', sans-serif; margin-top: 20px; text-align: justify; max-width: 800px; margin-left: auto; margin-right: auto;"
+                        ),
+                        # Cita OWID abreviada
+                        ui.p(
+                            "IHME, Global Burden of Disease (2024) – with minor processing by Our World in Data",
+                            style="font-size: 14px; color: black; font-family: 'Arial', sans-serif; margin-top: 10px; text-align: left; max-width: 800px; margin-left: auto; margin-right: auto;"
+                        )
                     ),
-        
+                    
                     # Botón volver atrás
                     ui.div(
                         ui.input_action_button(
@@ -1015,13 +1013,10 @@ def server(input, output, session):
                             onclick="Shiny.setInputValue('page', 'section3')"
                         ),
                         style="text-align: center; margin-top: 30px;"
-                    ),
-        
-                    class_="map-container"
-                ),
-        
-                class_="content-box"
+                    )
+                )
             )
+
 
         elif page == "plot_europe_aire":
             return ui.div(
@@ -1096,73 +1091,66 @@ def server(input, output, session):
                         ui.input_action_button("go_to_europe_plomo", "🌍 Ver Mapa Europeo", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'plot_europe_plomo')")
                     ),
         
-                    # Sección de descarga completa
+                    # Sección de descarga de datos (sin botones)
                     ui.div(
-                        ui.h3("📥 Descarga completa de datos", 
-                              style="text-align: center; margin-top: 30px; margin-bottom: 10px; font-family: 'Arial', sans-serif;"),
+                        ui.h3(
+                            "📥 Descarga de datos",
+                            style="text-align: center; margin-top: 30px; margin-bottom: 10px; font-family: 'Arial', sans-serif;"
+                        ),
+                    
+                        # Mensaje de restricción de licencia
                         ui.div(
-                            ui.download_button("downloadAll_exposicion_plomo", "Descargar CSV "),
-                            ui.download_button("downloadAll_exposicion_plomo_json", "Descargar JSON "),
-                            style="display: flex; flex-direction: column; gap: 10px; align-items: center;"
+                            ui.HTML(
+                                '⚠️ La descarga de estos datos no está disponible debido a restricciones de licencia que no permiten su redistribución. '
+                                'Para más información, visita este <a href="https://vizhub.healthdata.org/gbd-results/" '
+                                'target="_blank" style="color: black; text-decoration: underline;">enlace</a>.'
+                            ),
+                            style="background-color: #AED6F1; color: black; padding: 15px; border-radius: 8px; text-align: center; font-family: \'Arial\', sans-serif; margin-top: 10px;"
                         )
                     ),
-        
-                    # Sección de filtros y descarga filtrada
+                    
+                    # Sección de citas añadida
                     ui.div(
-                        ui.h3("📅 Filtra los datos por año y país", 
-                              style="text-align: center; margin-top: 40px; margin-bottom: 10px; font-family: 'Arial', sans-serif;"),
-                        ui.div(
-                            # Columna izquierda: selectores
-                            ui.div(
-                                ui.div(
-                                    ui.input_select(
-                                        "years_select",
-                                        "Selecciona los años",
-                                        choices=years,
-                                        selected=[],
-                                        multiple=True,
-                                        selectize=True
-                                    ),
-                                    style="margin-bottom: 15px;"
-                                ),
-                                ui.input_select(
-                                    "countries_select",
-                                    "Selecciona los países",
-                                    choices=countries,
-                                    selected=[],
-                                    multiple=True,
-                                    selectize=True
-                                ),
-                                style="flex: 2; padding-right: 20px;"
+                        ui.h3("📚 Citas", style="text-align: center; margin-top: 40px; font-family: 'Arial', sans-serif;"),
+                        ui.p(
+                            ui.HTML(
+                                'Global Burden of Disease Collaborative Network. Global Burden of Disease Study 2021 (GBD 2021). '
+                                'Seattle, United States: Institute for Health Metrics and Evaluation (IHME), 2024. '
+                                'Available from <a href="https://vizhub.healthdata.org/gbd-results/" target="_blank" '
+                                'style="color: black; text-decoration: underline;">https://vizhub.healthdata.org/gbd-results/</a>. '
+                                '<br><strong>Attribution short:</strong> "IHME-GBD".'
                             ),
-        
-                            # Columna derecha: descarga filtrada
-                            ui.div(
-                                ui.download_button("downloadData_exposicion_plomo", "Descargar CSV Filtrado"),
-                                ui.download_button("downloadData_exposicion_plomo_json", "Descargar JSON Filtrado"),
-                                style="flex: 1; display: flex; flex-direction: column; gap: 10px; justify-content: flex-start; margin-top: 25px;"
-                            ),
-        
-                            style="display: flex; width: 100%;"
+                            style="font-size: 14px; color: black; font-family: 'Arial', sans-serif; margin-top: 10px; text-align: justify; max-width: 800px; margin-left: auto; margin-right: auto;"
                         ),
-                        style="width: 90%; margin: auto; margin-top: 20px;"
+                        ui.p(
+                            ui.HTML(
+                                '“Data Page: Rate of disease burden from lead exposure”, part of the following publication: '
+                                'Esteban Ortiz-Ospina and Max Roser (2016) – “Global Health”. Data adapted from IHME, Global Burden of Disease. '
+                                'Retrieved from <a href="https://ourworldindata.org/grapher/rate-disease-burden-lead" target="_blank" '
+                                'style="color: black; text-decoration: underline;">https://ourworldindata.org/grapher/rate-disease-burden-lead</a> [online resource].'
+                            ),
+                            style="font-size: 14px; color: black; font-family: 'Arial', sans-serif; margin-top: 20px; text-align: justify; max-width: 800px; margin-left: auto; margin-right: auto;"
+                        ),
+                    
+                        # Cita OWID abreviada
+                        ui.p(
+                            "IHME, Global Burden of Disease (2024) – with minor processing by Our World in Data",
+                            style="font-size: 14px; color: black; font-family: 'Arial', sans-serif; margin-top: 10px; text-align: left; max-width: 800px; margin-left: auto; margin-right: auto;"
+                        )
+                        
                     ),
-        
-                    # Botón de volver
+                    
+                    # Botón volver atrás
                     ui.div(
                         ui.input_action_button(
-                            "volver_atras_plomo",
+                            "volver_atras_contaminacion",
                             "🔙 Volver Atrás",
                             class_="btn btn-secondary",
                             onclick="Shiny.setInputValue('page', 'section3')"
                         ),
                         style="text-align: center; margin-top: 30px;"
-                    ),
-        
-                    class_="map-container"
-                ),
-        
-                class_="content-box"
+                    )
+                )
             )
 
 
@@ -1236,73 +1224,48 @@ def server(input, output, session):
                         ui.input_action_button("go_to_europe_agua", "🌍 Ver Mapa Europeo", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'plot_europe_agua')")
                     ),
         
-                    # Sección de descarga completa
+                    # Sección de citas añadida
                     ui.div(
-                        ui.h3("📥 Descarga completa de datos", 
-                              style="text-align: center; margin-top: 30px; margin-bottom: 10px; font-family: 'Arial', sans-serif;"),
-                        ui.div(
-                            ui.download_button("downloadAll_muertes_agua", "Descargar CSV "),
-                            ui.download_button("downloadAll_muertes_agua_json", "Descargar JSON "),
-                            style="display: flex; flex-direction: column; gap: 10px; align-items: center;"
-                        )
-                    ),
-        
-                    # Sección de filtrado
-                    ui.div(
-                        ui.h3("📅 Filtra los datos por año y país", 
-                              style="text-align: center; margin-top: 40px; margin-bottom: 10px; font-family: 'Arial', sans-serif;"),
-                        ui.div(
-                            # Columna izquierda: selectores
-                            ui.div(
-                                ui.div(
-                                    ui.input_select(
-                                        "years_select",
-                                        "Selecciona los años",
-                                        choices=years,
-                                        selected=[],
-                                        multiple=True,
-                                        selectize=True
-                                    ),
-                                    style="margin-bottom: 15px;"
-                                ),
-                                ui.input_select(
-                                    "countries_select",
-                                    "Selecciona los países",
-                                    choices=countries,
-                                    selected=[],
-                                    multiple=True,
-                                    selectize=True
-                                ),
-                                style="flex: 2; padding-right: 20px;"
+                        ui.h3("📚 Citas", style="text-align: center; margin-top: 40px; font-family: 'Arial', sans-serif;"),
+                        ui.p(
+                            ui.HTML(
+                                'Global Burden of Disease Collaborative Network. Global Burden of Disease Study 2021 (GBD 2021). '
+                                'Seattle, United States: Institute for Health Metrics and Evaluation (IHME), 2024. '
+                                'Available from <a href="https://vizhub.healthdata.org/gbd-results/" target="_blank" '
+                                'style="color: black; text-decoration: underline;">https://vizhub.healthdata.org/gbd-results/</a>. '
+                                '<br><strong>Attribution short:</strong> "IHME-GBD".'
                             ),
-        
-                            # Columna derecha: descarga filtrada
-                            ui.div(
-                                ui.download_button("downloadData_muertes_agua", "Descargar CSV Filtrado"),
-                                ui.download_button("downloadData_muertes_agua_json", "Descargar JSON Filtrado"),
-                                style="flex: 1; display: flex; flex-direction: column; gap: 10px; justify-content: flex-start; margin-top: 25px;"
-                            ),
-        
-                            style="display: flex; width: 100%;"
+                            style="font-size: 14px; color: black; font-family: 'Arial', sans-serif; margin-top: 10px; text-align: justify; max-width: 800px; margin-left: auto; margin-right: auto;"
                         ),
-                        style="width: 90%; margin: auto; margin-top: 20px;"
+                        ui.p(
+                            ui.HTML(
+                                '“Data Page: Rate of disease burden from lead exposure”, part of the following publication: '
+                                'Esteban Ortiz-Ospina and Max Roser (2016) – “Global Health”. Data adapted from IHME, Global Burden of Disease. '
+                                'Retrieved from <a href="https://ourworldindata.org/grapher/rate-disease-burden-lead" target="_blank" '
+                                'style="color: black; text-decoration: underline;">https://ourworldindata.org/grapher/deaths-due-to-unsafe-water-sources</a> [online resource].'
+                            ),
+                            style="font-size: 14px; color: black; font-family: 'Arial', sans-serif; margin-top: 20px; text-align: justify; max-width: 800px; margin-left: auto; margin-right: auto;"
+                        ),
+                    
+                        # Cita OWID abreviada
+                        ui.p(
+                            "IHME, Global Burden of Disease (2024) – with minor processing by Our World in Data",
+                            style="font-size: 14px; color: black; font-family: 'Arial', sans-serif; margin-top: 10px; text-align: left; max-width: 800px; margin-left: auto; margin-right: auto;"
+                        )
+                        
                     ),
-        
-                    # Botón de volver
+                    
+                    # Botón volver atrás
                     ui.div(
                         ui.input_action_button(
-                            "volver_atras_agua",
+                            "volver_atras_contaminacion",
                             "🔙 Volver Atrás",
                             class_="btn btn-secondary",
                             onclick="Shiny.setInputValue('page', 'section3')"
                         ),
                         style="text-align: center; margin-top: 30px;"
-                    ),
-        
-                    class_="map-container"
-                ),
-        
-                class_="content-box"
+                    )
+                )
             )
 
 
@@ -1363,22 +1326,29 @@ def server(input, output, session):
                     ui.output_ui("plot_pesticidas"),
         
                     ui.div(
-                        ui.input_slider("year", "Selecciona el Año", 
-                                        min=df_pepticidas["Año"].min(), 
-                                        max=df_pepticidas["Año"].max(), 
-                                        value=df_pepticidas["Año"].min(), 
-                                        step=1, 
-                                        sep=""),
+                        ui.input_slider(
+                            "year", "Selecciona el Año",
+                            min=df_pepticidas["Año"].min(),
+                            max=df_pepticidas["Año"].max(),
+                            value=df_pepticidas["Año"].min(),
+                            step=1,
+                            sep=""
+                        ),
                         style="margin-top: 10px;"
                     ),
         
                     ui.div(
-                        ui.input_action_button("go_to_europe_pesticidas", "🌍 Ver Mapa Europeo", class_="btn btn-primary", onclick="Shiny.setInputValue('page', 'plot_europe_pesticidas')")
+                        ui.input_action_button(
+                            "go_to_europe_pesticidas",
+                            "🌍 Ver Mapa Europeo",
+                            class_="btn btn-primary",
+                            onclick="Shiny.setInputValue('page', 'plot_europe_pesticidas')"
+                        )
                     ),
         
                     # Sección de descarga completa
                     ui.div(
-                        ui.h3("📥 Descarga completa de datos", 
+                        ui.h3("📥 Descarga completa de datos",
                               style="text-align: center; margin-top: 30px; margin-bottom: 10px; font-family: 'Arial', sans-serif;"),
                         ui.div(
                             ui.download_button("downloadAll_uso_pesticidas", "Descargar CSV "),
@@ -1389,7 +1359,7 @@ def server(input, output, session):
         
                     # Sección de filtrado por año y país
                     ui.div(
-                        ui.h3("📅 Filtra los datos por año y país", 
+                        ui.h3("📅 Filtra los datos por año y país",
                               style="text-align: center; margin-top: 40px; margin-bottom: 10px; font-family: 'Arial', sans-serif;"),
                         ui.div(
                             # Columna izquierda: selectores
@@ -1428,15 +1398,51 @@ def server(input, output, session):
                         style="width: 90%; margin: auto; margin-top: 20px;"
                     ),
         
-                    # Botón de volver atrás
+                    # Sección de citas y botón volver atrás
                     ui.div(
-                        ui.input_action_button(
-                            "volver_atras_pesticidas",
-                            "🔙 Volver Atrás",
-                            class_="btn btn-secondary",
-                            onclick="Shiny.setInputValue('page', 'section3')"
-                        ),
-                        style="text-align: center; margin-top: 30px;"
+                            *[
+                            ui.h3("📚 Citas", style="text-align: center; margin-top: 40px; font-family: 'Arial', sans-serif;"),
+        
+                            # Cita original de IHME
+                            ui.p(
+                                ui.HTML(
+                                    'Global Burden of Disease Collaborative Network. Global Burden of Disease Study 2021 (GBD 2021). '
+                                    'Seattle, United States: Institute for Health Metrics and Evaluation (IHME), 2024. '
+                                    'Available from <a href="https://vizhub.healthdata.org/gbd-results/" target="_blank" '
+                                    'style="color: black; text-decoration: underline;">https://vizhub.healthdata.org/gbd-results/</a>. '
+                                    '<br><strong>Attribution short:</strong> "IHME-GBD".'
+                                ),
+                                style="font-size: 14px; color: black; font-family: 'Arial', sans-serif; margin-top: 10px; text-align: justify; max-width: 800px; margin-left: auto; margin-right: auto;"
+                            ),
+        
+                            # Cita OWID extendida
+                            ui.p(
+                                ui.HTML(
+                                    '“Data Page: Rate of disease burden from lead exposure”, part of the following publication: '
+                                    'Esteban Ortiz-Ospina and Max Roser (2016) – “Global Health”. Data adapted from IHME, Global Burden of Disease. '
+                                    'Retrieved from <a href="https://ourworldindata.org/grapher/pesticide-use-tonnes" target="_blank" '
+                                    'style="color: black; text-decoration: underline;">https://ourworldindata.org/grapher/pesticide-use-tonnes</a> [online resource].'
+                                ),
+                                style="font-size: 14px; color: black; font-family: 'Arial', sans-serif; margin-top: 20px; text-align: justify; max-width: 800px; margin-left: auto; margin-right: auto;"
+                            ),
+        
+                            # Cita OWID abreviada
+                            ui.p(
+                                "IHME, Global Burden of Disease (2024) – with minor processing by Our World in Data",
+                                style="font-size: 14px; color: black; font-family: 'Arial', sans-serif; margin-top: 10px; text-align: left; max-width: 800px; margin-left: auto; margin-right: auto;"
+                            ),
+        
+                            # Botón de volver atrás
+                            ui.div(
+                                ui.input_action_button(
+                                    "volver_atras_pesticidas",
+                                    "🔙 Volver Atrás",
+                                    class_="btn btn-secondary",
+                                    onclick="Shiny.setInputValue('page', 'section3')"
+                                ),
+                                style="text-align: center; margin-top: 30px;"
+                            )
+                        ]
                     ),
         
                     class_="map-container"
@@ -1444,6 +1450,8 @@ def server(input, output, session):
         
                 class_="content-box"
             )
+
+            
 
 
         elif page == "plot_europe_pesticidas":
@@ -1570,15 +1578,51 @@ def server(input, output, session):
                         style="width: 90%; margin: auto; margin-top: 20px;"
                     ),
         
-                    # Botón de volver atrás
+                    # Sección de citas y botón volver atrás
                     ui.div(
-                        ui.input_action_button(
-                            "volver_atras_precipitaciones",
-                            "🔙 Volver Atrás",
-                            class_="btn btn-secondary",
-                            onclick="Shiny.setInputValue('page', 'section3')"
-                        ),
-                        style="text-align: center; margin-top: 30px;"
+                            *[
+                            ui.h3("📚 Citas", style="text-align: center; margin-top: 40px; font-family: 'Arial', sans-serif;"),
+        
+                            # Cita original de IHME
+                            ui.p(
+                                ui.HTML(
+                                    'Global Burden of Disease Collaborative Network. Global Burden of Disease Study 2021 (GBD 2021). '
+                                    'Seattle, United States: Institute for Health Metrics and Evaluation (IHME), 2024. '
+                                    'Available from <a href="https://vizhub.healthdata.org/gbd-results/" target="_blank" '
+                                    'style="color: black; text-decoration: underline;">https://vizhub.healthdata.org/gbd-results/</a>. '
+                                    '<br><strong>Attribution short:</strong> "IHME-GBD".'
+                                ),
+                                style="font-size: 14px; color: black; font-family: 'Arial', sans-serif; margin-top: 10px; text-align: justify; max-width: 800px; margin-left: auto; margin-right: auto;"
+                            ),
+        
+                            # Cita OWID extendida
+                            ui.p(
+                                ui.HTML(
+                                    '“Data Page: Rate of disease burden from lead exposure”, part of the following publication: '
+                                    'Esteban Ortiz-Ospina and Max Roser (2016) – “Global Health”. Data adapted from IHME, Global Burden of Disease. '
+                                    'Retrieved from <a href="https://ourworldindata.org/grapher/pesticide-use-tonnes" target="_blank" '
+                                    'style="color: black; text-decoration: underline;">https://ourworldindata.org/grapher/average-precipitation-per-year</a> [online resource].'
+                                ),
+                                style="font-size: 14px; color: black; font-family: 'Arial', sans-serif; margin-top: 20px; text-align: justify; max-width: 800px; margin-left: auto; margin-right: auto;"
+                            ),
+        
+                            # Cita OWID abreviada
+                            ui.p(
+                                "IHME, Global Burden of Disease (2024) – with minor processing by Our World in Data",
+                                style="font-size: 14px; color: black; font-family: 'Arial', sans-serif; margin-top: 10px; text-align: left; max-width: 800px; margin-left: auto; margin-right: auto;"
+                            ),
+        
+                            # Botón de volver atrás
+                            ui.div(
+                                ui.input_action_button(
+                                    "volver_atras_pesticidas",
+                                    "🔙 Volver Atrás",
+                                    class_="btn btn-secondary",
+                                    onclick="Shiny.setInputValue('page', 'section3')"
+                                ),
+                                style="text-align: center; margin-top: 30px;"
+                            )
+                        ]
                     ),
         
                     class_="map-container"
