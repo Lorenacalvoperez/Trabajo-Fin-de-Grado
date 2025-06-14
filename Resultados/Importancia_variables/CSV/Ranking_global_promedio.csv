@@ -1,0 +1,6 @@
+Variable,Ranking_Promedio,Ranking_Ranking_variables_GLM,Ranking_Ranking_variables_KNN,Ranking_Ranking_variables_MLP,Ranking_Ranking_variables_RF,Ranking_Ranking_variables_SVR,Ranking_Ranking_variables_XG
+Exp_plomo,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+Precipitaciones,2.6666666666666665,1.0,2.0,3.0,4.0,2.0,4.0
+Pesticidas,2.8333333333333335,1.0,3.0,4.0,3.0,3.0,3.0
+Muertes_agua,2.8333333333333335,1.0,5.0,2.0,2.0,5.0,2.0
+Contaminacion_aire,4.0,1.0,4.0,5.0,5.0,4.0,5.0
