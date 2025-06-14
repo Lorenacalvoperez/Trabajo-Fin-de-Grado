@@ -1,0 +1,20 @@
+Copyright (c) 2025 Lorena Calvo Pérez
+
+Todos los derechos reservados.
+
+Este proyecto y los datos incluidos están protegidos por derechos de autor y su uso está sujeto a las siguientes condiciones:
+
+1. Uso permitido:
+   - Puedes usar los datos y el código para análisis, investigación, y fines personales o académicos.
+   - Puedes visualizar y procesar los datos para tu propio uso.
+
+2. Prohibiciones:
+   - Queda estrictamente prohibida la redistribución, reventa, sublicencia, o publicación de los datos sin permiso explícito del titular de los derechos.
+   - No está permitido utilizar los datos para fines comerciales sin autorización previa.
+
+3. Atribución:
+   - Al usar los datos o el código, debes dar crédito adecuado citando al titular de los derechos.
+
+4. Exención de responsabilidad:
+   - El titular de los derechos no se responsabiliza por el uso incorrecto o resultados derivados del uso de los datos.
+
