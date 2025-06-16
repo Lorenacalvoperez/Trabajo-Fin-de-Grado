@@ -28,6 +28,36 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error
 import seaborn as sns
 
 def entrenar_modelo_glm(df, modelo_familia, variables_independientes, variable_dependiente, test_size=0.2,ranking=False, scaler=False):
+    '''
+    Entrenamiento de modelo lineal generalizado (GLM) con transformaciones polinómicas, escalado opcional y análisis de significancia.
+
+    Prámetros
+    --------
+    - df : pandas.DataFrame  
+        Conjunto de datos que contiene tanto las variables independientes como la dependiente.
+    - modelo_familia : statsmodels.genmod.families.Family  
+        Familia de distribución del modelo GLM (por ejemplo, sm.families.Gaussian()).
+    - variables_independientes : list[str]  
+        Lista de nombres de variables independientes utilizadas como predictores.
+    - variable_dependiente : str  
+        Nombre de la variable objetivo a predecir.
+    - test_size : float, opcional (default=0.2)  
+        Proporción del conjunto de datos utilizada para el conjunto de prueba.
+    - ranking : bool, opcional (default=False)  
+        Si se activa, se imprime, guarda y grafica el ranking de variables por p-valor.
+    - scaler : bool, opcional (default=False)  
+        Si se activa, se escalan las variables independientes (excepto el intercepto).
+
+    Retorno
+    -------
+    - modelo : Objeto resultante del modelo GLM entrenado.
+    - scaler_model : Objeto `StandardScaler` usado para escalar los datos, o None si no se aplica escalado.
+    - transformaciones : dict  
+        Diccionario con las transformaciones polinómicas aplicadas a ciertas variables.
+    - formula : str  
+        Fórmula Patsy generada dinámicamente para construir el modelo.
+
+    '''
     df = df.copy()
 
     transformaciones = {
@@ -134,21 +164,31 @@ def entrenar_modelo_glm(df, modelo_familia, variables_independientes, variable_d
 # Modelo Random Forest
 # Modelo Random Forest
 def entrenar_modelo_rf(df, variables_independientes, variable_dependiente, test_size=0.2,ranking=False):
-    """
-    Entrena un modelo Random Forest, escala las variables, y calcula la importancia de las variables 
-    tanto por feature importance como por permutación.
-    
-    Parámetros:
-    - df: DataFrame con los datos.
-    - variables_independientes: lista de nombres de las columnas que se usarán como variables independientes.
-    - variable_dependiente: nombre de la columna de la variable dependiente.
-    - test_size: proporción del conjunto de test.
-    
-    Retorna:
-    - modelo_global: el modelo entrenado de Random Forest.
-    - importancia_df: DataFrame con la importancia de las variables (feature importance).
-    - importancia_perm: DataFrame con la importancia por permutación.
-    """
+    '''
+    Entrena un modelo de Random Forest para regresión, con escalado de variables y análisis de importancia.
+
+    Parámetros
+    ----------
+    - df : DataFrame
+        Conjunto de datos que contiene las variables independientes y la variable dependiente.
+    - variables_independientes : list
+        Lista de nombres de las columnas que se usarán como variables explicativas.
+    - variable_dependiente : str
+        Nombre de la columna objetivo.
+    - test_size : float, opcional
+        Proporción del conjunto de datos que se reservará como conjunto de prueba.
+    - ranking : bool, opcional
+        Si es True, se genera una visualización de la importancia de las variables mediante permutación
+        y se guarda un CSV con el ranking.
+
+    Retorna
+    -------
+    - modelo_global : El modelo entrenado con los datos de entrenamiento.
+    - importancia_df : list
+        Lista con los nombres de las variables usadas.
+    - importancia_perm : DataFrame
+        DataFrame con la importancia media por permutación y su desviación estándar.
+    '''
     
     # 1. Separar X e y
     X = df[variables_independientes].copy()
@@ -206,6 +246,28 @@ def entrenar_modelo_rf(df, variables_independientes, variable_dependiente, test_
 
 # Modelo CGBoost
 def entrenar_modelo_xgboost(df, variables_independientes, variable_dependiente, test_size=0.2,ranking=False):
+    '''
+    Entrenamiento de un modelo XGBoost para regresión con evaluación de métricas y ranking de importancia por permutación.
+
+    Prámetros
+    --------
+    - df : pandas.DataFrame  
+        Conjunto de datos que contiene las variables predictoras y la variable objetivo.
+    - variables_independientes : list 
+        Lista de nombres de variables independientes.
+    - variable_dependiente : str  
+        Nombre de la variable objetivo a predecir.
+    - test_size : float, opcional (default=0.2)  
+        Proporción del conjunto de datos que se utilizará como conjunto de prueba.
+    - ranking : bool, opcional (default=False)  
+        Si es True, se genera un gráfico de importancia de variables mediante permutación.
+
+    Retorno
+    -------
+    - modelo : Modelo entrenado con los hiperparámetros especificados.
+    - variables_independientes : list  
+        Lista de nombres de variables usadas en el entrenamiento.
+    '''
     df = df.copy()
 
     # 1. Separar X e y
@@ -273,6 +335,28 @@ def entrenar_modelo_xgboost(df, variables_independientes, variable_dependiente, 
 
 # Modelo SVR 
 def entrenar_modelo_svr(df, variables_independientes, variable_dependiente, test_size=0.2,ranking=False):
+    '''
+    Entrena un modelo de Support Vector Regression (SVR) con evaluación de métricas y análisis de importancia de variables por permutación.
+
+    Parámetros
+    --------
+    - df : pandas.DataFrame  
+      DataFrame con los datos, que incluye las variables independientes y dependiente.
+    - variables_independientes : list
+      Lista con los nombres de las columnas usadas como variables predictoras.
+    - variable_dependiente : str  
+      Nombre de la columna objetivo a predecir.
+    - test_size : float, opcional (default=0.2)  
+      Proporción del conjunto de datos que se reserva para evaluación.
+    - ranking : bool, opcional (default=False)  
+      Si es True, genera y muestra gráfico con importancia de variables basado en permutación.
+
+    Retorno
+    -------
+    - modelo : Modelo SVR entrenado con hiperparámetros definidos.
+    - variables_independientes : list
+      Lista de variables usadas en el modelo, para referencia.
+    '''
     df = df.copy()
 
     # 1. Separar X e y
@@ -327,6 +411,29 @@ def entrenar_modelo_svr(df, variables_independientes, variable_dependiente, test
 
 # Modelo KNN
 def entrenar_modelo_knn(df, variables_independientes, variable_dependiente, test_size=0.2, ranking=False):
+    '''
+    Entrena un modelo K-Nearest Neighbors (KNN) para regresión, con evaluación y análisis de importancia por permutación.
+
+    Parámetros
+    --------
+    - df : pandas.DataFrame  
+      Conjunto de datos que contiene las variables predictoras y la variable objetivo.
+    - variables_independientes : list  
+      Lista con los nombres de las columnas usadas como variables independientes.
+    - variable_dependiente : str  
+      Nombre de la columna objetivo que se quiere predecir.
+    - test_size : float, opcional (default=0.2)  
+      Fracción del conjunto de datos usada para validación.
+    - ranking : bool, opcional (default=False)  
+      Indica si se genera gráfico y archivo CSV con el ranking de importancia por permutación.
+
+    Retorno
+    -------
+    - modelo : Modelo KNN entrenado con los parámetros definidos.
+    - variables_independientes : list
+      Lista con las variables utilizadas para el entrenamiento.
+
+    '''
     df = df.copy()
 
     # 1. Separar X e y
@@ -381,6 +488,29 @@ def entrenar_modelo_knn(df, variables_independientes, variable_dependiente, test
 
 # Modelo MLP
 def entrenar_modelo_mlp(df, variables_independientes, variable_dependiente, test_size=0.2, ranking=False):
+    '''
+    Entrena un modelo de Perceptrón Multicapa (MLP) para regresión, con evaluación y análisis de importancia por permutación.
+
+    ENTRADAS
+    --------
+    - df : pandas.DataFrame  
+      Conjunto de datos que contiene las variables independientes y la variable objetivo.
+    - variables_independientes : list 
+      Lista con los nombres de las columnas utilizadas como variables predictoras.
+    - variable_dependiente : str  
+      Nombre de la columna objetivo a predecir.
+    - test_size : float, opcional (default=0.2)  
+      Proporción del conjunto de datos usada para la validación.
+    - ranking : bool, opcional (default=False)  
+      Indica si se genera un gráfico y archivo CSV con el ranking de importancia por permutación.
+
+    SALIDAS
+    -------
+    - modelo : Modelo MLP entrenado con la configuración especificada.
+    - scaler : Objeto escalador usado para estandarizar las variables independientes.
+    - variables_independientes : list
+      Lista de variables usadas para entrenar el modelo.
+    '''
     df = df.copy()
 
     # 1. Separar X e y
