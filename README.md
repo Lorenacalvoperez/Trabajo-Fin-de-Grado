@@ -6,7 +6,7 @@
 **Curso académico:** 2024/2025  
 
 ---
-## 📖 Introducción
+## Introducción
 
 La enfermedad de Parkinson es un **trastorno neurodegenerativo del sistema nervioso central (SNC)** que afecta a más de 10 millones de personas en todo el mundo, siendo la segunda más común tras el Alzheimer. Su prevalencia ha aumentado significativamente en los últimos años, especialmente en países con una población envejecida, y se estima que el número de casos se duplicará para 2050.
 
@@ -19,7 +19,7 @@ En este contexto, la **biometeorología**, que estudia cómo el clima y el entor
 
 Desarrollar un sistema basado en **minería de datos** y **aprendizaje automático** para analizar y predecir la prevalencia de la enfermedad de Parkinson a partir de variables **biometeorológicas**, con el fin de identificar factores ambientales que puedan influir en su desarrollo.
 
-## 📈 Resultados
+## Resultados
 
 Los resultados del análisis y los modelos predictivos desarrollados se encuentran disponibles a través de la siguiente aplicación web:
 
@@ -27,4 +27,5 @@ Los resultados del análisis y los modelos predictivos desarrollados se encuentr
 
 A continuación, se muestra una captura de pantalla de la interfaz:
 
+![Captura de la aplicación](./IMAGES/Pantalla_inicio_app.png)
 
