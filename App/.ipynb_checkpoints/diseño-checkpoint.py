@@ -634,7 +634,7 @@ app_ui = ui.page_fluid(
             ui.div(
                 ui.a("🏠 Home", class_="sidebar-link home-link", onclick="Shiny.setInputValue('page', 'home')"),
                 ui.a("🧠 Enfermedad de Parkinson", class_="sidebar-link park-link", onclick="Shiny.setInputValue('page', 'section1')"),
-                ui.a("🗺️ Mapa Mundial de párkinson", class_="sidebar-link map-link", onclick="Shiny.setInputValue('page', 'section2')"),
+                ui.a("🗺️ Mapa Mundial de la enfermedad de Parkinson", class_="sidebar-link map-link", onclick="Shiny.setInputValue('page', 'section2')"),
                 ui.a("🌿 Variables Ambientales", class_="sidebar-link env-link", onclick="Shiny.setInputValue('page', 'section3')"),
                 ui.a("📈 Predicciones", class_="sidebar-link graph-link", onclick="Shiny.setInputValue('page', 'section4')"),
                 ui.a("🔍 Importancia de variables", class_="sidebar-link analisis-link", onclick="Shiny.setInputValue('page', 'section5')"),
@@ -688,7 +688,7 @@ def server(input, output, session):
                     ui.h3("¿Qué analizamos?", style="font-size: 24px; font-weight: bold; color: #2C3E50; margin-top: 20px;"),
                     ui.p(
                         "A través de esta aplicación, analizamos diferentes aspectos de la prevalencia de la enfermedad de Parkinson en función de los factores ambientales. "
-                        "Entre los análisis realizados se incluyen la visualización geográfica de los países más afectados por la enfermedad, "
+                        "Entre los análisis realizados se incluyen la visualización geográfica de los países afectados por la enfermedad, "
                         "y el uso de modelos predictivos entrenados con estos datos para predecir la prevalencia futura en distintas regiones del mundo.",
                         style="font-size: 18px; line-height: 1.6; color: #333333;"
                     ),
@@ -732,7 +732,7 @@ def server(input, output, session):
                 # Información sobre la Enfermedad de Parkinson
                 ui.div(
                     # Título de la sección
-                    ui.h2("🧠 ¿Qué es la Enfermedad de Parkinson?", style="color: black; text-align: center; margin-top: 20px;"),
+                    ui.h2("🧠 ¿Qué es la enfermedad de Parkinson?", style="color: black; text-align: center; margin-top: 20px;"),
             
                     # Descripción general de la enfermedad
                     ui.p(
@@ -779,7 +779,7 @@ def server(input, output, session):
             
                     # Descripción de los factores de riesgo
                     ui.div(
-                        ui.HTML("<strong>Edad</strong>: La mayoría de las personas con párkinson son mayores de 60 años."),
+                        ui.HTML("<strong>Edad</strong>: La mayoría de las personas con enfermedad de Parkinson son mayores de 60 años."),
                         style="color: black; font-size: 16px; margin-bottom: 10px; text-align: left; background-color: #ecf0f1; padding: 10px; border-radius: 8px;"
                     ),
                     ui.div(
@@ -819,7 +819,7 @@ def server(input, output, session):
                 # Descripción bajo el título
                 ui.p(
                     ui.HTML(
-                        'Visualiza la prevalencia estimada de la enfermedad de Parkinson: el número de personas afectadas por cada 100,000 habitantes en distintos países y años. '
+                        'Visualiza la prevalencia estimada de la enfermedad de Parkinson (EP) : el número de personas afectadas por cada 100.000 habitantes en distintos países y años. '
                         '<a href="https://ourworldindata.org/grapher/parkinsons-disease-prevalence-ihme" target="_blank" style="color: #2980B9; text-decoration: underline;">Accede aquí</a>.'
                     ),
                     style="text-align: center; font-size: 16px; color: black; font-family: 'Arial', sans-serif; margin-top: 10px;"
@@ -1827,7 +1827,7 @@ def server(input, output, session):
                 ),
 
                 ui.p(
-    "Esta sección presenta visualizaciones geográficas relacionadas con la enfermedad de Parkinson. "
+    "Esta sección presenta visualizaciones geográficas relacionadas con la Enfermedad de Parkinson (EP). "
     "En primer lugar, se muestra un mapa con la prevalencia estimada por país según el modelo de predicción. "
     "A continuación, se visualiza la incertidumbre asociada a estas estimaciones, representada por la desviación estándar del modelo. "
     "Finalmente, se incluye un mapa de anomalías que refleja la diferencia entre los valores predichos y los reales, "
@@ -1858,7 +1858,7 @@ def server(input, output, session):
                 ui.div(
                     ui.p(
                         ui.HTML(
-                            "En esta sección se presenta un análisis global de la <strong>importancia de las variables</strong> utilizadas en los modelos de predicción de párkinson. "
+                            "En esta sección se presenta un análisis global de la <strong>importancia de las variables</strong> utilizadas en los modelos de predicción de la enfermedad de Parkinson (EP). "
                             "El gráfico que verás a continuación resume la influencia promedio de cada variable, calculada a partir de todos los modelos entrenados. "
                             "Esto proporciona una visión integral sobre qué factores tienen mayor peso en la predicción a nivel mundial. "
                             "Cuanto más bajo es el valor del ranking, mayor es la importancia de esa variable en los modelos. "
@@ -2802,7 +2802,7 @@ def server(input, output, session):
             hover_data={"Parkinson": True, "País": False},
             color_continuous_scale="Viridis",
             range_color=(min_parkinson, q95_parkinson),
-            title=f"Prevalencia del Parkinson por País y Año - {año_seleccionado}"
+            title=f"Prevalencia de la Enfermedad de Parkinson por País y Año - {año_seleccionado}"
         )
     
         fig_parkinson_filtrado.update_geos(
@@ -2814,7 +2814,7 @@ def server(input, output, session):
     
         fig_parkinson_filtrado.update_layout(
             title={
-                'text': f"<b>Prevalencia de párkinson por País y Año - {año_seleccionado}</b>",
+                'text': f"<b>Prevalencia de la Enfermedad de Parkinson por País y Año - {año_seleccionado}</b>",
                 'font': {'size': 20},
                 'x': 0.7,
                 'y': 0.98,
@@ -2826,7 +2826,7 @@ def server(input, output, session):
                 len=0.95,
                 thickness=25,
                 y=0.5,
-                title="Número estimado de<br>casos de párkinson",
+                title="Número estimado de<br>casos de la EP",
                 tickvals=[min_parkinson, q25_parkinson, q50_parkinson, q75_parkinson, q95_parkinson],
                 ticktext=[
                     f"Mín: {min_parkinson}",
@@ -2875,7 +2875,7 @@ def server(input, output, session):
             hover_data={"Parkinson": True, "País": False},
             color_continuous_scale="Viridis",
             range_color=(min_parkinson, q95),
-            title=f"Prevalencia de párkinson en Europa por País y Año - {año_seleccionado}"
+            title=f"Prevalencia de la Enfermedad de Parkinson en Europa por País y Año - {año_seleccionado}"
         )
     
         fig_europa.update_geos(
@@ -2889,7 +2889,7 @@ def server(input, output, session):
         # Personalizar barra de color con cuantiles
         fig_europa.update_layout(
             title={
-                'text': f"<b>Prevalencia de párkinson en Europa por País y Año - {año_seleccionado}</b>",
+                'text': f"<b>Prevalencia de la Enfermedad de Parkinson en Europa por País y Año - {año_seleccionado}</b>",
                 'font': {'size': 20},
                 'x': 0.7,
                 'y': 0.98,
@@ -2901,7 +2901,7 @@ def server(input, output, session):
                 len=0.95,  # altura de barra de color (0.8 es acorde al mapa)
                 thickness=25,
                 y=0.5,
-                title="Número estimado de<br>casos de párkinson",
+                title="Número estimado de<br>casos de la EP",
                 tickvals=[min_parkinson, q25, q50, q75, q95],
                 ticktext=[
                     f"Mín: {min_parkinson}",
@@ -3571,7 +3571,7 @@ def server(input, output, session):
             hover_data={"Parkinson_Predicho": True, "País": False},
             color_continuous_scale="Viridis",
             range_color=(min_glm, q95_glm),  # 🔽 Recorte en Q95 como hiciste en el otro
-            title=f"Predicción Prevalencia del Parkinson GLM"
+            title=f"Predicción Prevalencia de la Enfermedad de Parkisnon (EP) GLM"
         )
     
         fig_glm.update_geos(
@@ -3583,9 +3583,9 @@ def server(input, output, session):
     
         fig_glm.update_layout(
             title={
-                'text': f"<b>Predicción Prevalencia de párkinson GLM</b>",
+                'text': f"<b>Predicción Prevalencia de la Enfermedad de Parkisnon (EP) GLM</b>",
                 'font': {'size': 20},
-                'x': 0.6,
+                'x': 0.7,
                 'y': 0.98,
                 'xanchor': 'right'
             },
@@ -3595,7 +3595,7 @@ def server(input, output, session):
                 len=0.99,
                 thickness=20,
                 y=0.5,
-                title="Prevalencia<br> de párkinson",
+                title="Prevalencia<br> de la EP",
                 tickvals=[min_glm, q25_glm, q50_glm, q75_glm, q95_glm],
                 ticktext=[
                     f"Mín: {min_glm}",
@@ -3643,7 +3643,7 @@ def server(input, output, session):
             hover_data={"Parkinson_Predicho": True, "País": False},
             color_continuous_scale="Viridis",
             range_color=(min_val, q95),
-            title="Predicción Prevalencia de párkinson GLM"
+            title="Predicción Prevalencia de la Enfermedad de Parkisnon (EP) GLM"
         )
     
         fig_europa_glm.update_geos(
@@ -3656,7 +3656,7 @@ def server(input, output, session):
     
         fig_europa_glm.update_layout(
             title={
-                'text': "<b>Predicción Prevalencia de párkinson GLM</b>",
+                'text': "<b>Predicción Prevalencia de la Enfermedad de Parkisnon (EP) GLM</b>",
                 'font': {'size': 20},
                 'x': 0.7,
                 'y': 0.98,
@@ -3668,7 +3668,7 @@ def server(input, output, session):
                 len=0.95,
                 thickness=25,
                 y=0.5,
-                title="Prevalencia<br> de párkinson",
+                title="Prevalencia<br> de la EP",
                 tickvals=[min_val, q25, q50, q75, q95],
                 ticktext=[
                     f"Mín: {min_val}",
@@ -3695,7 +3695,7 @@ def server(input, output, session):
             hover_data={"Parkinson_Predicho": True, "País": False},
             color_continuous_scale="Viridis",
             range_color=(min_rf, q95_rf),  # Limita la escala hasta Q95
-            title="Predicción Prevalencia de párkinson RF"
+            title="Predicción Prevalencia de la Enfermedad de Parkisnon (EP) RF Regressor"
         )
     
         fig_rf.update_geos(
@@ -3707,9 +3707,9 @@ def server(input, output, session):
     
         fig_rf.update_layout(
             title={
-                'text': "<b>Predicción Prevalencia de párkinson RF</b>",
+                'text': "<b>Predicción Prevalencia de la Enfermedad de Parkisnon (EP) RF Regressor</b>",
                 'font': {'size': 20},
-                'x': 0.6,
+                'x': 0.7,
                 'y': 0.98,
                 'xanchor': 'right'
             },
@@ -3719,7 +3719,7 @@ def server(input, output, session):
                 len=0.99,
                 thickness=20,
                 y=0.5,
-                title="Prevalencia<br>de párkinson",
+                title="Prevalencia<br>de la EP",
                 tickvals=[min_rf, q25_rf, q50_rf, q75_rf, q95_rf],
                 ticktext=[
                     f"Mín: {min_rf}",
@@ -3767,7 +3767,7 @@ def server(input, output, session):
             hover_data={"Parkinson_Predicho": True, "País": False},
             color_continuous_scale="Viridis",
             range_color=(min_val, q95),
-            title="Predicción Prevalencia de párkinson RF"
+            title="Predicción Prevalencia de la Enfermedad de Parkisnon (EP) RF Regressor"
         )
     
         fig_europa_rf.update_geos(
@@ -3780,7 +3780,7 @@ def server(input, output, session):
     
         fig_europa_rf.update_layout(
             title={
-                'text': "<b>Predicción Prevalencia de párkinson RF</b>",
+                'text': "<b>Predicción Prevalencia de la Enfermedad de Parkisnon (EP) RF Regressor</b>",
                 'font': {'size': 20},
                 'x': 0.7,
                 'y': 0.98,
@@ -3792,7 +3792,7 @@ def server(input, output, session):
                 len=0.95,
                 thickness=25,
                 y=0.5,
-                title="Prevalencia<br> de párkinson",
+                title="Prevalencia<br> de la EP",
                 tickvals=[min_val, q25, q50, q75, q95],
                 ticktext=[
                     f"Mín: {min_val}",
@@ -3819,7 +3819,7 @@ def server(input, output, session):
             hover_data={"Parkinson_Predicho": True, "País": False},
             color_continuous_scale="Viridis",
             range_color=(min_xg, q95_xg),
-            title="Predicción Prevalencia de párkinson XGBoost Regressor"
+            title="Predicción Prevalencia de la Enfermedad de Parkisnon (EP) XGBoost Regressor"
         )
     
         fig_xg.update_geos(
@@ -3831,9 +3831,9 @@ def server(input, output, session):
     
         fig_xg.update_layout(
             title={
-                'text': "<b>Predicción Prevalencia de párkinson XGBoost Regressor</b>",
+                'text': "<b>Predicción Prevalencia de la Enfermedad de Parkisnon (EP) XGBoost Regressor</b>",
                 'font': {'size': 20},
-                'x': 0.65,
+                'x': 0.7,
                 'y': 0.98,
                 'xanchor': 'right'
             },
@@ -3843,7 +3843,7 @@ def server(input, output, session):
                 len=0.99,
                 thickness=20,
                 y=0.5,
-                title="Prevalencia<br> de párkinson",
+                title="Prevalencia<br> de la EP",
                 tickvals=[min_xg, q25_xg, q50_xg, q75_xg, q95_xg],
                 ticktext=[
                     f"Mín: {min_xg}",
@@ -3891,7 +3891,7 @@ def server(input, output, session):
             hover_data={"Parkinson_Predicho": True, "País": False},
             color_continuous_scale="Viridis",
             range_color=(min_val, q95),
-            title="Predicción Prevalencia de párkinson XGBoost Regressor"
+            title="Predicción Prevalencia de la Enfermedad de Parkisnon (EP) XGBoost Regressor"
         )
     
         fig_europa_xg.update_geos(
@@ -3904,7 +3904,7 @@ def server(input, output, session):
     
         fig_europa_xg.update_layout(
             title={
-                'text': "<b>Predicción Prevalencia de párkinson XGBoost Regressor</b>",
+                'text': "<b>Predicción Prevalencia de la Enfermedad de Parkisnon (EP) XGBoost Regressor</b>",
                 'font': {'size': 20},
                 'x': 0.7,
                 'y': 0.98,
@@ -3916,7 +3916,7 @@ def server(input, output, session):
                 len=0.95,
                 thickness=25,
                 y=0.5,
-                title="Prevalencia<br> de párkinson",
+                title="Prevalencia<br> de la EP",
                 tickvals=[min_val, q25, q50, q75, q95],
                 ticktext=[
                     f"Mín: {min_val}",
@@ -3943,7 +3943,7 @@ def server(input, output, session):
             hover_data={"Parkinson_Predicho": True, "País": False},
             color_continuous_scale="Viridis",
             range_color=(min_svr, q95_svr),
-            title="Predicción Prevalencia de párkinson SVR Regressor"
+            title="Predicción Prevalencia de la Enfermedad de Parkisnon (EP) SVR Regressor"
         )
     
         fig_svr.update_geos(
@@ -3955,9 +3955,9 @@ def server(input, output, session):
     
         fig_svr.update_layout(
             title={
-                'text': "<b>Predicción Prevalencia de párkinson SVR Regressor</b>",
+                'text': "<b>Predicción Prevalencia de la Enfermedad de Parkisnon (EP) SVR Regressor</b>",
                 'font': {'size': 20},
-                'x': 0.6,
+                'x': 0.7,
                 'y': 0.98,
                 'xanchor': 'right'
             },
@@ -3967,7 +3967,7 @@ def server(input, output, session):
                 len=0.99,
                 thickness=20,
                 y=0.5,
-                title="Prevalencia<br>de párkinson",
+                title="Prevalencia<br>de la EP",
                 tickvals=[min_svr, q25_svr, q50_svr, q75_svr, q95_svr],
                 ticktext=[
                     f"Mín: {min_svr}",
@@ -4013,7 +4013,7 @@ def server(input, output, session):
             hover_data={"Parkinson_Predicho": True, "País": False},
             color_continuous_scale="Viridis",
             range_color=(min_val, q95),
-            title="Predicción Prevalencia de párkinson SVR Regressor"
+            title="Predicción Prevalencia de la Enfermedad de Parkisnon (EP) SVR Regressor"
         )
     
         fig_europa_svr.update_geos(
@@ -4026,7 +4026,7 @@ def server(input, output, session):
     
         fig_europa_svr.update_layout(
             title={
-                'text': "<b>Predicción Prevalencia de párkinson SVR Regressor</b>",
+                'text': "<b>Predicción Prevalencia de la Enfermedad de Parkisnon (EP) SVR Regressor</b>",
                 'font': {'size': 20},
                 'x': 0.7,
                 'y': 0.98,
@@ -4038,7 +4038,7 @@ def server(input, output, session):
                 len=0.95,
                 thickness=25,
                 y=0.5,
-                title="Prevalencia de párkinson",
+                title="Prevalencia de la EP",
                 tickvals=[min_val, q25, q50, q75, q95],
                 ticktext=[
                     f"Mín: {min_val}",
@@ -4065,7 +4065,7 @@ def server(input, output, session):
             hover_data={"Parkinson_Predicho": True, "País": False},
             color_continuous_scale="Viridis",
             range_color=(min_knn, q95_knn),
-            title="Predicción Prevalencia de párkinson KNN Regressor"
+            title="Predicción Prevalencia de la Enfermedad de Parkisnon (EP) KNN Regressor"
         )
     
         fig_knn.update_geos(
@@ -4077,9 +4077,9 @@ def server(input, output, session):
     
         fig_knn.update_layout(
             title={
-                'text': "<b>Predicción Prevalencia de párkinson KNN Regressor</b>",
+                'text': "<b>Predicción Prevalencia de la Enfermedad de Parkisnon (EP) KNN Regressor</b>",
                 'font': {'size': 20},
-                'x': 0.5,
+                'x': 0.7,
                 'y': 0.98,
                 'xanchor': 'right'
             },
@@ -4089,7 +4089,7 @@ def server(input, output, session):
                 len=0.99,
                 thickness=20,
                 y=0.5,
-                title="Prevalencia<br>de párkinson",
+                title="Prevalencia<br>de la EP",
                 tickvals=[min_knn, q25_knn, q50_knn, q75_knn, q95_knn],
                 ticktext=[
                     f"Mín: {min_knn}",
@@ -4136,7 +4136,7 @@ def server(input, output, session):
             hover_data={"Parkinson_Predicho": True, "País": False},
             color_continuous_scale="Viridis",
             range_color=(min_val, q95),
-            title="Predicción Prevalencia de párkinson KNN Regressor"
+            title="Predicción Prevalencia de la Enfermedad de Parkisnon (EP) KNN Regressor"
         )
     
         fig_europa_knn.update_geos(
@@ -4149,7 +4149,7 @@ def server(input, output, session):
     
         fig_europa_knn.update_layout(
             title={
-                'text': "<b>Predicción Prevalencia de párkinson KNN Regressor</b>",
+                'text': "<b>Predicción Prevalencia de la Enfermedad de Parkisnon (EP) KNN Regressor</b>",
                 'font': {'size': 20},
                 'x': 0.7,
                 'y': 0.98,
@@ -4161,7 +4161,7 @@ def server(input, output, session):
                 len=0.95,
                 thickness=25,
                 y=0.5,
-                title="Prevalencia de párkinson",
+                title="Prevalencia de la EP",
                 tickvals=[min_val, q25, q50, q75, q95],
                 ticktext=[
                     f"Mín: {min_val}",
@@ -4188,7 +4188,7 @@ def server(input, output, session):
             hover_data={"Parkinson_Predicho": True, "País": False},
             color_continuous_scale="Viridis",
             range_color=(min_mlp, q95_mlp),
-            title="Predicción Prevalencia de párkinson MLP Regressor"
+            title="Predicción Prevalencia de la Enfermedad de Parkisnon (EP) MLP Regressor"
         )
     
         fig_mlp.update_geos(
@@ -4200,7 +4200,7 @@ def server(input, output, session):
     
         fig_mlp.update_layout(
             title={
-                'text': "<b>Predicción Prevalencia de párkinson MLP Regressor</b>",
+                'text': "<b>Predicción Prevalencia de la Enfermedad de Parkisnon (EP) MLP Regressor</b>",
                 'font': {'size': 20},
                 'x': 0.7,
                 'y': 0.98,
@@ -4212,7 +4212,7 @@ def server(input, output, session):
                 len=0.99,
                 thickness=20,
                 y=0.5,
-                title="Prevalencia<br>de párkinson",
+                title="Prevalencia<br>de la EP",
                 tickvals=[min_mlp, q25_mlp, q50_mlp, q75_mlp, q95_mlp],
                 ticktext=[
                     f"Mín: {min_mlp}",
@@ -4259,7 +4259,7 @@ def server(input, output, session):
             hover_data={"Parkinson_Predicho": True, "País": False},
             color_continuous_scale="Viridis",
             range_color=(min_val, q95),
-            title="Predicción Prevalencia de párkinson MLP Regressor"
+            title="Predicción Prevalencia de la Enfermedad de Parkisnon (EP) MLP Regressor"
         )
     
         fig_europa_mlp.update_geos(
@@ -4272,7 +4272,7 @@ def server(input, output, session):
     
         fig_europa_mlp.update_layout(
             title={
-                'text': "<b>Predicción Prevalencia de párkinson MLP Regressor</b>",
+                'text': "<b>Predicción Prevalencia de la Enfermedad de Parkisnon (EP) MLP Regressor</b>",
                 'font': {'size': 20},
                 'x': 0.65,
                 'y': 0.98,
@@ -4284,7 +4284,7 @@ def server(input, output, session):
                 len=0.95,
                 thickness=25,
                 y=0.5,
-                title="Prevalencia de párkinson",
+                title="Prevalencia de la EP",
                 tickvals=[min_val, q25, q50, q75, q95],
                 ticktext=[
                     f"Mín: {min_val}",
@@ -4311,7 +4311,7 @@ def server(input, output, session):
             hover_data={"Parkinson_Predicho_Promedio": True, "País": False},
             color_continuous_scale="Viridis",
             range_color=(min_pred, q95_pred),
-            title="Predicción de prevalencia de la enfermedad de Parkinson"
+            title="Predicción de prevalencia de la Enfermedad de Parkinson"
         )
         fig_modelos.update_geos(
             projection_type="equirectangular",
@@ -4322,7 +4322,7 @@ def server(input, output, session):
     
         fig_modelos.update_layout(
             title={
-                'text': "<b>Predicción de prevalencia de la enfermedad de Parkinson</b>",
+                'text': "<b>Predicción de prevalencia de la Enfermedad de Parkinson</b>",
                 'font': {'size': 20},
                 'x': 0.7,
                 'y': 0.98,
@@ -4335,7 +4335,7 @@ def server(input, output, session):
                 len=0.9,
                 thickness=20,
                 y=0.5,
-                title="Prevalencia de párkinson",
+                title="Prevalencia de la EP",
                 tickvals=[min_pred, q25_pred, q50_pred, q75_pred, q95_pred],
                 ticktext=[
                     f"Mín: {min_pred}",
@@ -4423,7 +4423,7 @@ def server(input, output, session):
             "Error_Absoluto": True,
             "País": False
         },
-        title="Mapa de Anomalías de párkinson"
+        title="Mapa de Anomalías"
     )
 
         fig_modelos_prueba.update_geos(
@@ -4434,7 +4434,7 @@ def server(input, output, session):
          )
         fig_modelos_prueba.update_layout(
             title={
-                'text': f"<b> Mapa de Anomalías de párkinson",
+                'text': f"<b> Mapa de Anomalías ",
                 'font': {'size': 20},
                 'x': 0.4,
                 'y' : 0.98,
