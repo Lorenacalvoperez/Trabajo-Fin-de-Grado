@@ -1,6 +1,6 @@
 # Minería de datos y aprendizaje automático aplicado a la predicción de incidencia de párkinson basado en la biometereología.<img src='IMAGES/universidad_burgos.jpg' align="right" height="120" />
 **Autor:** Lorena Calvo Pérez  
-**Tutores:** Antonio Jesus Canepa Oneto, Esther Cubo Delgado
+**Tutores:** Antonio Jesus Canepa Oneto, Esther Cubo Delgado  
 **Universidad:** Universidad de Burgos  
 **Titulación:** Grado en Ingeniería de la Salud  
 **Curso académico:** 2024/2025  
