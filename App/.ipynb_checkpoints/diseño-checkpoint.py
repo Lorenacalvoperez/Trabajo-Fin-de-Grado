@@ -2321,9 +2321,8 @@ def server(input, output, session):
                     ),
                     style="background-color: #2C3E50; border-radius: 8px; width: 100%; margin-bottom: 20px;"
                 ),
-
-                
-                # Cuerpo con información de contacto (Estilo atractivo)
+        
+                # Cuerpo con información de contacto
                 ui.div(
                     ui.p("¿Tienes preguntas, sugerencias o quieres colaborar? Ponte en contacto conmigo:",
                          style="font-size: 18px; margin: 20px; text-align: center; color: #333;"
@@ -2333,11 +2332,10 @@ def server(input, output, session):
                         ui.div(
                             ui.h3("📧 Correo Electrónico", style="font-size: 20px; color: #8E44AD; text-align: center;"),
                             ui.p("Envíame un correo para cualquier consulta o inquietud.", style="text-align: center; font-size: 16px;"),
-                            # Enlace mailto para el correo
                             ui.p(ui.tags.a("lcp1009@alu.ubu.es", href="mailto:tuemail@gmail.com", target="_blank", style="color: #2980B9; font-size: 18px;")),
                             style="background-color: #F2F3F4; padding: 20px; margin: 10px 0; border-radius: 8px;"
                         ),
-                        
+        
                         # GitHub
                         ui.div(
                             ui.h3("💻 GitHub", style="font-size: 20px; color: #8E44AD; text-align: center;"),
@@ -2345,12 +2343,19 @@ def server(input, output, session):
                             ui.p(ui.tags.a("github.com/Lorenacalvoperez", href="https://github.com/Lorenacalvoperez/Trabajo-Fin-de-Grado", target="_blank", style="color: #2980B9; font-size: 18px;")),
                             style="background-color: #F2F3F4; padding: 20px; margin: 10px 0; border-radius: 8px;"
                         ),
-                        
+        
                         style="margin: 0 10px;"
                     ),
+        
+                    # Aquí añadimos el texto de la versión
+                    ui.p("Versión 1.0 de la plataforma Parkinson Worldwide",
+                         style="font-size: 14px; color: #7F8C8D; margin-top: 30px; text-align: center;"
+                    ),
+        
                     style="text-align: center; margin-top: 20px;"
                 )
             )
+
     
     
 
